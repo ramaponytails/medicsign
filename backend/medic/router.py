@@ -1,10 +1,11 @@
-from .models import Doctor, Patient
+from .models import MedicalReport, UserMedicalReport
 from django.contrib.auth.models import User
 
 class MedicalRouter:
     # Router for Medical Reports
 
-    route_app_labels = ['']
+    hospital_report = 'MedicalReport'
+    user_report = 'UserMedicalReport'
 
     def db_for_read(self, model, **hints):
         if model._meta.app_label != 'medic':

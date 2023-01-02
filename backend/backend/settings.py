@@ -101,7 +101,7 @@ DATABASES = {
     },
 }
 
-DATABASE_ROUTERS = ['backend.users.router.UserRouter', 'backend.medic.router.MedicalRouter']
+DATABASE_ROUTERS = ['users.router.UserRouter', 'medic.router.MedicalRouter']
 
 
 # Password validation
