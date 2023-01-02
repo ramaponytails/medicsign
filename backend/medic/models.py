@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from backend.users.models import Doctor, Patient
+from users.models import Doctor, Patient
 from datetime import datetime
 
 # Create your models here.
@@ -14,10 +14,10 @@ class MedicalReport(models.Model):
     created_at = models.DateTimeField(default=datetime.now)
     hospital_entry_date = models.DateField(blank=True, null=True)
     hospital_release_date = models.DateField(blank=True, null=True)
-    medical_history = models.CharField(max_length=5000, blank=True, default='')
-    medical_condition = models.CharField(max_length=5000, blank=True, default='')
-    surgery_processes = models.CharField(max_length=5000, blank=True, default='')
-    medication = models.CharField(max_length=5000, blank=True, default='')
+    medical_history = models.TextField(blank=True, default='')
+    medical_condition = models.TextField(blank=True, default='')
+    surgery_processes = models.TextField(blank=True, default='')
+    medication = models.TextField(blank=True, default='')
     # Attachment TODO
 
 class UserMedicalReport(models.Model):
@@ -25,8 +25,8 @@ class UserMedicalReport(models.Model):
     created_at = models.DateTimeField(default=datetime.now)
     hospital_entry_date = models.DateField(blank=True, null=True)
     hospital_release_date = models.DateField(blank=True, null=True)
-    medical_history = models.CharField(max_length=5000, blank=True, default='')
-    medical_condition = models.CharField(max_length=5000, blank=True, default='')
-    surgery_processes = models.CharField(max_length=5000, blank=True, default='')
-    medication = models.CharField(max_length=5000, blank=True, default='')
+    medical_history = models.TextField(blank=True, default='')
+    medical_condition = models.TextField(blank=True, default='')
+    surgery_processes = models.TextField(blank=True, default='')
+    medication = models.TextField(blank=True, default='')
     # Attachment TODO
