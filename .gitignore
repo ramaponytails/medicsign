@@ -1,3 +1,7 @@
 *.pyc
 *migrations/
 *__pycache__/
+*.log
+*auth.json
+*package-lock.json
+*node_modules/
