@@ -19,7 +19,7 @@ async function run() {
   await mongoose.connect(auth.mongodb);
   logger.info(`Connected to Atlas.`);
 
-  app.listen(auth.port, () => logger.info(`Server is listening to port ${auth.port}`));
+  app.listen(auth.port, () => logger.info(`Server is listening to port ${auth.port}.`));
 }
 
 run();

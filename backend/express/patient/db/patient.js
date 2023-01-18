@@ -8,7 +8,7 @@ const patientSchema = new mongoose.Schema({
   public_key: String,
 });
 
-patientSchema.index({email: 1, public_key: 1}, { unique: true });
+patientSchema.index({email: 1}, { unique: true });
 
 const Patient = mongoose.model('Patient', patientSchema);
 
