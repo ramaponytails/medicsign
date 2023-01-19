@@ -1,17 +1,15 @@
 const axios = require(`axios`);
 
 const payload = {
-  _id: `63c7f2e3293dda5f3c0f1e4a`,
-  email: `juan.c.vieri.3232@gmail.com`,
+  email: `juan.c.vieri.323222@gmail.com`,
   gender: `male`,
   name: `Juan Carlo Vieri`,
-  date_birth: 92138471982,
-  public_key: `testesdfd`
+  hospital: `Bagus`,
 }
 
 async function run() {
   try {
-    const res = await axios.post(`http://localhost:3000/patient/update`, payload);
+    const res = await axios.post(`http://localhost:3000/doctor/create`, payload);
     console.log(`Success!`);
     console.log(res.data);
   } catch (error) {

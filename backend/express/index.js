@@ -5,6 +5,7 @@ const {logger} = require(`./logger`);
 const {success, error} = require(`./req_handler`);
 
 const {patient} = require(`./patient/patient`);
+const {doctor} = require(`./doctor/doctor`);
 
 const app = express();
 app.use(express.json());
@@ -15,6 +16,9 @@ app.get(`/`, (req, res) => {
 
 app.post(`/patient/:cmd`, patient);
 app.get(`/patient/:cmd/:user?`, patient);
+
+app.post(`/doctor/:cmd`, doctor);
+app.get(`/doctor/:cmd/:user?`, doctor);
 
 async function run() {
   await mongoose.connect(auth.mongodb);
