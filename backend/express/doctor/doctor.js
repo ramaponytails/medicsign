@@ -7,6 +7,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const cmdMap = {
   create,
   view,
+  update,
 };
 
 const doctorSchema = {
@@ -60,6 +61,26 @@ async function view(req, res) {
     await success(res, user);
   } catch (error) {
     logger.error(`Error viewing doctor.`, {error});
+    return (await sendStatus(res, 500));
+  }
+}
+
+async function update(req, res) {
+  var dat = req.body;
+  const userId = dat._id;
+  dat = validate(dat);
+  try {
+    if (!dat || !userId || !validate_id(userId) || !(await Doctor.countDocuments({_id: userId}))) return (await sendStatus(res, 400, `Invalid user.`));
+    if (await Doctor.countDocuments({email: dat.email})) return (await sendStatus(res, 400, `User exists.`));
+
+    await Doctor.findByIdAndUpdate(userId, dat).exec();
+
+    logger.info(`Doctor updated!`, {dat});
+
+    await sendStatus(res, 200, `User updated.`);
+
+  } catch (error) {
+    logger.error(`Error updating doctor.`, {error});
     return (await sendStatus(res, 500));
   }
 }

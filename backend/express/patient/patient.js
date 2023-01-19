@@ -70,8 +70,8 @@ async function update(req, res) {
   const userId = dat._id;
   dat = validate(dat);
   try {
-    if (!dat || !userId || !validate_id(userId) || !(await Patient.countDocuments({_id: userId}))) return sendStatus(res, 400, `Invalid user.`);
-    if (await Patient.countDocuments({email: dat.email})) return sendStatus(res, 409, `User exists.`);
+    if (!dat || !userId || !validate_id(userId) || !(await Patient.countDocuments({_id: userId}))) return (await sendStatus(res, 400, `Invalid user.`));
+    if (await Patient.countDocuments({email: dat.email})) return (await sendStatus(res, 409, `User exists.`));
   
     await Patient.findByIdAndUpdate(userId, dat).exec();
     
