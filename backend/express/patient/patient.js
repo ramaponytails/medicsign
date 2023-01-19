@@ -2,9 +2,11 @@ const mongoose = require(`mongoose`);
 const {logger} = require(`../logger`);
 const {success, error, sendStatus} = require(`../req_handler`);
 const {Patient} = require(`./db/patient`);
+const ObjectId = mongoose.Types.ObjectId;
 
 const cmdMap = {
   create,
+  view,
 }
 
 const patientSchema = {
@@ -25,7 +27,7 @@ function validate(dat) {
 }
 
 async function create(req, res) {
-  dat = req.body;
+  var dat = req.body;
   dat = validate(dat);
   if (!dat) return sendStatus(res, 400, `Invalid user.`);
 
@@ -36,6 +38,16 @@ async function create(req, res) {
   logger.info(`New Patient saved!`, {dat});
 
   await sendStatus(res, 200, `User saved.`);
+}
+
+async function view(req, res) {
+  const userId = req.params.user;
+
+  if (!userId || !ObjectId.isValid(userId) || !(await Patient.countDocuments({_id: userId}))) return sendStatus(res, 404, `Invalid userId.`);
+
+  const user = await Patient.findOne({_id: userId}).exec();
+
+  await success(res, user);
 }
 
 async function patient(req, res) {

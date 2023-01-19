@@ -14,6 +14,7 @@ app.get(`/`, (req, res) => {
 });
 
 app.post(`/patient/:cmd`, patient);
+app.get(`/patient/:cmd/:user?`, patient);
 
 async function run() {
   await mongoose.connect(auth.mongodb);
