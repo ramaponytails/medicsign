@@ -7,6 +7,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const cmdMap = {
   create,
   view,
+  update,
 }
 
 const patientSchema = {
@@ -26,6 +27,10 @@ function validate(dat) {
   return res;
 }
 
+function validate_id(userId) {
+  return ObjectId.isValid(userId);
+}
+
 async function create(req, res) {
   var dat = req.body;
   dat = validate(dat);
@@ -43,11 +48,22 @@ async function create(req, res) {
 async function view(req, res) {
   const userId = req.params.user;
 
-  if (!userId || !ObjectId.isValid(userId) || !(await Patient.countDocuments({_id: userId}))) return sendStatus(res, 404, `Invalid userId.`);
+  if (!userId || !validate_id(userId) || !(await Patient.countDocuments({_id: userId}))) return sendStatus(res, 404, `Invalid userId.`);
 
   const user = await Patient.findOne({_id: userId}).exec();
 
   await success(res, user);
+}
+
+async function update(req, res) {
+  var dat = req.body;
+  const userId = dat._id;
+  dat = validate(dat);
+  if (!dat || !userId || !validate_id(userId) || !(await Patient.countDocuments({_id: userId}))) return sendStatus(res, 400, `Invalid user.`);
+  if (await Patient.countDocuments({email: dat.email})) return sendStatus(res, 409, `User exists.`);
+
+  await Patient.findByIdAndUpdate(userId, dat).exec();
+  await sendStatus(res, 200, `User updated.`);
 }
 
 async function patient(req, res) {
