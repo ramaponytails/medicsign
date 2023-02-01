@@ -12,13 +12,15 @@
 
 =========================================================
 
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+* The above copyright notice and this permission notice shall 
+be included in all copies or substantial portions of the Software.
 
 */
+/* eslint-disable */
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Link, } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/animate.min.css";
@@ -32,9 +34,8 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
-    <Switch>
-      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-      <Redirect from="/" to="/admin/dashboard" />
-    </Switch>
+    <Routes>
+      <Route path="/admin/*" element={<AdminLayout />} />
+    </Routes>
   </BrowserRouter>
 );

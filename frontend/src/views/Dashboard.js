@@ -1,5 +1,6 @@
 import React from "react";
-import ChartistGraph from "react-chartist";
+
+/* eslint-disable */
 // react-bootstrap components
 import {
   Badge,
@@ -16,12 +17,12 @@ import {
   Tooltip,
 } from "react-bootstrap";
 
-import RecordForm from '../forms/CreateRecord'
+import RecordForm from 'forms/CreateRecord'
 
 function Dashboard() {
   return (
     <>
-      <Container fluid>
+      <Container>
         <Row>
           <Col>
             <RecordForm />

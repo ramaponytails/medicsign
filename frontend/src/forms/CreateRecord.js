@@ -7,7 +7,7 @@ class RecordForm extends Component{
         super(props);
         this.state = {
             step: 1, // If we want to make it a multistep form
-            doctor_mame: "",
+            doctor_name: "",
             patient_name: "",
             medical_condition: "",
             disease: "",

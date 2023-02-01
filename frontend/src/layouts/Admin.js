@@ -16,7 +16,7 @@
 
 */
 import React, { Component } from "react";
-import { useLocation, Route, Switch } from "react-router-dom";
+import { useLocation, Route, Routes, BrowserRouter } from "react-router-dom";
 
 import AdminNavbar from "components/Navbars/AdminNavbar";
 import Footer from "components/Footer/Footer";
@@ -27,11 +27,11 @@ import routes from "routes.js";
 
 import sidebarImage from "assets/img/sidebar-3.jpg";
 
-function Admin() {
+function AdminLayout() {
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
   const [hasImage, setHasImage] = React.useState(true);
-  const location = useLocation();
+  let location = useLocation();
   const mainPanel = React.useRef(null);
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
@@ -39,7 +39,7 @@ function Admin() {
         return (
           <Route
             path={prop.layout + prop.path}
-            render={(props) => <prop.component {...props} />}
+            element={<prop.component />}
             key={key}
           />
         );
@@ -68,7 +68,7 @@ function Admin() {
         <div className="main-panel" ref={mainPanel}>
           <AdminNavbar />
           <div className="content">
-            <Switch>{getRoutes(routes)}</Switch>
+            <Routes>{getRoutes(routes)}</Routes>
           </div>
           <Footer />
         </div>
@@ -85,4 +85,4 @@ function Admin() {
   );
 }
 
-export default Admin;
+export default AdminLayout;

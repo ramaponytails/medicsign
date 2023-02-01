@@ -12,9 +12,11 @@
 
 =========================================================
 
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+* The above copyright notice and this permission notice shall be 
+included in all copies or substantial portions of the Software.
 
 */
+/* eslint-disable */
 import React, { Component } from "react";
 import { useLocation, NavLink } from "react-router-dom";
 
@@ -63,8 +65,7 @@ function Sidebar({ color, image, routes }) {
                 >
                   <NavLink
                     to={prop.layout + prop.path}
-                    className="nav-link"
-                    activeClassName="active"
+                    className={({ isActive }) => "nav-link" + (isActive ? " activated" : "")}
                   >
                     <i className={prop.icon} />
                     <p>{prop.name}</p>
