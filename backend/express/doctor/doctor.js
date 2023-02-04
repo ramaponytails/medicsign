@@ -1,7 +1,7 @@
 const mongoose = require(`mongoose`);
 const {logger} = require(`../logger`);
 const {success, error, sendStatus} = require(`../req_handler`);
-const {Doctor} = require(`./db/doctor`);
+const {Doctor} = require(`../db/doctor`);
 const ObjectId = mongoose.Types.ObjectId;
 
 const cmdMap = {
