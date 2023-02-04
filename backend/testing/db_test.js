@@ -30,34 +30,38 @@ var report_dat = {
 }
 
 async function run() {
-  await mongoose.connect(auth.mongodb);
+  try {
+    await mongoose.connect(auth.mongodb);
+  } catch (error) {
+    logger.error(`Error connecting to DB.`, {error});
+  }
   
   logger.info(`DB connected`);
 
 
 
 
-  const {Patient} = require('../db/patient');
+  const {Patient} = require('./patient');
   const existingPatient = await Patient.deleteOne(patient_dat).exec();
   const newPatient = new Patient(patient_dat);
   await newPatient.save();
   logger.info(`New Patient saved!`);
 
 
-  const {Doctor} = require('../db/doctor');
+  const {Doctor} = require('./doctor');
   const existingDoctor = await Doctor.deleteOne(doctor_dat).exec();
   const newDoctor = new Doctor(doctor_dat);
   await newDoctor.save();
   logger.info(`New Doctor saved!`);
 
 
-  const {Diagnosis} = require('../db/diagnosis');
+  const {Diagnosis} = require('./diagnosis');
   const existingDiagnosis = await Diagnosis.deleteOne(diagnosis_dat).exec();
   const newDiagnosis = new Diagnosis(diagnosis_dat);
   await newDiagnosis.save();
   logger.info(`New Diagnosis saved!`);
 
-  const {Report} = require('../db/report');
+  const {Report} = require('./report');
   report_dat.patient = newPatient._id;
   report_dat.doctor = newDoctor._id;
   report_dat.diagnosis = newDiagnosis._id;

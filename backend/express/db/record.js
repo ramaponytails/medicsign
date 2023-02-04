@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const reportSchema = new mongoose.Schema({
+const recordSchema = new mongoose.Schema({
   patient_id: mongoose.Schema.Types.ObjectId,
   doctor_id: mongoose.Schema.Types.ObjectId,
   disease: String,
@@ -9,8 +9,8 @@ const reportSchema = new mongoose.Schema({
   signature: String,
 });
 
-reportSchema.index({}, { unique: true });
+recordSchema.index({}, { unique: true });
 
-const Report = mongoose.model('Report', reportSchema);
+const Record = mongoose.model('Record', recordSchema);
 
-module.exports = { Report };
+module.exports = { Record };
