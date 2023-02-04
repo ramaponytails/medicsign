@@ -2,7 +2,6 @@ const axios = require(`axios`);
 
 const payload = {
   email: `juan.c.vieri.323222@gmail.com`,
-  gender: `male`,
   name: `Juan Carlo Vieri`,
   hospital: `Bagus`,
 }

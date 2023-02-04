@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const doctorSchema = new mongoose.Schema({
   email: String,
   name: String,
-  gender: String,
   hospital: String,
 });
 

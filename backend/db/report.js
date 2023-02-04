@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
 const reportSchema = new mongoose.Schema({
-  patient: mongoose.Schema.Types.ObjectId,
-  doctor: mongoose.Schema.Types.ObjectId,
-  diagnosis: mongoose.Schema.Types.ObjectId,
+  patient_id: mongoose.Schema.Types.ObjectId,
+  doctor_id: mongoose.Schema.Types.ObjectId,
+  disease: String,
+  diagnosis: String,
   created_at: Date,
   signature: String,
 });

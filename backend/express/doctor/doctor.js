@@ -13,7 +13,6 @@ const cmdMap = {
 const doctorSchema = {
   email: `string`,
   name: `string`,
-  gender: `string`,
   hospital: `string`,
 };
 

@@ -1,9 +1,8 @@
 const axios = require(`axios`);
 
 const payload = {
-  _id: `63c940fd9b1e75930292428c`,
+  _id: `63de5676f3d90198eb27e22d`,
   email: `juan.c.vier2@gmail.com`,
-  gender: `male`,
   name: `Juan Carlo Vieri`,
   hospital: `Manuk akal`,
 }
