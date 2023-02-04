@@ -16,7 +16,7 @@
 
 */
 import React, { Component } from "react";
-import { useLocation, Route, Routes, BrowserRouter } from "react-router-dom";
+import { useLocation, Outlet, Route, Routes, BrowserRouter } from "react-router-dom";
 
 import AdminNavbar from "components/Navbars/AdminNavbar";
 import Footer from "components/Footer/Footer";
@@ -27,27 +27,12 @@ import routes from "routes.js";
 
 import sidebarImage from "assets/img/sidebar-3.jpg";
 
-function AdminLayout() {
+function AdminLayout({children}) {
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
   const [hasImage, setHasImage] = React.useState(true);
   let location = useLocation();
   const mainPanel = React.useRef(null);
-  const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            element={<prop.component />}
-            key={key}
-          />
-        );
-      } else {
-        return null;
-      }
-    });
-  };
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
@@ -65,11 +50,9 @@ function AdminLayout() {
     <>
       <div className="wrapper">
         <Sidebar color={color} image={hasImage ? image : ""} routes={routes} />
-        <div className="main-panel" ref={mainPanel}>
+        <div className="main-panel p-1" ref={mainPanel}>
           <AdminNavbar />
-          <div className="content">
-            <Routes>{getRoutes(routes)}</Routes>
-          </div>
+          <div className="m-3"><Outlet /></div>
           <Footer />
         </div>
       </div>
