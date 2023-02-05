@@ -12,13 +12,24 @@
 
 =========================================================
 
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+* The above copyright notice and this permission notice shall 
+be included in all copies or substantial portions of the Software.
 
 */
+/* eslint-disable */
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Link, } from "react-router-dom";
+
+import routes from "routes.js";
+import Dashboard from "views/Dashboard.js";
+import UserProfile from "views/UserProfile.js";
+import TableList from "views/TableList.js";
+import Typography from "views/Typography.js";
+import Icons from "views/Icons.js";
+import Maps from "views/Maps.js";
+import Upgrade from "views/Upgrade.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/animate.min.css";
@@ -30,11 +41,29 @@ import AdminLayout from "layouts/Admin.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
+const getRoutes = (routes) => {
+  return routes.map((prop, key) => {
+    if (prop.layout === "/admin") {
+      return (
+        <Route
+          path={prop.layout + prop.path}
+          element={<prop.component />}
+          key={key}
+        />
+      );
+    } else {
+      return <Route />;
+    }
+  });
+};
+
 root.render(
   <BrowserRouter>
-    <Switch>
-      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-      <Redirect from="/" to="/admin/dashboard" />
-    </Switch>
+    <Routes>
+      <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
+      <Route element={<AdminLayout />}>
+        {getRoutes(routes)}
+      </Route>
+    </Routes>
   </BrowserRouter>
 );

@@ -1,3 +1,4 @@
+/* eslint-disable */ 
 /*!
 
 =========================================================
@@ -21,7 +22,6 @@ import TableList from "views/TableList.js";
 import Typography from "views/Typography.js";
 import Icons from "views/Icons.js";
 import Maps from "views/Maps.js";
-import Notifications from "views/Notifications.js";
 import Upgrade from "views/Upgrade.js";
 
 const dashboardRoutes = [
@@ -75,13 +75,6 @@ const dashboardRoutes = [
     component: Maps,
     layout: "/admin"
   },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    icon: "nc-icon nc-bell-55",
-    component: Notifications,
-    layout: "/admin"
-  }
 ];
 
 export default dashboardRoutes;
