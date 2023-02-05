@@ -1,9 +1,8 @@
+const env = process.env;
 const express = require(`express`);
 const mongoose = require(`mongoose`);
-const auth = require(`./auth.json`);
 const { logger } = require(`./logger`);
 const { success, error } = require(`./req_handler`);
-
 const { patient } = require(`./patient/patient`);
 const { doctor } = require(`./doctor/doctor`);
 const { record } = require(`./record/record`);
@@ -25,11 +24,11 @@ app.post(`/record/:cmd`, record);
 app.get(`/record/:cmd/:record?`, record);
 
 async function run() {
-  await mongoose.connect(auth.mongodb);
+  await mongoose.connect(env.mongodb);
   logger.info(`Connected to Atlas.`);
 
-  app.listen(auth.port, () =>
-    logger.info(`Server is listening to port ${auth.port}.`)
+  app.listen(env.port, () =>
+    logger.info(`Server is listening to port ${env.port}.`)
   );
 }
 
