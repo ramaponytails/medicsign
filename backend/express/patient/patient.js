@@ -71,7 +71,7 @@ async function update(req, res) {
   dat = validate(dat);
   try {
     if (!dat || !userId || !validate_id(userId) || !(await Patient.countDocuments({_id: userId}))) return (await sendStatus(res, 400, `Invalid user.`));
-    if (await Patient.countDocuments({email: dat.email})) return (await sendStatus(res, 409, `User exists.`));
+    if (await Patient.countDocuments({email: dat.email}) - ((await Patient.findOne({_id: userId}).exec()).email === dat.email)) return (await sendStatus(res, 409, `User exists.`));
   
     await Patient.findByIdAndUpdate(userId, dat).exec();
     
