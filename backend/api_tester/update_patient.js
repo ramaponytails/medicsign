@@ -6,12 +6,15 @@ const payload = {
   gender: `female`,
   name: `Juan 22 Vieri`,
   date_birth: 9213822471982,
-  public_key: `222`
-}
+  public_key: `222`,
+};
 
 async function run() {
   try {
-    const res = await axios.post(`http://localhost:3000/patient/update`, payload);
+    const res = await axios.post(
+      `http://localhost:3000/patient/update`,
+      payload
+    );
     console.log(`Success!`);
     console.log(res.data);
   } catch (error) {
