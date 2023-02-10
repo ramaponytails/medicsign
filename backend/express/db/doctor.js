@@ -6,7 +6,7 @@ const doctorSchema = new mongoose.Schema({
   hospital: String,
 });
 
-doctorSchema.index({email: 1}, { unique: true });
+doctorSchema.index({ email: 1 }, { unique: true });
 
 const Doctor = mongoose.model('Doctor', doctorSchema);
 
