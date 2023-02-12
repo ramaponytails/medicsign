@@ -1,6 +1,6 @@
-const { patient } = require(`./patient/patient`);
-const { doctor } = require(`./doctor/doctor`);
-const { record } = require(`./record/record`);
+const { patient } = require(`./controllers/patient`);
+const { doctor } = require(`./controllers/doctor`);
+const { record } = require(`./controllers/record`);
 
 module.exports = (app) => {
   app.get(`/`, (req, res) => {
