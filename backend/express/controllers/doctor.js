@@ -43,7 +43,7 @@ async function create(req, res) {
     await newDoctor.save();
     logger.info(`New Doctor saved!`, { dat });
 
-    await sendStatus(res, 200, `User saved.`);
+    await sendStatus(res, 201, `User saved.`);
   } catch (error) {
     logger.error(`Error saving new doctor.`, { error });
     return await sendStatus(res, 500);

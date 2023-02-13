@@ -68,7 +68,7 @@ async function create(req, res) {
     await newRecord.save();
     logger.info(`New Record saved!`, { dat });
 
-    await sendStatus(res, 200, `Record Saved.`);
+    await sendStatus(res, 201, `Record Saved.`);
   } catch (error) {
     logger.error(`Error creating record.`, { error });
     return await sendStatus(res, 500);
