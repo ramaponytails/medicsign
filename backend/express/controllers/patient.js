@@ -38,11 +38,15 @@ function validate_id(userId) {
   return ObjectId.isValid(userId);
 }
 
+async function encrypt(password) {
+  return await bcrypt.hash(password, 10);
+}
+
 async function create(req, res) {
   var dat = req.body;
   dat = validate(dat);
   if (!dat) return await sendStatus(res, 400, `Invalid user.`);
-  dat.password = await bcrypt.hash(dat.password, 10);
+  dat.password = await encrypt(dat.password);
 
   try {
     if (await Patient.countDocuments({ email: dat.email }))
@@ -79,8 +83,10 @@ async function login(req, res) {
       });
       await user.save();
 
+      logger.info(`Patient login success.`);
       return await success(res, user);
     }
+    logger.info(`Patient invalid credentials.`);
     return await sendStatus(res, 400, `Invalid credentials.`);
   } catch (error) {
     logger.error(`Error logging patient in.`, { error });
@@ -115,6 +121,8 @@ async function update(req, res) {
   var dat = req.body;
   const userId = dat._id;
   dat = validate(dat);
+  dat.password = await encrypt(dat.password);
+
   try {
     if (
       !dat ||
