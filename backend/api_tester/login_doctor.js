@@ -2,8 +2,8 @@ const conf = require(`./config.json`);
 const axios = require(`axios`);
 
 const payload = {
-  email: `juan.c.vier2322@gmail.com`,
-  password: `ahlibesar`,
+  email: `121212`,
+  password: `ahlikecil`,
 };
 
 async function run() {
