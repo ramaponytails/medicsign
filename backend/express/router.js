@@ -12,6 +12,7 @@ module.exports = (app) => {
   app.post(`/patient/update`, auth, patient.update);
   app.post(`/patient/login`, patient.login);
   app.get(`/patient/view/:user`, auth, patient.view);
+  app.get(`/patient/list/:user`, auth, patient.list);
 
   app.post(`/doctor/create`, doctor.create);
   app.post(`/doctor/update`, auth, doctor.update);

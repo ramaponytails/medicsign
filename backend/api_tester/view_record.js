@@ -22,7 +22,7 @@ const config = {
 async function run() {
   try {
     const res = await axios.get(
-      `http://localhost:3000/record/view/${payload._id}`,
+      `http://localhost:${conf.port}/record/view/${payload._id}`,
       config
     );
     console.log(`Success!`);
