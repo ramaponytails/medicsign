@@ -1,3 +1,4 @@
+const conf = require(`./config.json`);
 const axios = require(`axios`);
 
 const payload = {
@@ -12,7 +13,7 @@ const payload = {
 async function run() {
   try {
     const res = await axios.post(
-      `http://localhost:3000/patient/create`,
+      `http://localhost:${conf.port}/patient/create`,
       payload
     );
     console.log(`Success!`);

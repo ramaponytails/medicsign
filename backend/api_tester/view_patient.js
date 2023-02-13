@@ -1,3 +1,4 @@
+const conf = require(`./config.json`);
 const axios = require(`axios`);
 
 const payload = {
@@ -14,7 +15,7 @@ const config = {
 async function run() {
   try {
     const res = await axios.get(
-      `http://localhost:3000/patient/view/${payload._id}`,
+      `http://localhost:${conf.port}/patient/view/${payload._id}`,
       config
     );
     console.log(`Success!`);

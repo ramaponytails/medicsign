@@ -42,6 +42,16 @@ async function encrypt(password) {
   return await bcrypt.hash(password, 10);
 }
 
+async function sign(user) {
+  return await jwt.sign(
+    { userId: user._id, email: user.email },
+    env.TOKEN_KEY,
+    {
+      expiresIn: `2h`,
+    }
+  );
+}
+
 async function create(req, res) {
   var dat = req.body;
   dat = validate(dat);
@@ -53,11 +63,7 @@ async function create(req, res) {
       return await sendStatus(res, 409, `User exists.`);
 
     const newPatient = new Patient(dat);
-    newPatient.token = await jwt.sign(
-      { userId: newPatient._id, email: dat.email },
-      env.TOKEN_KEY,
-      { expiresIn: `2h` }
-    );
+    newPatient.token = await sign(newPatient);
     await newPatient.save();
     logger.info(`New Patient saved!`, { dat });
 
@@ -78,9 +84,7 @@ async function login(req, res) {
 
     const user = await Patient.findOne({ email });
     if (user && (await bcrypt.compare(password, user.password))) {
-      user.token = await jwt.sign({ userId: user._id, email }, env.TOKEN_KEY, {
-        expiresIn: `2h`,
-      });
+      user.token = await sign(user);
       await user.save();
 
       logger.info(`Patient login success.`);

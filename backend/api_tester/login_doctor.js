@@ -2,16 +2,14 @@ const conf = require(`./config.json`);
 const axios = require(`axios`);
 
 const payload = {
-  email: `121212`,
-  name: `Juan Carlo Vieri`,
-  hospital: `Bagus`,
-  password: `ahlikecil`,
+  email: `juan.c.vier2322@gmail.com`,
+  password: `ahlibesar`,
 };
 
 async function run() {
   try {
     const res = await axios.post(
-      `http://localhost:${conf.port}/doctor/create`,
+      `http://localhost:${conf.port}/doctor/login`,
       payload
     );
     console.log(`Success!`);
