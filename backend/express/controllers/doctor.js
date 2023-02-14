@@ -7,6 +7,7 @@ const env = process.env;
 const { logger } = require(`../logger`);
 const { success, error, sendStatus } = require(`../req_handler`);
 const { Doctor } = require(`../models/doctor`);
+const { Record } = require(`../models/record`);
 const ObjectId = mongoose.Types.ObjectId;
 
 const cmdMap = {
@@ -14,6 +15,7 @@ const cmdMap = {
   view,
   update,
   login,
+  list,
 };
 
 const doctorSchema = {
@@ -172,6 +174,27 @@ async function update(req, res) {
     return await success(res, { user: updatedDoctor });
   } catch (error) {
     logger.error(`Error updating doctor.`, { error });
+    return await sendStatus(res, 500);
+  }
+}
+
+async function list(req, res) {
+  var userId = req.params.user;
+
+  try {
+    if (
+      !userId ||
+      !validate_id(userId) ||
+      !(await Doctor.countDocuments({ _id: userId }))
+    )
+      return await sendStatus(res, 404, `Invalid userId.`);
+
+    if (req.user.userId !== userId) return await sendStatus(res, 403);
+
+    const user = await Record.find({ doctor_id: userId });
+    return await success(res, user);
+  } catch (error) {
+    logger.error(`Error retrieving record list.`, { error });
     return await sendStatus(res, 500);
   }
 }

@@ -19,6 +19,7 @@ module.exports = (app) => {
   app.post(`/doctor/update`, auth, doctor.update);
   app.post(`/doctor/login`, doctor.login);
   app.get(`/doctor/view/:user`, auth, doctor.view);
+  app.get(`/doctor/list/:user`, auth, doctor.list);
 
   app.post(`/record/create`, auth, record.create);
   app.post(`/record/update`, auth, record.update);

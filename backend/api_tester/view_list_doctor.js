@@ -2,20 +2,20 @@ const conf = require(`./config.json`);
 const axios = require(`axios`);
 
 const payload = {
-  _id: `63eb5dac86b78351d9d6bc43`,
+  _id: `63eb653ec81b61365346d5e5`,
 };
 
 const config = {
   headers: {
     "x-access-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ViNWRhYzg2Yjc4MzUxZDlkNmJjNDMiLCJlbWFpbCI6Imp1YW4uYy52MjJpZXJpLjExQGdtYWlsLmNvbSIsImlhdCI6MTY3NjM3MDg2MCwiZXhwIjoxNjc2Mzc4MDYwfQ.URqM-xIdCB5Iq3zp3f00mVUxBzbJ_CsBVHHRy1Zcg1Y",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ViNjUzZWM4MWI2MTM2NTM0NmQ1ZTUiLCJlbWFpbCI6IjEyMTIxMiIsImlhdCI6MTY3NjM3MTI5NCwiZXhwIjoxNjc2Mzc4NDk0fQ.AHatlN_g5PODT-DpZlQJccHAmVNI9YTTHdbDrN6i_bk",
   },
 };
 
 async function run() {
   try {
     const res = await axios.get(
-      `http://localhost:${conf.port}/patient/list/${payload._id}`,
+      `http://localhost:${conf.port}/doctor/list/${payload._id}`,
       config
     );
     console.log(`Success!`);
