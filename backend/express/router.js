@@ -1,6 +1,7 @@
 const patient = require(`./controllers/patient`);
 const doctor = require(`./controllers/doctor`);
 const record = require(`./controllers/record`);
+const refresh = require(`./refresh`);
 const auth = require(`./auth`);
 
 module.exports = (app) => {
@@ -18,8 +19,11 @@ module.exports = (app) => {
   app.post(`/doctor/update`, auth, doctor.update);
   app.post(`/doctor/login`, doctor.login);
   app.get(`/doctor/view/:user`, auth, doctor.view);
+  app.get(`/doctor/list/:user`, auth, doctor.list);
 
   app.post(`/record/create`, auth, record.create);
   app.post(`/record/update`, auth, record.update);
   app.get(`/record/view/:record`, auth, record.view);
+
+  app.get(`/refresh`, refresh);
 };

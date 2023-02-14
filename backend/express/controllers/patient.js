@@ -44,14 +44,31 @@ async function encrypt(password) {
   return await bcrypt.hash(password, 10);
 }
 
-async function sign(user) {
+async function get_refresh(user) {
   return await jwt.sign(
     { userId: user._id, email: user.email },
-    env.TOKEN_KEY,
+    env.REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: `1y`,
+    }
+  );
+}
+
+async function get_access(user) {
+  return await jwt.sign(
+    { userId: user._id, email: user.email },
+    env.ACCESS_TOKEN_SECRET,
     {
       expiresIn: `2h`,
     }
   );
+}
+
+async function get_tokens(user) {
+  return {
+    access_token: await get_access(user),
+    refresh_token: await get_refresh(user),
+  };
 }
 
 async function create(req, res) {
@@ -65,11 +82,13 @@ async function create(req, res) {
       return await sendStatus(res, 409, `User exists.`);
 
     const newPatient = new Patient(dat);
-    newPatient.token = await sign(newPatient);
     await newPatient.save();
+
+    const tokens = await get_tokens(newPatient);
+
     logger.info(`New Patient saved!`, { dat });
 
-    await success(res, newPatient);
+    await success(res, { user: newPatient, tokens });
   } catch (error) {
     logger.error(`Error saving new patient.`, { error });
     return await sendStatus(res, 500);
@@ -86,11 +105,12 @@ async function login(req, res) {
 
     const user = await Patient.findOne({ email });
     if (user && (await bcrypt.compare(password, user.password))) {
-      user.token = await sign(user);
       await user.save();
 
+      const tokens = await get_tokens(user);
+
       logger.info(`Patient login success.`);
-      return await success(res, user);
+      return await success(res, { user, tokens });
     }
     logger.info(`Patient invalid credentials.`);
     return await sendStatus(res, 400, `Invalid credentials.`);
@@ -116,7 +136,7 @@ async function view(req, res) {
     }
 
     const user = await Patient.findOne({ _id: userId }).exec();
-    await success(res, user);
+    await success(res, { user });
   } catch (error) {
     logger.error(`Error viewing patient.`, { error });
     return await sendStatus(res, 500);
@@ -148,11 +168,12 @@ async function update(req, res) {
     )
       return await sendStatus(res, 409, `User exists.`);
 
-    const updatedPatient = await Patient.findByIdAndUpdate(userId, dat).exec();
+    await Patient.findByIdAndUpdate(userId, dat).exec();
+    const updatedPatient = await Patient.findOne({ _id: userId });
 
     logger.info(`Patient updated!`, { dat });
 
-    return await success(res, updatedPatient);
+    return await success(res, { user: updatedPatient });
   } catch (error) {
     logger.error(`Error updating patient.`, { error });
     return await sendStatus(res, 500);
