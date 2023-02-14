@@ -8,14 +8,14 @@ const payload = {
 const config = {
   headers: {
     "x-access-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2VhMzhlNWNlNmYzNjVhOWJjZjUwZGIiLCJlbWFpbCI6Imp1YW4uYy52aWVyaS4yMjIxMkBnbWFpbC5jb20iLCJpYXQiOjE2NzYyOTQ0NjYsImV4cCI6MTY3NjMwMTY2Nn0.qlBx20yFFjMYyV0jyXLg_0NzSQ_B-6jxZR2o-2R1dsg",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2VhMzhlNWNlNmYzNjVhOWJjZjUwZGIiLCJlbWFpbCI6Imp1YW4uYy52aWVyaS4yMjIxMkBnbWFpbC5jb20iLCJpYXQiOjE2NzYzMDM1NzYsImV4cCI6MTY3NjMxMDc3Nn0.V_AaDL9OME7vTHUZcqOP7V-1VnKE1Z_cxY0wXPHMUEU",
   },
 };
 
 async function run() {
   try {
     const res = await axios.get(
-      `http://localhost:${conf.port}/patient/view/${payload._id}`,
+      `http://localhost:${conf.port}/patient/list/${payload._id}`,
       config
     );
     console.log(`Success!`);

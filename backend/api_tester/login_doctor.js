@@ -3,15 +3,13 @@ const axios = require(`axios`);
 
 const payload = {
   email: `121212`,
-  name: `Juan Carlo Vieri`,
-  hospital: `Bagus`,
   password: `ahlikecil`,
 };
 
 async function run() {
   try {
     const res = await axios.post(
-      `http://localhost:${conf.port}/doctor/create`,
+      `http://localhost:${conf.port}/doctor/login`,
       payload
     );
     console.log(`Success!`);

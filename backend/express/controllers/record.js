@@ -1,9 +1,9 @@
 const mongoose = require(`mongoose`);
 const { logger } = require(`../logger`);
 const { success, error, sendStatus } = require(`../req_handler`);
-const { Record } = require(`../db/record`);
-const { Patient } = require(`../db/patient`);
-const { Doctor } = require(`../db/doctor`);
+const { Record } = require(`../models/record`);
+const { Patient } = require(`../models/patient`);
+const { Doctor } = require(`../models/doctor`);
 const ObjectId = mongoose.Types.ObjectId;
 
 function logAndThrow(jobs, message) {
@@ -64,11 +64,15 @@ async function create(req, res) {
     if (invalid)
       return await sendStatus(res, 400, `Invalid patient or doctor.`);
 
+    if (req.user.userId !== dat.doctor_id) {
+      return await sendStatus(res, 403);
+    }
+
     const newRecord = new Record(dat);
     await newRecord.save();
     logger.info(`New Record saved!`, { dat });
 
-    await sendStatus(res, 200, `Record Saved.`);
+    return await success(res, newRecord);
   } catch (error) {
     logger.error(`Error creating record.`, { error });
     return await sendStatus(res, 500);
@@ -87,7 +91,15 @@ async function view(req, res) {
       return await sendStatus(res, 404, `Invalid recordId`);
 
     const record = await Record.findOne({ _id: recordId }).exec();
-    await success(res, record);
+
+    if (
+      req.user.userId !== record.patient_id.toString() &&
+      req.user.userId !== record.doctor_id.toString()
+    ) {
+      return await sendStatus(res, 403);
+    }
+
+    return await success(res, record);
   } catch (error) {
     logger.error(`Error viewing record.`, { error });
     return await sendStatus(res, 500);
@@ -116,11 +128,19 @@ async function update(req, res) {
     if (invalid)
       return await sendStatus(res, 400, `Invalid patient or doctor.`);
 
-    await Record.findByIdAndUpdate(recordId, dat).exec();
+    if (
+      req.user.userId !== dat.doctor_id ||
+      req.user.userId !==
+        (await Record.findOne({ _id: recordId })).doctor_id.toString()
+    ) {
+      return await sendStatus(res, 403);
+    }
+
+    const updatedRecord = await Record.findByIdAndUpdate(recordId, dat).exec();
 
     logger.info(`Record udpated!`, { dat });
 
-    await sendStatus(res, 200, `Record updated.`);
+    return await success(res, updatedRecord);
   } catch (error) {
     logger.error(`Error updating record.`, { error });
     return await sendStatus(res, 500);
@@ -135,4 +155,4 @@ async function record(req, res) {
   await cmdMap[cmd](req, res);
 }
 
-module.exports = { record };
+module.exports = cmdMap;

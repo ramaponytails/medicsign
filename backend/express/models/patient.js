@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
 
 const patientSchema = new mongoose.Schema({
-  email: String,
+  email: { type: String, required: true },
   gender: String,
-  name: String,
-  date_birth: Date,
+  name: { type: String, required: true },
+  date_birth: { type: Date, required: true },
   public_key: String,
+  password: { type: String, required: true },
+  token: String,
 });
 
 patientSchema.index({ email: 1 }, { unique: true });
