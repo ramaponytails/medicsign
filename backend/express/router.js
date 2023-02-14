@@ -1,6 +1,7 @@
 const patient = require(`./controllers/patient`);
 const doctor = require(`./controllers/doctor`);
 const record = require(`./controllers/record`);
+const refresh = require(`./refresh`);
 const auth = require(`./auth`);
 
 module.exports = (app) => {
@@ -22,4 +23,6 @@ module.exports = (app) => {
   app.post(`/record/create`, auth, record.create);
   app.post(`/record/update`, auth, record.update);
   app.get(`/record/view/:record`, auth, record.view);
+
+  app.get(`/refresh`, refresh);
 };

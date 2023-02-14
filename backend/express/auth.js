@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, env.TOKEN_KEY);
+    const decoded = jwt.verify(token, env.ACCESS_TOKEN_SECRET);
     req.user = decoded;
   } catch (error) {
     return sendStatus(res, 401, `Invalid token.`);
