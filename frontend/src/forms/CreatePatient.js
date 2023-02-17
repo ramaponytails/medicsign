@@ -110,7 +110,9 @@ const PatientForm = () => {
           </label>
           <div className="col-sm-10">
             <Field className="form-control" name="name" type="text" />
-            <ErrorMessage name="name" />
+            <ErrorMessage name="name">
+              {(msg) => <div style={{ color: "red" }}>{msg}</div>}
+            </ErrorMessage>
           </div>
         </div>
         <div className="form-group row mb-2">
@@ -119,7 +121,9 @@ const PatientForm = () => {
           </label>
           <div className="col-sm-10">
             <Field className="form-control" name="email" type="email" />
-            <ErrorMessage name="email" />
+            <ErrorMessage name="email">
+              {(msg) => <div style={{ color: "red" }}>{msg}</div>}
+            </ErrorMessage>
           </div>
         </div>
         <div className="form-group row mb-2">
@@ -128,13 +132,17 @@ const PatientForm = () => {
           </label>
           <div className="col-sm-10">
             <Field className="form-control" name="password" type="password" />
-            <ErrorMessage name="password" />
+            <ErrorMessage name="password">
+              {(msg) => <div style={{ color: "red" }}>{msg}</div>}
+            </ErrorMessage>
           </div>
         </div>
         <div className="form-group row mb-2">
           <div className="col-sm-2 pt-0">
             <label htmlFor="gender"> Gender </label> <br />
-            <ErrorMessage name="gender" />
+            <ErrorMessage name="gender">
+              {(msg) => <div style={{ color: "red" }}>{msg}</div>}
+            </ErrorMessage>
           </div>
           <div role="group" className="col-sm-10">
             <div className="form-check">
@@ -172,7 +180,9 @@ const PatientForm = () => {
           </label>
           <div className="col-sm-10 pt-0">
             <Field className="form-control" name="date_birth" type="date" />
-            <ErrorMessage name="date_birth" />
+            <ErrorMessage name="date_birth">
+              {(msg) => <div style={{ color: "red" }}>{msg}</div>}
+            </ErrorMessage>
           </div>
         </div>
         <button type="submit" className="btn btn-primary">
