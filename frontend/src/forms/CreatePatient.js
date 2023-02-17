@@ -93,6 +93,8 @@ async function handleSubmit(values, { setSubmitting }) {
 const PatientForm = () => {
   return (
     <Formik
+      validate={validate}
+      onSubmit={handleSubmit}
       initialValues={{
         name: "",
         email: "",
@@ -100,14 +102,11 @@ const PatientForm = () => {
         gender: "",
         date_birth: "",
       }}
-      validate={validate}
-      onSubmit={handleSubmit}
     >
       <Form>
         <div className="form-group row mb-2">
           <label htmlFor="name" className="col-sm-2">
-            {" "}
-            Patient Name{" "}
+            Patient Name
           </label>
           <div className="col-sm-10">
             <Field className="form-control" name="name" type="text" />
@@ -116,8 +115,7 @@ const PatientForm = () => {
         </div>
         <div className="form-group row mb-2">
           <label htmlFor="email" className="col-sm-2">
-            {" "}
-            Email{" "}
+            Email
           </label>
           <div className="col-sm-10">
             <Field className="form-control" name="email" type="email" />
@@ -126,8 +124,7 @@ const PatientForm = () => {
         </div>
         <div className="form-group row mb-2">
           <label htmlFor="password" className="col-sm-2">
-            {" "}
-            Password{" "}
+            Password
           </label>
           <div className="col-sm-10">
             <Field className="form-control" name="password" type="password" />
@@ -178,12 +175,9 @@ const PatientForm = () => {
             <ErrorMessage name="date_birth" />
           </div>
         </div>
-        <div className="form-group">
-          <button type="submit" className="btn btn-primary">
-            {" "}
-            Submit{" "}
-          </button>
-        </div>
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
       </Form>
     </Formik>
   );
