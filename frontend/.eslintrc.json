@@ -83,7 +83,6 @@
         "extensions": [".jsx", ".js"]
       }
     ],
-    "react/jsx-closing-bracket-location": ["error", "after-props"],
     "react/prefer-stateless-function": [
       "error",
       { "ignorePureComponents": true }
