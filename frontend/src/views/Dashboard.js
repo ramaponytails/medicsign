@@ -17,7 +17,7 @@ import {
   Tooltip,
 } from "react-bootstrap";
 
-import RecordForm from 'forms/CreateRecord'
+import PatientForm from "forms/CreatePatient";
 
 function Dashboard() {
   return (
@@ -25,7 +25,7 @@ function Dashboard() {
       <Container>
         <Row>
           <Col>
-            <RecordForm />
+            <PatientForm />
           </Col>
         </Row>
       </Container>
