@@ -2,8 +2,8 @@ const conf = require(`./config.json`);
 const axios = require(`axios`);
 
 const payload = {
-  _id: `63eb5dac86b78351d9d6bc43`,
-  email: `juan.c.v22ieri.11@gmail.com`,
+  _id: `63f04735bdcd98d77d995fc8`,
+  email: `matewmemangjelek`,
   gender: `fem11ale`,
   name: `Juan 22 Vieri`,
   date_birth: 9213822471982,
@@ -14,7 +14,7 @@ const payload = {
 const config = {
   headers: {
     "x-access-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ViNWRhYzg2Yjc4MzUxZDlkNmJjNDMiLCJlbWFpbCI6Imp1YW4uYy52MjJpZXJpLjExQGdtYWlsLmNvbSIsImlhdCI6MTY3NjM3MDg2MCwiZXhwIjoxNjc2Mzc4MDYwfQ.URqM-xIdCB5Iq3zp3f00mVUxBzbJ_CsBVHHRy1Zcg1Y",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2YwNDczNWJkY2Q5OGQ3N2Q5OTVmYzgiLCJlbWFpbCI6Im1hdGV3amVsZWsiLCJpYXQiOjE2NzY2OTI3MzMsImV4cCI6MTY3NjY5OTkzM30.CFa9kHImIw9kWn_9QolM6ZHcDxFBgHBr_AxgGSa6yD0",
   },
 };
 
