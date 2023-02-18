@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from "react";
 
 // react-bootstrap components
@@ -10,7 +12,7 @@ import {
   Nav,
   Container,
   Row,
-  Col
+  Col,
 } from "react-bootstrap";
 
 function User() {
