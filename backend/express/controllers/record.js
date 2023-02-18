@@ -4,6 +4,7 @@ const { success, error, sendStatus } = require(`../req_handler`);
 const { Record } = require(`../models/record`);
 const { Patient } = require(`../models/patient`);
 const { Doctor } = require(`../models/doctor`);
+const sign = require(`../sign`);
 const ObjectId = mongoose.Types.ObjectId;
 
 function logAndThrow(jobs, message) {
@@ -99,7 +100,7 @@ async function view(req, res) {
       return await sendStatus(res, 403);
     }
 
-    return await success(res, record);
+    return await success(res, record, await sign(record, req.user.userId));
   } catch (error) {
     logger.error(`Error viewing record.`, { error });
     return await sendStatus(res, 500);

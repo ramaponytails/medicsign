@@ -2,22 +2,22 @@ const conf = require(`./config.json`);
 const axios = require(`axios`);
 
 const payload = {
-  _id: `63ea4cbc047e56616bcc52bd`,
-};
-
-const config = {
-  headers: {
-    "x-access-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2VhNDI1MDk0ZGE1ZTFiZGI5YzI1MDAiLCJlbWFpbCI6Imp1YW4uYy52aWVyMjMyMkBnbWFpbC5jb20iLCJpYXQiOjE2NzYyOTkzNTYsImV4cCI6MTY3NjMwNjU1Nn0.x0uLlhDLMyqfFGzUD3MvQ9sRKkYmtEGlyYevG8TIYwo",
-  },
+  _id: `63f0543d4a48782688bc0502`,
 };
 
 // const config = {
 //   headers: {
 //     "x-access-token":
-//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2VhMzk1NmNlNmYzNjVhOWJjZjUwZWQiLCJlbWFpbCI6Imp1YW4uYy52MjJpZXJpLjExQGdtYWlsLmNvbSIsImlhdCI6MTY3NjMwMDY5MywiZXhwIjoxNjc2MzA3ODkzfQ.5zzWKSPQp0NJzG-wEVfyVbmUOURK_HWqxAoTlUVdu80",
+//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2YwNTQxYTRhNDg3ODI2ODhiYzA0ZTgiLCJlbWFpbCI6ImpvZWxqZWxlayIsImlhdCI6MTY3NjY5NDU1NCwiZXhwIjoxNjc2NzAxNzU0fQ.gE9q0k8AVzRM5lD-QifaSkiYOMzw-42eerTrcd2urQ0",
 //   },
 // };
+
+const config = {
+  headers: {
+    "x-access-token":
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2YwNDczNWJkY2Q5OGQ3N2Q5OTVmYzgiLCJlbWFpbCI6Im1hdGV3amVsZWsiLCJpYXQiOjE2NzY2OTI3MzMsImV4cCI6MTY3NjY5OTkzM30.CFa9kHImIw9kWn_9QolM6ZHcDxFBgHBr_AxgGSa6yD0",
+  },
+};
 
 async function run() {
   try {
