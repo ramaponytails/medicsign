@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*!
 
 =========================================================
@@ -34,7 +35,7 @@ function Sidebar({ color, image, routes }) {
       <div
         className="sidebar-background"
         style={{
-          backgroundImage: "url(" + image + ")"
+          backgroundImage: "url(" + image + ")",
         }}
       />
       <div className="sidebar-wrapper">
@@ -65,7 +66,9 @@ function Sidebar({ color, image, routes }) {
                 >
                   <NavLink
                     to={prop.layout + prop.path}
-                    className={({ isActive }) => "nav-link" + (isActive ? " activated" : "")}
+                    className={({ isActive }) =>
+                      "nav-link" + (isActive ? " activated" : "")
+                    }
                   >
                     <i className={prop.icon} />
                     <p>{prop.name}</p>
