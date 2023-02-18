@@ -1,5 +1,6 @@
 'use strict';
 
+const crypto = require(`crypto`);
 const mongoose = require(`mongoose`);
 const jwt = require(`jsonwebtoken`);
 const bcrypt = require(`bcryptjs`);
@@ -8,6 +9,8 @@ const { logger } = require(`../logger`);
 const { success, error, sendStatus } = require(`../req_handler`);
 const { Patient } = require(`../models/patient`);
 const { Record } = require(`../models/record`);
+const { Key } = require(`../models/key`);
+const sign = require(`../sign`);
 const ObjectId = mongoose.Types.ObjectId;
 
 const cmdMap = {
@@ -23,7 +26,7 @@ const patientSchema = {
   gender: `string`,
   name: `string`,
   date_birth: `number`,
-  public_key: `string`,
+  // public_key: `string`,
   password: `string`,
 };
 
@@ -81,8 +84,28 @@ async function create(req, res) {
     if (await Patient.countDocuments({ email: dat.email }))
       return await sendStatus(res, 409, `User exists.`);
 
+    var { publicKey: public_key, privateKey: private_key } =
+      crypto.generateKeyPairSync(`rsa`, {
+        modulusLength: 2048,
+        publicKeyEncoding: {
+          type: 'spki',
+          format: 'der',
+        },
+        privateKeyEncoding: {
+          type: 'pkcs8',
+          format: 'der',
+        },
+      });
+
+    public_key = public_key.toString(`base64`);
+    private_key = private_key.toString(`base64`);
+    dat.public_key = public_key;
+
     const newPatient = new Patient(dat);
     await newPatient.save();
+
+    const newKey = new Key({ userId: newPatient._id, private_key, public_key });
+    await newKey.save();
 
     const tokens = await get_tokens(newPatient);
 
@@ -193,8 +216,8 @@ async function list(req, res) {
 
     if (req.user.userId !== userId) return await sendStatus(res, 403);
 
-    const user = await Record.find({ patient_id: userId });
-    return await success(res, user);
+    const records = await Record.find({ patient_id: userId });
+    return await success(res, records, await sign(records, userId));
   } catch (error) {
     logger.error(`Error retrieving record list.`, { error });
     return await sendStatus(res, 500);

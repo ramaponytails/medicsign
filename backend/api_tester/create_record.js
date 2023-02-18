@@ -2,7 +2,7 @@ const conf = require(`./config.json`);
 const axios = require(`axios`);
 
 const payload = {
-  patient_id: `63eb5dac86b78351d9d6bc43`,
+  patient_id: `63f04735bdcd98d77d995fc8`,
   doctor_id: `63eb653ec81b61365346d5e5`,
   disease: `kangen`,
   diagnosis: `jangan`,
@@ -13,7 +13,7 @@ const payload = {
 const config = {
   headers: {
     "x-access-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ViNjUzZWM4MWI2MTM2NTM0NmQ1ZTUiLCJlbWFpbCI6IjExMTExbSIsImlhdCI6MTY3NjM3NDQwNywiZXhwIjoxNjc2MzgxNjA3fQ.6ObfHDBBQxLmCo-5BYAcV9GasqWzBG8aX8olbZN9R_c",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ViNjUzZWM4MWI2MTM2NTM0NmQ1ZTUiLCJlbWFpbCI6IjExMTExbSIsImlhdCI6MTY3NjY5Mjc0NywiZXhwIjoxNjc2Njk5OTQ3fQ.43q62wNcIpnDfv7WXIVhjft3zgh318uSxOI5eDuZstc",
   },
 };
 
