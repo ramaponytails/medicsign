@@ -2,18 +2,18 @@ const conf = require(`./config.json`);
 const axios = require(`axios`);
 
 const payload = {
-  patient_id: `63f04735bdcd98d77d995fc8`,
-  doctor_id: `63f0541a4a48782688bc04e8`,
-  disease: `kangen`,
-  diagnosis: `jangan`,
-  created_at: 92138471982,
-  signature: `mat`,
+  patient_id: `63f0f8d1c0b60a1da17f1fb8`,
+  doctor_id: `63eb653ec81b61365346d5e5`,
+  disease: `2222`,
+  diagnosis: `11`,
+  created_at: 22,
+  signature: `11`,
 };
 
 const config = {
   headers: {
     "x-access-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2YwNTQxYTRhNDg3ODI2ODhiYzA0ZTgiLCJlbWFpbCI6ImpvZWxqZWxlayIsImlhdCI6MTY3NjY5NDU1NCwiZXhwIjoxNjc2NzAxNzU0fQ.gE9q0k8AVzRM5lD-QifaSkiYOMzw-42eerTrcd2urQ0",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ViNjUzZWM4MWI2MTM2NTM0NmQ1ZTUiLCJlbWFpbCI6IjExMTExbSIsImlhdCI6MTY3NjczODcyMCwiZXhwIjoxNjc2NzQ1OTIwfQ.WjgKMGCCFpJYoenoYemIOjG0yyzGeDHI-mcfm-jNI1Y",
   },
 };
 

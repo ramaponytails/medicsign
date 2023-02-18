@@ -10,7 +10,7 @@ const { success, error, sendStatus } = require(`../req_handler`);
 const { Doctor } = require(`../models/doctor`);
 const { Record } = require(`../models/record`);
 const { Key } = require(`../models/key`);
-const sign = require(`../sign`);
+const { decrypt, sign } = require(`../sign`);
 const ObjectId = mongoose.Types.ObjectId;
 
 const cmdMap = {
@@ -215,7 +215,7 @@ async function list(req, res) {
     if (req.user.userId !== userId) return await sendStatus(res, 403);
 
     const records = await Record.find({ doctor_id: userId });
-    return await success(res, records, await sign(records, userId));
+    return await success(res, records);
   } catch (error) {
     logger.error(`Error retrieving record list.`, { error });
     return await sendStatus(res, 500);
