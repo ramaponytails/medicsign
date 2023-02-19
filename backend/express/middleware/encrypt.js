@@ -1,8 +1,8 @@
 'use strict';
 
 const crypto = require(`crypto`);
-const { success, error, sendStatus } = require(`./req_handler`);
-const { Key } = require(`./models/key`);
+const { success, error, sendStatus } = require(`../middleware/req_handler`);
+const { Key } = require(`../models/key`);
 
 async function encrypt_aes(data) {
   const key = crypto.randomBytes(32);

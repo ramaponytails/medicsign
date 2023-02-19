@@ -1,11 +1,11 @@
 const mongoose = require(`mongoose`);
-const { logger } = require(`../logger`);
-const { success, error, sendStatus } = require(`../req_handler`);
+const { logger } = require(`../middleware/logger`);
+const { success, error, sendStatus } = require(`../middleware/req_handler`);
 const { Record } = require(`../models/record`);
 const { Patient } = require(`../models/patient`);
 const { Doctor } = require(`../models/doctor`);
-const { encrypt } = require(`../encrypt`);
-const { decrypt, server_public_key } = require(`../decrypt`);
+const { encrypt } = require(`../middleware/encrypt`);
+const { decrypt, server_public_key } = require(`../middleware/decrypt`);
 const ObjectId = mongoose.Types.ObjectId;
 
 function logAndThrow(jobs, message) {

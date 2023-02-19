@@ -1,8 +1,8 @@
 'use strict';
 
 const crypto = require(`crypto`);
-const { success, error, sendStatus } = require(`./req_handler`);
-const { Key } = require(`./models/key`);
+const { success, error, sendStatus } = require(`../middleware/req_handler`);
+const { Key } = require(`../models/key`);
 
 var { publicKey: server_public_key, privateKey: server_private_key } =
   crypto.generateKeyPairSync(`rsa`, {

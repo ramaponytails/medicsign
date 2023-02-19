@@ -1,9 +1,9 @@
 'use strict';
 
 const jwt = require(`jsonwebtoken`);
-const { success, error, sendStatus } = require(`./req_handler`);
+const { success, error, sendStatus } = require(`../middleware/req_handler`);
 const env = process.env;
-const { encrypt } = require(`./encrypt`);
+const { encrypt } = require(`../middleware/encrypt`);
 
 async function get_access(user) {
   return await jwt.sign(

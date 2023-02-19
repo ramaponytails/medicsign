@@ -1,4 +1,4 @@
-const { logger } = require(`./logger`);
+const { logger } = require(`../middleware/logger`);
 
 async function success(res, data, signature) {
   await res.send({
