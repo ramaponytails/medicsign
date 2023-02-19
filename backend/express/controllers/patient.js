@@ -171,31 +171,28 @@ async function update(req, res) {
     dat = validate(dat);
     const { public_key } = req.body;
 
-    if (!dat || !public_key)
-      return await sendStatus(res, 400, `Incomplete data.`);
-
     dat.password = await hash(dat.password);
     if (
       !dat ||
+      !public_key ||
       !userId ||
       !validate_id(userId) ||
       !(await Patient.countDocuments({ _id: userId }))
     )
-      return await sendStatus(res, 400, `Invalid user.`);
+      return await sendStatus(res, 400, `Incomplete data..`);
 
     if (req.user.userId !== userId) {
       return await sendStatus(res, 403);
     }
-
-    const userKey = await Key.findOne({ userId });
-    userKey.public_key = public_key;
-    await userKey.save();
-
     if (
       (await Patient.countDocuments({ email: dat.email })) -
       ((await Patient.findOne({ _id: userId }).exec()).email === dat.email)
     )
       return await sendStatus(res, 409, `User exists.`);
+
+    const userKey = await Key.findOne({ userId });
+    userKey.public_key = public_key;
+    await userKey.save();
 
     await Patient.findByIdAndUpdate(userId, dat).exec();
     const updatedPatient = await Patient.findOne({ _id: userId });

@@ -1,14 +1,15 @@
 const conf = require(`./config.json`);
 const axios = require(`axios`);
+const { decrypt } = require(`./decryptor`);
 
 const payload = {
-  _id: `63f0541a4a48782688bc04e8`,
+  _id: `63f174b634494a5f16c171de`,
 };
 
 const config = {
   headers: {
     "x-access-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2YwNTQxYTRhNDg3ODI2ODhiYzA0ZTgiLCJlbWFpbCI6ImpvZWxqZWxlayIsImlhdCI6MTY3NjY5NDU1NCwiZXhwIjoxNjc2NzAxNzU0fQ.gE9q0k8AVzRM5lD-QifaSkiYOMzw-42eerTrcd2urQ0",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2YxNzRiNjM0NDk0YTVmMTZjMTcxZGUiLCJlbWFpbCI6ImpvZWxqdWVsZWtrIiwiaWF0IjoxNjc2NzY4OTA2LCJleHAiOjE2NzY3NzYxMDZ9.kUn797wge8izhUL7CuIQ5690-OE9MmO8ax0UJoMbCmQ",
   },
 };
 
@@ -19,7 +20,9 @@ async function run() {
       config
     );
     console.log(`Success!`);
-    console.log(res.data);
+    const { encrypted, keys } = res.data.data;
+    const decrypted = await decrypt(encrypted, keys);
+    console.log(decrypted);
   } catch (error) {
     console.error(`Error: ${error}`);
   }

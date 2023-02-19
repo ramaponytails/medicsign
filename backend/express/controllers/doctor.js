@@ -10,7 +10,8 @@ const { success, error, sendStatus } = require(`../req_handler`);
 const { Doctor } = require(`../models/doctor`);
 const { Record } = require(`../models/record`);
 const { Key } = require(`../models/key`);
-const { decrypt, sign } = require(`../sign`);
+const { encrypt } = require(`../encrypt`);
+const { decrypt, server_public_key } = require(`../decrypt`);
 const ObjectId = mongoose.Types.ObjectId;
 
 const cmdMap = {
@@ -41,7 +42,7 @@ function validate_id(userId) {
   return ObjectId.isValid(userId);
 }
 
-async function encrypt(password) {
+async function hash(password) {
   return await bcrypt.hash(password, 10);
 }
 
@@ -73,43 +74,34 @@ async function get_tokens(user) {
 }
 
 async function create(req, res) {
-  var dat = req.body;
-  dat = validate(dat);
-  if (!dat) return await sendStatus(res, 400, `Invalid user.`);
-  dat.password = await encrypt(dat.password);
-
   try {
+    var dat = req.body.user;
+    dat = validate(dat);
+    const { public_key } = req.body;
+    if (!dat || !public_key)
+      return await sendStatus(res, 400, `Incomplete data.`);
+    dat.password = await hash(dat.password);
+
     if (await Doctor.countDocuments({ email: dat.email }))
       return await sendStatus(res, 409, `User exists.`);
-
-    var { publicKey: public_key, privateKey: private_key } =
-      crypto.generateKeyPairSync(`rsa`, {
-        modulusLength: 2048,
-        publicKeyEncoding: {
-          type: 'spki',
-          format: 'der',
-        },
-        privateKeyEncoding: {
-          type: 'pkcs8',
-          format: 'der',
-        },
-      });
-
-    public_key = public_key.toString(`base64`);
-    private_key = private_key.toString(`base64`);
-    dat.public_key = public_key;
 
     const newDoctor = new Doctor(dat);
     await newDoctor.save();
 
-    const newKey = new Key({ userId: newDoctor._id, private_key, public_key });
+    const newKey = new Key({ userId: newDoctor._id, public_key });
     await newKey.save();
 
     const tokens = await get_tokens(newDoctor);
 
     logger.info(`New Doctor saved!`, { dat });
 
-    await success(res, { user: newDoctor, tokens });
+    await success(
+      res,
+      await encrypt(
+        { user: newDoctor, tokens, server_public_key },
+        newDoctor._id
+      )
+    );
   } catch (error) {
     logger.error(`Error saving new doctor.`, { error });
     return await sendStatus(res, 500);
@@ -118,7 +110,8 @@ async function create(req, res) {
 
 async function login(req, res) {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body.credentials || {};
+    const { public_key } = req.body;
 
     if (!(email && password)) {
       return await sendStatus(res, 400, `Insufficient data to log in.`);
@@ -126,12 +119,17 @@ async function login(req, res) {
 
     const user = await Doctor.findOne({ email });
     if (user && (await bcrypt.compare(password, user.password))) {
-      await user.save();
+      const userKey = await Key.findOne({ userId: user._id });
+      userKey.public_key = public_key;
+      await userKey.save();
 
       const tokens = await get_tokens(user);
 
       logger.info(`Doctor login success.`);
-      return await success(res, { user, tokens });
+      return await success(
+        res,
+        await encrypt({ user, tokens, server_public_key }, user._id)
+      );
     }
     logger.info(`Doctor invalid credentials.`);
     return await sendStatus(res, 400, `Invalid credentials.`);
@@ -157,7 +155,7 @@ async function view(req, res) {
     }
 
     const user = await Doctor.findOne({ _id: userId }).exec();
-    await success(res, { user });
+    await success(res, await encrypt({ user }, userId));
   } catch (error) {
     logger.error(`Error viewing doctor.`, { error });
     return await sendStatus(res, 500);
@@ -165,36 +163,41 @@ async function view(req, res) {
 }
 
 async function update(req, res) {
-  var dat = req.body;
-  const userId = dat._id;
-  dat = validate(dat);
-  dat.password = await encrypt(dat.password);
-
   try {
+    var dat = req.body.user;
+    const userId = dat._id;
+    dat = validate(dat);
+    const { public_key } = req.body;
+
+    dat.password = await hash(dat.password);
     if (
       !dat ||
+      !public_key ||
       !userId ||
       !validate_id(userId) ||
       !(await Doctor.countDocuments({ _id: userId }))
     )
-      return await sendStatus(res, 400, `Invalid user.`);
+      return await sendStatus(res, 400, `Incomplete data.`);
 
     if (req.user.userId !== userId) {
       return await sendStatus(res, 403);
     }
-
     if (
       (await Doctor.countDocuments({ email: dat.email })) -
       ((await Doctor.findOne({ _id: userId }).exec()).email === dat.email)
     )
       return await sendStatus(res, 409, `User exists.`);
 
+    const userKey = await Key.findOne({ userId });
+    userKey.public_key = public_key;
+    await userKey.save();
+
     await Doctor.findByIdAndUpdate(userId, dat).exec();
     const updatedDoctor = await Doctor.findOne({ _id: userId });
 
     logger.info(`Doctor updated!`, { dat });
 
-    return await success(res, { user: updatedDoctor });
+    return await success(res, await encrypt({ user: updatedDoctor }, userId));
   } catch (error) {
     logger.error(`Error updating doctor.`, { error });
     return await sendStatus(res, 500);
@@ -215,7 +218,7 @@ async function list(req, res) {
     if (req.user.userId !== userId) return await sendStatus(res, 403);
 
     const records = await Record.find({ doctor_id: userId });
-    return await success(res, records);
+    return await success(res, await encrypt({ records }, userId));
   } catch (error) {
     logger.error(`Error retrieving record list.`, { error });
     return await sendStatus(res, 500);

@@ -19,7 +19,8 @@ async function run() {
       config
     );
     console.log(`Success!`);
-    console.log(res.data);
+    const { encrypted, keys } = res.data.data;
+    const decrypted = await decrypt(encrypted, keys);
   } catch (error) {
     console.error(`Error: ${error}`);
   }
