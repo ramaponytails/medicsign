@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  backend:
+    image: "medicsign/backend:latest"
+    build: ./backend/express/
+    restart: unless-stopped
+    env_file: ./backend/express/.env
+    ports:
+      - 1234:3000

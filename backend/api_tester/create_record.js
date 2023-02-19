@@ -1,19 +1,21 @@
 const conf = require(`./config.json`);
 const axios = require(`axios`);
+const { encrypt } = require(`./encryptor`);
+const { decrypt } = require(`./decryptor`);
 
 const payload = {
-  patient_id: `63eb5dac86b78351d9d6bc43`,
-  doctor_id: `63eb653ec81b61365346d5e5`,
-  disease: `kangen`,
-  diagnosis: `jangan`,
-  created_at: 92138471982,
-  signature: `mat`,
+  patient_id: `63f0f8d1c0b60a1da17f1fb8`,
+  doctor_id: `63f174b634494a5f16c171de`,
+  disease: `2222`,
+  diagnosis: `11`,
+  created_at: 22,
+  signature: `11`,
 };
 
 const config = {
   headers: {
     "x-access-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ViNjUzZWM4MWI2MTM2NTM0NmQ1ZTUiLCJlbWFpbCI6IjExMTExbSIsImlhdCI6MTY3NjM3NDQwNywiZXhwIjoxNjc2MzgxNjA3fQ.6ObfHDBBQxLmCo-5BYAcV9GasqWzBG8aX8olbZN9R_c",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2YxNzRiNjM0NDk0YTVmMTZjMTcxZGUiLCJlbWFpbCI6ImpvZWxqdWVsZWtrIiwiaWF0IjoxNjc2NzY4OTA2LCJleHAiOjE2NzY3NzYxMDZ9.kUn797wge8izhUL7CuIQ5690-OE9MmO8ax0UJoMbCmQ",
   },
 };
 
@@ -28,11 +30,13 @@ async function run() {
   try {
     const res = await axios.post(
       `http://localhost:${conf.port}/record/create`,
-      payload,
+      await encrypt(payload),
       config
     );
     console.log(`Success!`);
-    console.log(res.data);
+    const { encrypted, keys } = res.data.data;
+    const decrypted = await decrypt(encrypted, keys);
+    console.log(decrypted);
   } catch (error) {
     console.error(`Error: ${error}`);
   }

@@ -5,6 +5,7 @@ const doctorSchema = new mongoose.Schema({
   name: { type: String, required: true },
   hospital: { type: String, required: true },
   password: { type: String, required: true },
+  public_key: String,
 });
 
 doctorSchema.index({ email: 1 }, { unique: true });

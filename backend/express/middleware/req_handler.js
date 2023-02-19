@@ -1,9 +1,10 @@
-const { logger } = require(`./logger`);
+const { logger } = require(`../middleware/logger`);
 
-async function success(res, data) {
+async function success(res, data, signature) {
   await res.send({
     success: true,
     data,
+    signature,
   });
   logger.info(`Success response.`, { res, data });
 }
