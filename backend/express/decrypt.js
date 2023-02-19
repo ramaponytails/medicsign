@@ -18,6 +18,11 @@ var { publicKey: server_public_key, privateKey: server_private_key } =
   });
 
 server_public_key = server_public_key.toString(`base64`);
+server_private_key = crypto.createPrivateKey({
+  key: server_private_key,
+  type: `pkcs8`,
+  format: `der`,
+});
 
 async function decrypt_aes(enc, key, iv, authTag) {
   key = Buffer.from(key, `base64`);
