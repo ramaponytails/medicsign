@@ -13,13 +13,12 @@ const validate = (values) => {
   const password_regex = /^[A-Za0-9._*%&$\\\/]/i;
   const hospital_regex = /^[a-zA-Z0-9_-]+( [a-zA-Z0-9_-]+)*$/i;
 
-
   const errors = {};
 
   if (!values.name) {
     errors.name = "Name required";
   } else if (!name_regex.test(values.name)) {
-    errors.name = "Name must only contain alphanumeric characters and spaces";
+    errors.name = "Name must only contain alphabet characters and spaces";
   }
 
   if (!values.email) {
@@ -39,9 +38,9 @@ const validate = (values) => {
 
   if (!values.hospital) {
     errors.hospital = "Hospital required";
-  }
-  else if(!hospital_regex.test(values.hospital)) {
-    errors.hospital = "Hospital name can ony contain alphanumeric characters, spaces, and symbols (- _)";
+  } else if (!hospital_regex.test(values.hospital)) {
+    errors.hospital =
+      "Hospital name can ony contain alphanumeric characters, spaces, and symbols (- _)";
   }
 
   return errors;
@@ -50,7 +49,7 @@ const validate = (values) => {
 async function create(payload) {
   try {
     const res = await axios.post(
-      `http://localhost:3000/patient/create`,
+      `http://localhost:3000/doctor/create`,
       payload
     );
     console.log(`Success!`);
@@ -68,8 +67,8 @@ async function handleSubmit(values, { setSubmitting }) {
     hospital: values.hospital,
   };
 
-  setTimeout(() => {
-    create(payload);
+  setTimeout(async () => {
+    await create(payload);
     setSubmitting(false);
   }, 400);
 }

@@ -84,8 +84,8 @@ async function handleSubmit(values, { setSubmitting }) {
     public_key: createPublicKey(),
   };
 
-  setTimeout(() => {
-    create(payload);
+  setTimeout(async () => {
+    await create(payload);
     setSubmitting(false);
   }, 400);
 }

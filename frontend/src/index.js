@@ -20,16 +20,9 @@ be included in all copies or substantial portions of the Software.
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import { BrowserRouter, Routes, Route, Navigate, Link, } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 
 import routes from "routes.js";
-import Dashboard from "views/Dashboard.js";
-import UserProfile from "views/UserProfile.js";
-import TableList from "views/TableList.js";
-import Typography from "views/Typography.js";
-import Icons from "views/Icons.js";
-import Maps from "views/Maps.js";
-import Upgrade from "views/Upgrade.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/animate.min.css";
@@ -61,9 +54,7 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
-      <Route element={<AdminLayout />}>
-        {getRoutes(routes)}
-      </Route>
+      <Route element={<AdminLayout />}>{getRoutes(routes)}</Route>
     </Routes>
   </BrowserRouter>
 );
