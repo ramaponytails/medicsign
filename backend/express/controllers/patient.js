@@ -75,6 +75,19 @@ async function get_tokens(user) {
   };
 }
 
+async function validate_key(key) {
+  try {
+    const res = crypto.createPublicKey({
+      key: Buffer.from(key, `base64`),
+      type: `spki`,
+      format: `der`,
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 async function create(req, res) {
   try {
     var dat = req.body.user;
@@ -82,6 +95,9 @@ async function create(req, res) {
     const { public_key } = req.body;
     if (!dat || !public_key)
       return await sendStatus(res, 400, `Incomplete data.`);
+    if (!(await validate_key(public_key)))
+      return await sendStatus(res, 400, `Invalid public key format.`);
+
     dat.password = await hash(dat.password);
 
     if (await Patient.countDocuments({ email: dat.email }))
@@ -118,6 +134,8 @@ async function login(req, res) {
     if (!(email && password && public_key)) {
       return await sendStatus(res, 400, `Insufficient data to log in.`);
     }
+    if (!(await validate_key(public_key)))
+      return await sendStatus(res, 400, `Invalid public key format.`);
 
     const user = await Patient.findOne({ email });
     if (user && (await bcrypt.compare(password, user.password))) {
@@ -180,6 +198,8 @@ async function update(req, res) {
       !(await Patient.countDocuments({ _id: userId }))
     )
       return await sendStatus(res, 400, `Incomplete data..`);
+    if (!(await validate_key(public_key)))
+      return await sendStatus(res, 400, `Invalid public key format.`);
 
     if (req.user.userId !== userId) {
       return await sendStatus(res, 403);
