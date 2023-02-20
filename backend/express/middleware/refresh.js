@@ -1,8 +1,9 @@
 'use strict';
 
 const jwt = require(`jsonwebtoken`);
-const { success, error, sendStatus } = require(`./req_handler`);
+const { success, error, sendStatus } = require(`../middleware/req_handler`);
 const env = process.env;
+const { encrypt } = require(`../middleware/encrypt`);
 
 async function get_access(user) {
   return await jwt.sign(
@@ -26,7 +27,10 @@ module.exports = async (req, res, next) => {
     const user = decoded;
 
     const access_token = await get_access(user);
-    return success(res, { access_token, refresh_token });
+    return success(
+      res,
+      await encrypt({ access_token, refresh_token }, user.userId)
+    );
   } catch (error) {
     return sendStatus(res, 401, `Invalid token.`);
   }

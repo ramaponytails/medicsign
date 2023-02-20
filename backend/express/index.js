@@ -2,8 +2,8 @@ const env = process.env;
 const express = require(`express`);
 const mongoose = require(`mongoose`);
 const cors = require('cors');
-const { logger } = require(`./logger`);
-const { success, error } = require(`./req_handler`);
+const { logger } = require(`./middleware/logger`);
+const { success, error } = require(`./middleware/req_handler`);
 const router = require(`./router`);
 
 const app = express();

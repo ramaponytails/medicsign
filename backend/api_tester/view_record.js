@@ -1,23 +1,24 @@
 const conf = require(`./config.json`);
 const axios = require(`axios`);
+const { decrypt } = require(`./decryptor`);
 
 const payload = {
-  _id: `63ea4cbc047e56616bcc52bd`,
-};
-
-const config = {
-  headers: {
-    "x-access-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2VhNDI1MDk0ZGE1ZTFiZGI5YzI1MDAiLCJlbWFpbCI6Imp1YW4uYy52aWVyMjMyMkBnbWFpbC5jb20iLCJpYXQiOjE2NzYyOTkzNTYsImV4cCI6MTY3NjMwNjU1Nn0.x0uLlhDLMyqfFGzUD3MvQ9sRKkYmtEGlyYevG8TIYwo",
-  },
+  _id: `63f17ee2b6241c858bd6bc9f`,
 };
 
 // const config = {
 //   headers: {
 //     "x-access-token":
-//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2VhMzk1NmNlNmYzNjVhOWJjZjUwZWQiLCJlbWFpbCI6Imp1YW4uYy52MjJpZXJpLjExQGdtYWlsLmNvbSIsImlhdCI6MTY3NjMwMDY5MywiZXhwIjoxNjc2MzA3ODkzfQ.5zzWKSPQp0NJzG-wEVfyVbmUOURK_HWqxAoTlUVdu80",
+//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2YwNTQxYTRhNDg3ODI2ODhiYzA0ZTgiLCJlbWFpbCI6ImpvZWxqZWxlayIsImlhdCI6MTY3NjY5NDU1NCwiZXhwIjoxNjc2NzAxNzU0fQ.gE9q0k8AVzRM5lD-QifaSkiYOMzw-42eerTrcd2urQ0",
 //   },
 // };
+
+const config = {
+  headers: {
+    "x-access-token":
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2YwZjhkMWMwYjYwYTFkYTE3ZjFmYjgiLCJlbWFpbCI6Im1hdGV3d3d3amVsZWsiLCJpYXQiOjE2NzY3NzE1MDUsImV4cCI6MTY3Njc3ODcwNX0.j-1jUWqpLGm8p0wReJKcafnnN4fybiWUc1xZ4mMNLGo",
+  },
+};
 
 async function run() {
   try {
@@ -26,7 +27,9 @@ async function run() {
       config
     );
     console.log(`Success!`);
-    console.log(res.data);
+    const { encrypted, keys } = res.data.data;
+    const decrypted = await decrypt(encrypted, keys);
+    console.log(decrypted);
   } catch (error) {
     console.error(`Error: ${error}`);
   }

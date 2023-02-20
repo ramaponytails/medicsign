@@ -2,19 +2,21 @@ const conf = require(`./config.json`);
 const axios = require(`axios`);
 
 const payload = {
-  _id: `63eb5dac86b78351d9d6bc43`,
-  email: `juan.c.v22ieri.11@gmail.com`,
-  gender: `fem11ale`,
-  name: `Juan 22 Vieri`,
-  date_birth: 9213822471982,
-  public_key: `222`,
-  password: `ahlibesar`,
+  user: {
+    _id: `63f0f8d1c0b60a1da17f1fb8`,
+    email: `matewwwwjelek`,
+    gender: `fem11ale`,
+    name: `Juan 22 Vieri`,
+    date_birth: 9213822471982,
+    password: `ahlibesar`,
+  },
+  public_key: `MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsMxsajLeUiQNaCZi3Hk6nNw/C6s3CbuORG/AnYxVFtwpCv0z4t0vS5fTWJcTXnnFmipgxIEDG9tYoYrnH22Z9BA5TxTRAZE+n6Vtpa2MonvhSEeq7oKQaafqHCPd8Ea+7aSRqMiNvP9tHZ2AKDgXz+Sl4SL40HuLjFVHIHJFBngX31OqB3cVDJLOnRRQvvXiwD3+c+yScYYYn1JnzDbWWwRGxF9pl/LeXHn7K9SxYjxgY9o7qAVMeK9Hxa9r7fDhE4RcKpMqQqPsb8h6HJIO9wx0dGPhvBKL4qI4Rs+7RsLZwUis0L2V8y6zekAuoB/wUoylYOh3a8c/9xgauHcmHQIDAQAB`,
 };
 
 const config = {
   headers: {
     "x-access-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2ViNWRhYzg2Yjc4MzUxZDlkNmJjNDMiLCJlbWFpbCI6Imp1YW4uYy52MjJpZXJpLjExQGdtYWlsLmNvbSIsImlhdCI6MTY3NjM3MDg2MCwiZXhwIjoxNjc2Mzc4MDYwfQ.URqM-xIdCB5Iq3zp3f00mVUxBzbJ_CsBVHHRy1Zcg1Y",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2YwZjhkMWMwYjYwYTFkYTE3ZjFmYjgiLCJlbWFpbCI6Im1hYWF0ZXd3amVsZWsiLCJpYXQiOjE2NzY3MzgzOTIsImV4cCI6MTY3Njc0NTU5Mn0.cO8HKrWHVGd0qfbmzICVPtzpr-QMwrBGekaGAjn3Vxk",
   },
 };
 
