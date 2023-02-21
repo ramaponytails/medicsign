@@ -10,6 +10,7 @@ const { success, error, sendStatus } = require(`../middleware/req_handler`);
 const { Patient } = require(`../models/patient`);
 const { Record } = require(`../models/record`);
 const { Key } = require(`../models/key`);
+const { set_tokens } = require(`../middleware/auth`);
 const ObjectId = mongoose.Types.ObjectId;
 
 const cmdMap = {
@@ -44,33 +45,6 @@ function validate_id(userId) {
 
 async function hash(password) {
   return await bcrypt.hash(password, 10);
-}
-
-async function get_refresh(user) {
-  return await jwt.sign(
-    { userId: user._id, email: user.email },
-    env.REFRESH_TOKEN_SECRET,
-    {
-      expiresIn: `1y`,
-    }
-  );
-}
-
-async function get_access(user) {
-  return await jwt.sign(
-    { userId: user._id, email: user.email },
-    env.ACCESS_TOKEN_SECRET,
-    {
-      expiresIn: `2h`,
-    }
-  );
-}
-
-async function get_tokens(user) {
-  return {
-    access_token: await get_access(user),
-    refresh_token: await get_refresh(user),
-  };
 }
 
 async function validate_keys(keys) {
@@ -115,7 +89,7 @@ async function create(req, res) {
     const newKey = new Key({ userId: newPatient._id, public_key, private_key });
     await newKey.save();
 
-    const tokens = await get_tokens(newPatient);
+    const tokens = await set_tokens(newPatient, res);
 
     logger.info(`New Patient saved!`, { dat });
 
@@ -142,7 +116,7 @@ async function login(req, res) {
         public_key: userKey.public_key,
       };
 
-      const tokens = await get_tokens(user);
+      const tokens = await set_tokens(user, res);
 
       logger.info(`Patient login success.`);
       return await success(res, { user, keys });
@@ -171,7 +145,7 @@ async function view(req, res) {
     }
 
     const user = await Patient.findOne({ _id: userId }).exec();
-    await success(res, await encrypt({ user }, userId));
+    await success(res, { user });
   } catch (error) {
     logger.error(`Error viewing patient.`, { error });
     return await sendStatus(res, 500);
