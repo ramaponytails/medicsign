@@ -1,6 +1,4 @@
-import { create } from "domain";
 import React, { useState } from "react";
-crypto = require("crypto");
 
 const getToken = () => {
   const tokenString = sessionStorage.getItem("token");
@@ -27,21 +25,42 @@ const purgeToken = () => {
   sessionStorage.removeItem("token");
 };
 
-const createRSA = () => {
-  const { privateKey, publicKey } = crypto.generateKeyPair("rsa", {
-    modulusLength: 2048,
-    publicKeyEncoding: {
-      type: "spki",
-      format: "pem",
+async function exportPrivateKey(key) {
+  const exported = await window.crypto.subtle.exportKey("pkcs8", key);
+  const exportedAsString = String.fromCharCode.apply(
+    null,
+    new Uint8Array(exported)
+  );
+  const exportedAsBase64 = window.btoa(exportedAsString);
+  return exportedAsBase64;
+}
+
+async function exportPublicKey(key) {
+  const exported = await window.crypto.subtle.exportKey("spki", key);
+  const exportedAsString = String.fromCharCode.apply(
+    null,
+    new Uint8Array(exported)
+  );
+  const exportedAsBase64 = window.btoa(exportedAsString);
+  return exportedAsBase64;
+}
+
+async function createRSA() {
+  const keyPair = await window.crypto.subtle.generateKey(
+    {
+      name: "RSA-OAEP",
+      modulusLength: 2048,
+      publicExponent: new Uint8Array([1, 0, 1]),
+      hash: "SHA-256",
     },
-    privateKeyEncoding: {
-      type: "pkcs8",
-      format: "pem",
-    },
-  });
-  sessionStorage.setItem("privateKey", JSON.stringify(privateKey));
-  sessionStorage.setItem("publicKey", JSON.stringify(publicKey));
-};
+    true,
+    ["encrypt", "decrypt"]
+  );
+  const rawPrivate = await exportPrivateKey(keyPair.privateKey);
+  const rawPublic = await exportPublicKey(keyPair.publicKey);
+  sessionStorage.setItem("privateKey", JSON.stringify(rawPrivate));
+  sessionStorage.setItem("publicKey", JSON.stringify(rawPublic));
+}
 
 const getPublic = () => {
   const publicKeyString = sessionStorage.getItem("publicKey");

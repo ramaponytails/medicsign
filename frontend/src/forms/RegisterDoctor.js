@@ -68,6 +68,8 @@ async function handleSubmit(values, { setSubmitting }) {
     return;
   }
 
+  console.log("creating RSA");
+
   await createRSA();
 
   const payload = {

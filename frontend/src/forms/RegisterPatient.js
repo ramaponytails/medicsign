@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 
-import { isLoggedIn, createRSA, useRSA } from "app/App";
+import { isLoggedIn, createRSA, getPublic } from "app/App";
 
 // name
 // email
@@ -81,7 +81,11 @@ async function handleSubmit(values, { setSubmitting }) {
     return;
   }
 
+  console.log("Creating RSA");
+
   await createRSA();
+
+  console.log("RSA fail");
 
   const date_birth = new Date(values.date_birth);
 

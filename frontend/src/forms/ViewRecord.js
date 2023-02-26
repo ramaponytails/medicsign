@@ -3,8 +3,6 @@ import axios from "axios";
 
 import { getToken } from "app/App";
 
-const decrypt = require("./decryptor");
-
 import {
   Badge,
   Button,
@@ -46,7 +44,7 @@ class RecordView extends Component {
       );
       console.log("success");
       const { encrypted, keys } = res.data.data;
-      const decrypted = await decrypt(encrypted, keys);
+      console.log(encrypted);
     } catch (error) {
       console.error(`Error: ${error}`);
     }
