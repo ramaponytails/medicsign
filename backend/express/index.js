@@ -5,9 +5,11 @@ const cors = require('cors');
 const { logger } = require(`./middleware/logger`);
 const { success, error } = require(`./middleware/req_handler`);
 const router = require(`./router`);
+const cookieParser = require(`cookie-parser`);
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 
 router(app);

@@ -1,8 +1,7 @@
 const patient = require(`./controllers/patient`);
 const doctor = require(`./controllers/doctor`);
 const record = require(`./controllers/record`);
-const refresh = require(`./middleware/refresh`);
-const auth = require(`./middleware/auth`);
+const { auth, refresh } = require(`./middleware/auth`);
 
 module.exports = (app) => {
   app.get(`/`, (req, res) => {
