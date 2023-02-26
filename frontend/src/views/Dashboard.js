@@ -17,13 +17,11 @@ import {
   Tooltip,
 } from "react-bootstrap";
 
-import PatientForm from "forms/CreatePatient";
+import PatientForm from "forms/RegisterPatient";
 import Login from "login/Login";
-import useToken from "app/App";
+import { saveToken } from "app/App";
 
 function Dashboard() {
-  const { token, setToken } = useToken();
-
   return (
     <>
       <Container>
@@ -34,7 +32,7 @@ function Dashboard() {
         </Row>
         <Row>
           <Col>
-            <Login setToken={setToken} />
+            <Login setToken={saveToken} />
           </Col>
         </Row>
       </Container>

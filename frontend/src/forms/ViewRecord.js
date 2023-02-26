@@ -1,4 +1,9 @@
 import React, { Component } from "react";
+import axios from "axios";
+
+import { getToken } from "app/App";
+
+const decrypt = require("./decryptor");
 
 import {
   Badge,
@@ -16,15 +21,45 @@ class RecordView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      doctor_name: "TEST DOCTOR NAME",
-      patient_name: "TEST PATIENT NAME",
-      medical_condition: "TEST MEDICAL CONDITION",
-      disease: "TEST DISEASE",
-      hospital_entry: "TEST ENTRY",
-      hospital_release: "TEST RELEASE",
-      record_number: "2834084",
+      doctor_name: "",
+      patient_name: "",
+      medical_condition: "",
+      disease: "",
+      hospital_entry: "",
+      hospital_release: "",
+      record_number: "",
     };
+    this.queryRecord = this.queryRecord.bind(this);
   }
+
+  async queryRecord() {
+    const config = {
+      headers: {
+        "x-access-token": getToken(),
+      },
+    };
+
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/record/view/0`,
+        config
+      );
+      console.log("success");
+      const { encrypted, keys } = res.data.data;
+      const decrypted = await decrypt(encrypted, keys);
+    } catch (error) {
+      console.error(`Error: ${error}`);
+    }
+  }
+
+  componentDidMount() {
+    if (isLoggedIn()) {
+      this.queryRecord();
+    } else {
+      console.error(`Not logged in`);
+    }
+  }
+
   render() {
     return (
       <Container fluid>

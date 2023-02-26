@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import PropTypes from "prop-types";
+import { isLoggedIn, createRSA, getPublic } from "app/App";
 
 const validate = (values) => {
   const email_regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
@@ -45,10 +46,19 @@ const Login = ({ setToken }) => {
   return (
     <Formik
       validate={validate}
-      onSubmit={(values, { setSubmitting }) => {
+      onSubmit={async (values, { setSubmitting }) => {
+        if (isLoggedIn()) {
+          console.error(`Login but logged in`);
+          setSubmitting(false);
+          return;
+        }
+
         const payload = {
-          email: values.email,
-          password: values.password,
+          credentials: {
+            email: values.email,
+            password: values.password,
+          },
+          key: await getPublic(),
         };
 
         setTimeout(async () => {

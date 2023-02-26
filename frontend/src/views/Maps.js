@@ -17,7 +17,7 @@ import {
   Tooltip,
 } from "react-bootstrap";
 
-import DoctorForm from "forms/CreateDoctor";
+import DoctorForm from "forms/RegisterDoctor";
 
 function Maps() {
   return (

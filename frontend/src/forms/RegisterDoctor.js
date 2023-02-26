@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 
+import { isLoggedIn, createRSA, getPublic } from "app/App";
+
 // name
 // email
 // password
@@ -60,11 +62,22 @@ async function create(payload) {
 }
 
 async function handleSubmit(values, { setSubmitting }) {
+  if (await isLoggedIn()) {
+    console.error(`Error: Logged in but submit`);
+    setSubmitting(false);
+    return;
+  }
+
+  await createRSA();
+
   const payload = {
-    email: values.email,
-    name: values.name,
-    password: values.password,
-    hospital: values.hospital,
+    user: {
+      email: values.email,
+      name: values.name,
+      password: values.password,
+      hospital: values.hospital,
+    },
+    key: await getPublic(),
   };
 
   setTimeout(async () => {
