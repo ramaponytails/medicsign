@@ -4,8 +4,6 @@ const { success, error, sendStatus } = require(`../middleware/req_handler`);
 const { Record } = require(`../models/record`);
 const { Patient } = require(`../models/patient`);
 const { Doctor } = require(`../models/doctor`);
-const { encrypt } = require(`../middleware/encrypt`);
-const { decrypt, server_public_key } = require(`../middleware/decrypt`);
 const ObjectId = mongoose.Types.ObjectId;
 
 function logAndThrow(jobs, message) {
@@ -53,20 +51,7 @@ function validate(dat) {
 
 async function create(req, res) {
   try {
-    const { encrypted, keys } = req.body;
-    if (!encrypted || !keys)
-      return await sendStatus(res, 400, `Incomplete data.`);
-    var dat;
-    try {
-      dat = await decrypt(encrypted, keys);
-    } catch (error) {
-      return await sendStatus(
-        res,
-        400,
-        `Failed to decrypt data. Please use server's public key to encrypt.`
-      );
-    }
-
+    var dat = req.body.record;
     dat = validate(dat);
     if (!dat) return await sendStatus(res, 400, `Invalid record.`);
 
@@ -87,10 +72,7 @@ async function create(req, res) {
     await newRecord.save();
     logger.info(`New Record saved!`, { dat });
 
-    return await success(
-      res,
-      await encrypt({ record: newRecord }, dat.doctor_id)
-    );
+    return await success(res, { record: newRecord });
   } catch (error) {
     logger.error(`Error creating record.`, { error });
     return await sendStatus(res, 500);
@@ -117,7 +99,7 @@ async function view(req, res) {
       return await sendStatus(res, 403);
     }
 
-    return await success(res, await encrypt({ record }, req.user.userId));
+    return await success(res, { record });
   } catch (error) {
     logger.error(`Error viewing record.`, { error });
     return await sendStatus(res, 500);
@@ -126,20 +108,7 @@ async function view(req, res) {
 
 async function update(req, res) {
   try {
-    const { encrypted, keys } = req.body;
-    if (!encrypted || !keys)
-      return await sendStatus(res, 400, `Incomplete data.`);
-    var dat;
-    try {
-      dat = await decrypt(encrypted, keys);
-    } catch (error) {
-      return await sendStatus(
-        res,
-        400,
-        `Failed to decrypt data. Please use server's public key to encrypt.`
-      );
-    }
-
+    var dat = req.body.record;
     const recordId = dat._id;
     dat = validate(dat);
     if (
@@ -172,10 +141,7 @@ async function update(req, res) {
 
     logger.info(`Record updated,`, { dat });
 
-    return await success(
-      res,
-      await encrypt({ record: updatedRecord }, req.user.userId)
-    );
+    return await success(res, { record: updatedRecord });
   } catch (error) {
     logger.error(`Error updating record.`, { error });
     return await sendStatus(res, 500);

@@ -10,8 +10,7 @@ const { success, error, sendStatus } = require(`../middleware/req_handler`);
 const { Patient } = require(`../models/patient`);
 const { Record } = require(`../models/record`);
 const { Key } = require(`../models/key`);
-const { encrypt } = require(`../middleware/encrypt`);
-const { decrypt, server_public_key } = require(`../middleware/decrypt`);
+const { set_tokens } = require(`../middleware/auth`);
 const ObjectId = mongoose.Types.ObjectId;
 
 const cmdMap = {
@@ -48,38 +47,19 @@ async function hash(password) {
   return await bcrypt.hash(password, 10);
 }
 
-async function get_refresh(user) {
-  return await jwt.sign(
-    { userId: user._id, email: user.email },
-    env.REFRESH_TOKEN_SECRET,
-    {
-      expiresIn: `1y`,
-    }
-  );
-}
-
-async function get_access(user) {
-  return await jwt.sign(
-    { userId: user._id, email: user.email },
-    env.ACCESS_TOKEN_SECRET,
-    {
-      expiresIn: `2h`,
-    }
-  );
-}
-
-async function get_tokens(user) {
-  return {
-    access_token: await get_access(user),
-    refresh_token: await get_refresh(user),
-  };
-}
-
-async function validate_key(key) {
+async function validate_keys(keys) {
   try {
-    const res = crypto.createPublicKey({
-      key: Buffer.from(key, `base64`),
+    const { public_key, private_key } = keys;
+
+    const publicKey = crypto.createPublicKey({
+      key: Buffer.from(public_key, `base64`),
       type: `spki`,
+      format: `der`,
+    });
+
+    const privateKey = crypto.createPrivateKey({
+      key: Buffer.from(private_key, `base64`),
+      type: `pkcs8`,
       format: `der`,
     });
     return true;
@@ -92,11 +72,10 @@ async function create(req, res) {
   try {
     var dat = req.body.user;
     dat = validate(dat);
-    const { public_key } = req.body;
-    if (!dat || !public_key)
-      return await sendStatus(res, 400, `Incomplete data.`);
-    if (!(await validate_key(public_key)))
-      return await sendStatus(res, 400, `Invalid public key format.`);
+    const { keys } = req.body;
+    if (!dat || !keys) return await sendStatus(res, 400, `Incomplete data.`);
+    if (!(await validate_keys(keys)))
+      return await sendStatus(res, 400, `Invalid key format.`);
 
     dat.password = await hash(dat.password);
 
@@ -106,20 +85,15 @@ async function create(req, res) {
     const newPatient = new Patient(dat);
     await newPatient.save();
 
-    const newKey = new Key({ userId: newPatient._id, public_key });
+    const { public_key, private_key } = keys;
+    const newKey = new Key({ userId: newPatient._id, public_key, private_key });
     await newKey.save();
 
-    const tokens = await get_tokens(newPatient);
+    const tokens = await set_tokens(newPatient, res);
 
     logger.info(`New Patient saved!`, { dat });
 
-    await success(
-      res,
-      await encrypt(
-        { user: newPatient, tokens, server_public_key },
-        newPatient._id
-      )
-    );
+    await success(res, { user: newPatient, keys });
   } catch (error) {
     logger.error(`Error saving new patient.`, { error });
     return await sendStatus(res, 500);
@@ -129,27 +103,23 @@ async function create(req, res) {
 async function login(req, res) {
   try {
     const { email, password } = req.body.credentials || {};
-    const { public_key } = req.body;
 
-    if (!(email && password && public_key)) {
+    if (!(email && password)) {
       return await sendStatus(res, 400, `Insufficient data to log in.`);
     }
-    if (!(await validate_key(public_key)))
-      return await sendStatus(res, 400, `Invalid public key format.`);
 
     const user = await Patient.findOne({ email });
     if (user && (await bcrypt.compare(password, user.password))) {
       const userKey = await Key.findOne({ userId: user._id });
-      userKey.public_key = public_key;
-      await userKey.save();
+      const keys = {
+        private_key: userKey.private_key,
+        public_key: userKey.public_key,
+      };
 
-      const tokens = await get_tokens(user);
+      const tokens = await set_tokens(user, res);
 
       logger.info(`Patient login success.`);
-      return await success(
-        res,
-        await encrypt({ user, tokens, server_public_key }, user._id)
-      );
+      return await success(res, { user, keys });
     }
     logger.info(`Patient invalid credentials.`);
     return await sendStatus(res, 400, `Invalid credentials.`);
@@ -175,7 +145,7 @@ async function view(req, res) {
     }
 
     const user = await Patient.findOne({ _id: userId }).exec();
-    await success(res, await encrypt({ user }, userId));
+    await success(res, { user });
   } catch (error) {
     logger.error(`Error viewing patient.`, { error });
     return await sendStatus(res, 500);
@@ -187,19 +157,15 @@ async function update(req, res) {
     var dat = req.body.user;
     const userId = dat._id;
     dat = validate(dat);
-    const { public_key } = req.body;
 
     dat.password = await hash(dat.password);
     if (
       !dat ||
-      !public_key ||
       !userId ||
       !validate_id(userId) ||
       !(await Patient.countDocuments({ _id: userId }))
     )
       return await sendStatus(res, 400, `Incomplete data..`);
-    if (!(await validate_key(public_key)))
-      return await sendStatus(res, 400, `Invalid public key format.`);
 
     if (req.user.userId !== userId) {
       return await sendStatus(res, 403);
@@ -210,16 +176,12 @@ async function update(req, res) {
     )
       return await sendStatus(res, 409, `User exists.`);
 
-    const userKey = await Key.findOne({ userId });
-    userKey.public_key = public_key;
-    await userKey.save();
-
     await Patient.findByIdAndUpdate(userId, dat).exec();
     const updatedPatient = await Patient.findOne({ _id: userId });
 
     logger.info(`Patient updated!`, { dat });
 
-    return await success(res, await encrypt({ user: updatedPatient }, userId));
+    return await success(res, { user: updatedPatient });
   } catch (error) {
     logger.error(`Error updating patient.`, { error });
     return await sendStatus(res, 500);
@@ -240,7 +202,7 @@ async function list(req, res) {
     if (req.user.userId !== userId) return await sendStatus(res, 403);
 
     const records = await Record.find({ patient_id: userId });
-    return await success(res, await encrypt({ records }, userId));
+    return await success(res, { records });
   } catch (error) {
     logger.error(`Error retrieving record list.`, { error });
     return await sendStatus(res, 500);
