@@ -17,22 +17,15 @@ import {
   Tooltip,
 } from "react-bootstrap";
 
-import PatientForm from "forms/RegisterPatient";
-import Login from "login/Login";
-import { saveToken } from "app/App";
+import DoctorForm from "forms/RegisterDoctor";
 
-function Dashboard() {
+function RegisterDoctor() {
   return (
     <>
       <Container>
         <Row>
           <Col>
-            <PatientForm />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Login setToken={saveToken} />
+            <DoctorForm />
           </Col>
         </Row>
       </Container>
@@ -40,4 +33,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default RegisterDoctor;

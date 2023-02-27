@@ -1,4 +1,4 @@
-/* eslint-disable */ 
+/* eslint-disable */
 /*!
 
 =========================================================
@@ -16,12 +16,9 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import Dashboard from "views/Dashboard.js";
-import UserProfile from "views/UserProfile.js";
-import TableList from "views/TableList.js";
-import Typography from "views/Typography.js";
+import RegisterPatient from "views/RegisterPatient.js";
+import RegisterDoctor from "views/RegisterDoctor.js";
 import Icons from "views/Icons.js";
-import Maps from "views/Maps.js";
 import Upgrade from "views/Upgrade.js";
 
 const dashboardRoutes = [
@@ -31,49 +28,28 @@ const dashboardRoutes = [
     name: "Upgrade to PRO",
     icon: "nc-icon nc-alien-33",
     component: Upgrade,
-    layout: "/admin"
+    layout: "/admin",
   },
   {
-    path: "/dashboard",
-    name: "Dashboard",
+    path: "/register/patient",
+    name: "Register Patient",
     icon: "nc-icon nc-chart-pie-35",
-    component: Dashboard,
-    layout: "/admin"
+    component: RegisterPatient,
+    layout: "/admin",
   },
   {
-    path: "/user",
-    name: "User Profile",
+    path: "/register/doctor",
+    name: "Register Doctor",
     icon: "nc-icon nc-circle-09",
-    component: UserProfile,
-    layout: "/admin"
-  },
-  {
-    path: "/table",
-    name: "Table List",
-    icon: "nc-icon nc-notes",
-    component: TableList,
-    layout: "/admin"
-  },
-  {
-    path: "/typography",
-    name: "Typography",
-    icon: "nc-icon nc-paper-2",
-    component: Typography,
-    layout: "/admin"
+    component: RegisterDoctor,
+    layout: "/admin",
   },
   {
     path: "/icons",
     name: "Icons",
     icon: "nc-icon nc-atom",
     component: Icons,
-    layout: "/admin"
-  },
-  {
-    path: "/maps",
-    name: "Maps",
-    icon: "nc-icon nc-pin-3",
-    component: Maps,
-    layout: "/admin"
+    layout: "/admin",
   },
 ];
 

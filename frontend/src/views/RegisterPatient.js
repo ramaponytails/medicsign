@@ -17,15 +17,15 @@ import {
   Tooltip,
 } from "react-bootstrap";
 
-import DoctorForm from "forms/RegisterDoctor";
+import PatientForm from "forms/RegisterPatient";
 
-function Maps() {
+function RegisterPatient() {
   return (
     <>
       <Container>
         <Row>
           <Col>
-            <DoctorForm />
+            <PatientForm />
           </Col>
         </Row>
       </Container>
@@ -33,4 +33,4 @@ function Maps() {
   );
 }
 
-export default Maps;
+export default RegisterPatient;

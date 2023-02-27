@@ -31,6 +31,8 @@ import "./assets/css/demo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import AdminLayout from "layouts/Admin.js";
+import LoginPatient from "login/LoginPatient.js";
+import LoginDoctor from "login/LoginDoctor.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -53,7 +55,9 @@ const getRoutes = (routes) => {
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
+      <Route path="/" element={<Navigate to="/login/patient" replace />} />
+      <Route path="/login/patient" element={<LoginPatient />} />
+      <Route path="/login/doctor" element={<LoginDoctor />} />
       <Route element={<AdminLayout />}>{getRoutes(routes)}</Route>
     </Routes>
   </BrowserRouter>

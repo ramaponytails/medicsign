@@ -81,11 +81,7 @@ async function handleSubmit(values, { setSubmitting }) {
     return;
   }
 
-  console.log("Creating RSA");
-
   await createRSA();
-
-  console.log("RSA fail");
 
   const date_birth = new Date(values.date_birth);
 
