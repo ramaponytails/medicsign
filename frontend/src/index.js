@@ -41,7 +41,7 @@ const getRoutes = (routes) => {
     if (prop.layout === "/admin") {
       return (
         <Route
-          path={prop.layout + prop.path}
+          path={prop.path}
           element={<prop.component />}
           key={key}
         />
