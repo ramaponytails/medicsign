@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 
-import { isLoggedIn, createRSA, getPublic } from "app/App";
+import { isLoggedIn, createRSA, getPublic, getPrivate } from "app/App";
 
 // name
 // email
@@ -79,7 +79,10 @@ async function handleSubmit(values, { setSubmitting }) {
       password: values.password,
       hospital: values.hospital,
     },
-    key: await getPublic(),
+    keys: {
+      public_key: await getPublic(),
+      private_key: await getPrivate(),
+    },
   };
 
   setTimeout(async () => {

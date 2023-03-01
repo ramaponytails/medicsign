@@ -62,6 +62,13 @@ async function createRSA() {
   sessionStorage.setItem("publicKey", JSON.stringify(rawPublic));
 }
 
+async function saveRSA(publicKey, privateKey) {
+  if (publicKey && privateKey) {
+    sessionStorage.setItem("privateKey", JSON.stringify(publicKey));
+    sessionStorage.setItem("publicKey", JSON.stringify(privateKey));
+  }
+}
+
 const getPublic = () => {
   const publicKeyString = sessionStorage.getItem("publicKey");
   if (publicKeyString !== "undefined") {
@@ -84,6 +91,7 @@ export {
   isLoggedIn,
   purgeToken,
   createRSA,
+  saveRSA,
   getPublic,
   getPrivate,
 };
