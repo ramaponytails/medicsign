@@ -20,6 +20,7 @@ import RegisterPatient from "views/RegisterPatient.js";
 import RegisterDoctor from "views/RegisterDoctor.js";
 import Icons from "views/Icons.js";
 import Upgrade from "views/Upgrade.js";
+import CreateRecord from "views/CreateRecord.js";
 
 const dashboardRoutes = [
   {
@@ -51,6 +52,13 @@ const dashboardRoutes = [
     component: Icons,
     layout: "/admin",
   },
+  {
+    path: "/create/record",
+    name: "Create Record",
+    icon: "nc-icon",
+    component: CreateRecord,
+    layout: "/admin"
+  }
 ];
 
 export default dashboardRoutes;
