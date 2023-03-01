@@ -62,10 +62,10 @@ async function createRSA() {
   sessionStorage.setItem("publicKey", JSON.stringify(rawPublic));
 }
 
-async function saveRSA(publicKey, privateKey) {
-  if (publicKey && privateKey) {
-    sessionStorage.setItem("privateKey", JSON.stringify(publicKey));
-    sessionStorage.setItem("publicKey", JSON.stringify(privateKey));
+async function saveRSA(keys) {
+  if (keys.publicKey && keys.privateKey) {
+    sessionStorage.setItem("privateKey", JSON.stringify(keys.publicKey));
+    sessionStorage.setItem("publicKey", JSON.stringify(keys.privateKey));
   }
 }
 
