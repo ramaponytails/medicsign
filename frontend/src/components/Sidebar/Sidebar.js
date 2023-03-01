@@ -65,7 +65,7 @@ function Sidebar({ color, image, routes }) {
                   key={key}
                 >
                   <NavLink
-                    to={prop.layout + prop.path}
+                    to={prop.path}
                     className={({ isActive }) =>
                       "nav-link" + (isActive ? " activated" : "")
                     }

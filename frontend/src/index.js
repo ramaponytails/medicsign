@@ -39,13 +39,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 const getRoutes = (routes) => {
   return routes.map((prop, key) => {
     if (prop.layout === "/admin") {
-      return (
-        <Route
-          path={prop.layout + prop.path}
-          element={<prop.component />}
-          key={key}
-        />
-      );
+      return <Route path={prop.path} element={<prop.component />} key={key} />;
     } else {
       return <Route />;
     }
@@ -55,7 +49,6 @@ const getRoutes = (routes) => {
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Navigate to="/login/patient" replace />} />
       <Route path="/login/patient" element={<LoginPatient />} />
       <Route path="/login/doctor" element={<LoginDoctor />} />
       <Route element={<AdminLayout />}>{getRoutes(routes)}</Route>
