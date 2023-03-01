@@ -25,36 +25,42 @@ const purgeToken = () => {
   sessionStorage.removeItem("token");
 };
 
-async function exportPrivateKey(key) {
-  const exported = await window.crypto.subtle.exportKey("pkcs8", key);
+// export string to Uint8 format
+const toUint8 = (data) => {
+  let encoder = new TextEncoder();
+  return encoder.encode(data);
+};
+
+// export Uint8 or ArrayBuffer format to Base64 string
+const exportUint8 = (data) => {
   const exportedAsString = String.fromCharCode.apply(
     null,
-    new Uint8Array(exported)
+    new Uint8Array(data)
   );
   const exportedAsBase64 = window.btoa(exportedAsString);
   return exportedAsBase64;
+};
+
+async function exportPrivateKey(key) {
+  const exported = await window.crypto.subtle.exportKey("pkcs8", key);
+  return exportUint8(exported);
 }
 
 async function exportPublicKey(key) {
-  const exported = await window.crypto.subtle.exportKey("spki", key);
-  const exportedAsString = String.fromCharCode.apply(
-    null,
-    new Uint8Array(exported)
-  );
-  const exportedAsBase64 = window.btoa(exportedAsString);
-  return exportedAsBase64;
+  const exported = await window.crypto.subtle.exportKey("pkcs8", key);
+  return exportUint8(exported);
 }
 
 async function createRSA() {
   const keyPair = await window.crypto.subtle.generateKey(
     {
-      name: "RSA-OAEP",
+      name: "RSA-PSS",
       modulusLength: 2048,
       publicExponent: new Uint8Array([1, 0, 1]),
       hash: "SHA-256",
     },
     true,
-    ["encrypt", "decrypt"]
+    ["sign", "verify"]
   );
   const rawPrivate = await exportPrivateKey(keyPair.privateKey);
   const rawPublic = await exportPublicKey(keyPair.publicKey);
@@ -85,6 +91,27 @@ const getPrivate = () => {
   }
 };
 
+async function signRSA(data) {
+  const encoded = toUint8(data);
+  const signature = await window.crypto.subtle.sign(
+    "RSASSA-PKCS1-v1_5",
+    getPrivate(),
+    encoded
+  );
+  return exportUint8(signature);
+}
+
+async function verifyRSA(signature, data) {
+  const encoded = toUint8(data);
+  const signencoded = toUint8(signature);
+  return await window.crypto.subtle.verify(
+    "RSASSA-PKCS1-v1_5",
+    getPrivate(),
+    signencoded,
+    encoded
+  );
+}
+
 export {
   getToken,
   saveToken,
@@ -94,4 +121,6 @@ export {
   saveRSA,
   getPublic,
   getPrivate,
+  signRSA,
+  verifyRSA,
 };
