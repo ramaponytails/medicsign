@@ -39,11 +39,16 @@ async function create(payload) {
 }
 
 async function handleSubmit(values, { setSubmitting }) {
+  let current_time = new Date();
+  current_time.setHours(0, 0, 0, 0);
+
   const payload = {
     patientid: values.patientid,
     doctorid: values.doctorid,
     disease: values.disease,
     diagnosis: values.diagnosis,
+    created_at: current_time.getTime(),
+    signature: "",
   };
 
   setTimeout(async () => {
