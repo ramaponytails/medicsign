@@ -39,7 +39,13 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 const getRoutes = (routes) => {
   return routes.map((prop, key) => {
     if (prop.layout === "/admin") {
-      return <Route path={prop.path} element={<prop.component />} key={key} />;
+      return (
+        <Route
+          path={prop.layout + prop.path}
+          element={<prop.component />}
+          key={key}
+        />
+      );
     } else {
       return <Route />;
     }
