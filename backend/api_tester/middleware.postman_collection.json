@@ -11,11 +11,26 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:{{port}}/refresh",
+          "raw": "http://localhost:{{port}}/token/refresh",
           "protocol": "http",
           "host": ["localhost"],
           "port": "{{port}}",
-          "path": ["refresh"]
+          "path": ["token", "refresh"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "validate token",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:{{port}}/token/validate",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "{{port}}",
+          "path": ["token", "validate"]
         }
       },
       "response": []
