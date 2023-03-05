@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { isLoggedIn, saveRSA } from "app/App";
+import { saveRSA } from "app/App";
+import { saveUser } from "./Accounts";
 
 const validate = (values) => {
   const email_regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
@@ -30,11 +31,11 @@ const validate = (values) => {
 async function loginUser(payload) {
   try {
     const res = await axios.post(
-      `http://localhost:3000/patient/login`,
+      "http://localhost:3000/patient/login",
       payload
     );
     const { data } = res.data;
-    return data.keys;
+    return data;
   } catch (error) {
     console.log(`Error: ${error}`);
     return "Not Found";
@@ -61,10 +62,15 @@ const LoginPatient = () => {
           };
 
           setTimeout(async () => {
-            const token = await loginUser(payload);
+            const data = await loginUser(payload);
+            const token = data.token;
+            const user = data.user;
+            user.type = "Patient";
+
             if (token === "Not Found") {
               alert("User not found");
             } else {
+              saveUser(user);
               saveRSA({
                 publicKey: token.publicKey,
                 privateKey: token.privateKey,

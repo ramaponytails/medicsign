@@ -3,6 +3,7 @@ import axios from "axios";
 
 async function isLoggedIn() {
   const res = await axios.get(`http://localhost:3000/islogin`);
+  return true;
 }
 
 function saveUser(user) {

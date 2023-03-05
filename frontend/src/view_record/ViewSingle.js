@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { isLoggedIn } from "login/Accounts";
 
 import {
   Badge,
@@ -13,35 +14,72 @@ import {
   Col,
 } from "react-bootstrap";
 
+async function queryRecord(_id) {
+  try {
+    const res = await axios.get(
+      "http://localhost:3000/record/view/" + toString(_id)
+    );
+    console.log("success");
+    const { record } = res.data.data;
+    return record;
+  } catch (error) {
+    console.error(`Error: ${error}`);
+  }
+}
+
+async function queryDoctor(_id) {
+  try {
+    const res = await axios.get(
+      "http://localhost:3000/doctor/view/" + toString(_id)
+    );
+    console.log("success");
+    const { user } = res.data.data;
+    return user;
+  } catch (error) {
+    console.error(`Error: ${error}`);
+  }
+}
+
+async function queryPatient(_id) {
+  try {
+    const res = await axios.get(
+      "http://localhost:3000/patient/view/" + toString(_id)
+    );
+    console.log("success");
+    const { user } = res.data.data;
+    return user;
+  } catch (error) {
+    console.error(`Error: ${error}`);
+  }
+}
+
 class RecordView extends Component {
   constructor(props) {
     super(props);
     this.state = {
       doctor_name: "",
       patient_name: "",
-      medical_condition: "",
       disease: "",
-      hospital_entry: "",
-      hospital_release: "",
-      record_number: "",
+      diagnosis: "",
+      created_at: "",
+      signature: "",
     };
-    this.queryRecord = this.queryRecord.bind(this);
   }
 
-  async queryRecord() {
-    try {
-      const res = await axios.get(`http://localhost:3000/record/view/0`);
-      console.log("success");
-      const { encrypted, keys } = res.data.data;
-      console.log(encrypted);
-    } catch (error) {
-      console.error(`Error: ${error}`);
-    }
-  }
-
-  componentDidMount() {
+  async componentDidMount() {
     if (isLoggedIn()) {
-      this.queryRecord();
+      const { record_id } = useParams();
+      const record = await queryRecord(record_id);
+      const doctor = await queryDoctor(record.doctor_id);
+      const patient = await queryPatient(record.patient_id);
+      this.setState({
+        doctor_name: doctor.name,
+        patient_name: patient.name,
+        disease: record.disease,
+        diagnosis: record.diagnosis,
+        created_at: record.created_at,
+        signature: record.signature,
+      });
     } else {
       console.error(`Not logged in`);
     }
@@ -70,20 +108,16 @@ class RecordView extends Component {
                       <td>{this.state.patient_name}</td>
                     </tr>
                     <tr>
-                      <td>Medical Condition</td>
-                      <td>{this.state.medical_condition}</td>
-                    </tr>
-                    <tr>
                       <td>Disease</td>
                       <td>{this.state.disease}</td>
                     </tr>
                     <tr>
-                      <td>Hospital Entry Date</td>
-                      <td>{this.state.hospital_entry}</td>
+                      <td>Diagnosis</td>
+                      <td>{this.state.diagnosis}</td>
                     </tr>
                     <tr>
-                      <td>Hospital Release Date</td>
-                      <td>{this.state.hospital_release}</td>
+                      <td>Signature</td>
+                      <td>{this.state.signature}</td>
                     </tr>
                   </tbody>
                 </Table>

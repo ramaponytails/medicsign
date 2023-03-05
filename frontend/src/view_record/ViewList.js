@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { getUser } from "app/App.js";
+import { getUser, isLoggedIn } from "login/Accounts";
 
 import {
   Badge,
@@ -14,6 +14,18 @@ import {
   Col,
 } from "react-bootstrap";
 
+async function queryRecordList() {
+  try {
+    const user = await getUser();
+    const query_path = `http://localhost:3000/doctor/list/` + tostr(user._id);
+    const res = await axios.get(query_path);
+    const { data } = res.data;
+    return data;
+  } catch (error) {
+    console.error(`Error: ${error}`);
+  }
+}
+
 class RecordList extends Component {
   constructor(props) {
     super(props);
@@ -23,23 +35,12 @@ class RecordList extends Component {
     this.queryRecordList = this.queryRecordList.bind(this);
   }
 
-  async queryRecordList() {
-    try {
-      const user = getUser();
-      const query_path = `http://localhost:3000/doctor/list/` + tostr(user._id);
-      const res = await axios.get(query_path);
-      const { data } = res.data;
-      this.setState({
-        records: data.records,
-      });
-    } catch (error) {
-      console.error(`Error: ${error}`);
-    }
-  }
-
-  componentDidMount() {
+  async componentDidMount() {
     if (isLoggedIn()) {
-      this.queryRecordList();
+      const res = await queryRecordList();
+      this.state({
+        records: res.records,
+      });
     } else {
       console.error("Not Logged In");
     }
