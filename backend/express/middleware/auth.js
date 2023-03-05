@@ -18,7 +18,7 @@ function set_refresh(user, res) {
   try {
     res.cookie(`refreshToken`, refreshToken, {
       httpOnly: true,
-      path: `/refresh`,
+      path: `/token/refresh`,
       sameSite: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -28,9 +28,9 @@ function set_refresh(user, res) {
   return refreshToken;
 }
 
-function set_access(user, res) {
+function set_access(user, res, type) {
   const accessToken = jwt.sign(
-    { userId: user._id, email: user.email },
+    { userId: user._id, email: user.email, type },
     env.ACCESS_TOKEN_SECRET,
     {
       expiresIn: `2h`,
@@ -49,9 +49,9 @@ function set_access(user, res) {
   return accessToken;
 }
 
-function set_tokens(user, res) {
+function set_tokens(user, res, type) {
   return {
-    accessToken: set_access(user, res),
+    accessToken: set_access(user, res, type),
     refreshToken: set_refresh(user, res),
   };
 }
@@ -73,7 +73,7 @@ function auth(req, res, next) {
   return next();
 }
 
-function refresh(req, res, next) {
+function refresh(req, res) {
   const { refreshToken } = req.cookies;
 
   if (!refreshToken) {
@@ -84,7 +84,11 @@ function refresh(req, res, next) {
     const decoded = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET);
     const user = decoded;
 
-    const tokens = set_tokens({ _id: user.userId, email: user.email }, res);
+    const tokens = set_tokens(
+      { _id: user.userId, email: user.email },
+      res,
+      user.type
+    );
 
     return sendStatus(res, 200);
   } catch (error) {
@@ -92,4 +96,20 @@ function refresh(req, res, next) {
   }
 }
 
-module.exports = { auth, set_tokens, refresh };
+function validate(req, res) {
+  const { accessToken } = req.cookies;
+
+  if (!accessToken) {
+    return sendStatus(res, 403, `No token found.`);
+  }
+
+  try {
+    const decoded = jwt.verify(accessToken, env.ACCESS_TOKEN_SECRET);
+    return success(res, { token_type: decoded.type, expiresIn: decoded.exp });
+    req.user = decoded;
+  } catch (error) {
+    return sendStatus(res, 401, `Invalid token.`);
+  }
+}
+
+module.exports = { auth, set_tokens, refresh, validate };
