@@ -1,30 +1,5 @@
 import React, { useState } from "react";
 
-const getToken = () => {
-  const tokenString = sessionStorage.getItem("token");
-  if (tokenString !== "undefined") {
-    const userToken = JSON.parse(tokenString);
-    return userToken?.token;
-  } else {
-    return "";
-  }
-};
-
-const saveToken = (userToken) => {
-  if (userToken !== "undefined") {
-    sessionStorage.setItem("token", JSON.stringify(userToken));
-    setToken(userToken.token);
-  }
-};
-
-const isLoggedIn = () => {
-  return getToken() ? true : false;
-};
-
-const purgeToken = () => {
-  sessionStorage.removeItem("token");
-};
-
 // export string to Uint8 format
 const toUint8 = (data) => {
   let encoder = new TextEncoder();
@@ -112,15 +87,4 @@ async function verifyRSA(signature, data) {
   );
 }
 
-export {
-  getToken,
-  saveToken,
-  isLoggedIn,
-  purgeToken,
-  createRSA,
-  saveRSA,
-  getPublic,
-  getPrivate,
-  signRSA,
-  verifyRSA,
-};
+export { createRSA, saveRSA, getPublic, getPrivate, signRSA, verifyRSA };

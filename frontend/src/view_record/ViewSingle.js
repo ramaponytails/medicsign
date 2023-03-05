@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-import { getToken } from "app/App";
-
 import {
   Badge,
   Button,
@@ -31,17 +29,8 @@ class RecordView extends Component {
   }
 
   async queryRecord() {
-    const config = {
-      headers: {
-        "x-access-token": getToken(),
-      },
-    };
-
     try {
-      const res = await axios.get(
-        `http://localhost:3000/record/view/0`,
-        config
-      );
+      const res = await axios.get(`http://localhost:3000/record/view/0`);
       console.log("success");
       const { encrypted, keys } = res.data.data;
       console.log(encrypted);
