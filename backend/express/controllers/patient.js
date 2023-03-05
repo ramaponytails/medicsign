@@ -89,7 +89,7 @@ async function create(req, res) {
     const newKey = new Key({ userId: newPatient._id, public_key, private_key });
     await newKey.save();
 
-    const tokens = await set_tokens(newPatient, res);
+    const tokens = await set_tokens(newPatient, res, `Patient`);
 
     logger.info(`New Patient saved!`, { dat });
 
@@ -116,7 +116,7 @@ async function login(req, res) {
         public_key: userKey.public_key,
       };
 
-      const tokens = await set_tokens(user, res);
+      const tokens = await set_tokens(user, res, `Patient`);
 
       logger.info(`Patient login success.`);
       return await success(res, { user, keys });

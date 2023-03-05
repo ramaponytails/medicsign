@@ -87,7 +87,7 @@ async function create(req, res) {
     const newKey = new Key({ userId: newDoctor._id, public_key, private_key });
     await newKey.save();
 
-    const tokens = await set_tokens(newDoctor, res);
+    const tokens = await set_tokens(newDoctor, res, `Doctor`);
 
     logger.info(`New Doctor saved!`, { dat });
 
@@ -114,7 +114,7 @@ async function login(req, res) {
         public_key: userKey.public_key,
       };
 
-      const tokens = await set_tokens(user, res);
+      const tokens = await set_tokens(user, res, `Doctor`);
 
       logger.info(`Doctor login success.`);
       return await success(res, { user, keys });
@@ -139,7 +139,7 @@ async function view(req, res) {
       return await sendStatus(res, 404, `Invalid userId.`);
 
     if (req.user.userId !== userId) {
-      return await sendStatus(res, 403);
+      return await sendStatus(res, 401);
     }
 
     const user = await Doctor.findOne({ _id: userId }).exec();
@@ -166,7 +166,7 @@ async function update(req, res) {
       return await sendStatus(res, 400, `Incomplete data.`);
 
     if (req.user.userId !== userId) {
-      return await sendStatus(res, 403);
+      return await sendStatus(res, 401);
     }
     if (
       (await Doctor.countDocuments({ email: dat.email })) -
@@ -197,7 +197,7 @@ async function list(req, res) {
     )
       return await sendStatus(res, 404, `Invalid userId.`);
 
-    if (req.user.userId !== userId) return await sendStatus(res, 403);
+    if (req.user.userId !== userId) return await sendStatus(res, 401);
 
     const records = await Record.find({ doctor_id: userId });
     return await success(res, { records });
