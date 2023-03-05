@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { isLoggedIn, saveRSA } from "app/App";
-import { saveUser } from "./Accounts.js";
+import { saveRSA } from "app/App";
+import { isLoggedIn, saveUser } from "./Accounts.js";
 
 const validate = (values) => {
   const email_regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
@@ -62,6 +62,8 @@ const LoginDoctor = () => {
             const data = await loginUser(payload);
             const token = data.keys;
             const user = data.user;
+            user.type = "Doctor";
+
             if (token === "Not Found") {
               alert("User not found");
             } else {

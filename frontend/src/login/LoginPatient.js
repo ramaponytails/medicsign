@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { saveRSA } from "app/App";
-import { saveUser } from "./Accounts";
+import { isLoggedIn, saveUser } from "./Accounts";
 
 const validate = (values) => {
   const email_regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
