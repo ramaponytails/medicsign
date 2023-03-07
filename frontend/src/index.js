@@ -19,10 +19,11 @@ be included in all copies or substantial portions of the Software.
 /* eslint-disable */
 import React from "react";
 import ReactDOM from "react-dom/client";
+import axios from "axios";
 
 import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 
-import {SignedInRoutes, SignedOutRoutes} from "routes.js";
+import { SignedInRoutes, SignedOutRoutes } from "routes.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/animate.min.css";
@@ -36,22 +37,18 @@ import SignedOutLayout from "layouts/SignedOut.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
+axios.defaults.withCredentials = true;
+
 const getRoutes = (routes) => {
   return routes.map((prop, key) => {
-    return (
-      <Route
-        path={prop.path}
-        element={<prop.component />}
-        key={key}
-      />
-    );
+    return <Route path={prop.path} element={<prop.component />} key={key} />;
   });
 };
 
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route element = {<SignedInLayout />}>
+      <Route element={<SignedInLayout />}>
         <Route path="record/:id" element={<RecordView />} />
       </Route>
       <Route element={<SignedInLayout />}>{getRoutes(SignedInRoutes)}</Route>

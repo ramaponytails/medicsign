@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 
 async function isLoggedIn() {
-  const res = await axios.get(`http://localhost:3000/islogin`);
   return true;
 }
 
@@ -13,16 +12,19 @@ function saveUser(user) {
     return;
   }
   sessionStorage.setItem("type", JSON.stringify(user.type));
-  sessionStorage.setItem("id", JSON.stringify(user._id));
+  sessionStorage.setItem("_id", JSON.stringify(user._id));
 }
 
 function getUser() {
-  const type = sessionStorage.getItem("type");
-  const _id = sessionStorage.getItem("_id");
+  const type = JSON.parse(sessionStorage.getItem("type"));
+  const _id = JSON.parse(sessionStorage.getItem("_id"));
+  console.log(type);
+  console.log(_id);
   if (type === "undefined" || _id === "undefined") {
     return "User not found";
   } else {
     const user = { type: type, _id: _id };
+    console.log(user);
     return user;
   }
 }

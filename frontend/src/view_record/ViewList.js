@@ -17,7 +17,7 @@ import {
 async function queryRecordList() {
   try {
     const user = await getUser();
-    const query_path = `http://localhost:3000/doctor/list/` + tostr(user._id);
+    const query_path = "http://localhost:3000/doctor/list/" + user._id;
     const res = await axios.get(query_path);
     const { data } = res.data;
     return data;
@@ -32,12 +32,12 @@ class RecordList extends Component {
     this.state = {
       records: [],
     };
-    this.queryRecordList = this.queryRecordList.bind(this);
   }
 
   async componentDidMount() {
     if (isLoggedIn()) {
       const res = await queryRecordList();
+      console.log(res);
       this.state({
         records: res.records,
       });
@@ -75,9 +75,11 @@ class RecordList extends Component {
                             <td>{val.id}</td>
                             <td>{val.patient_name}</td>
                             <td>{val.disease}</td>
-                            <td><a href={'/record/' + val.id}>More Details</a></td>
+                            <td>
+                              <a href={"/record/" + val.id}>More Details</a>
+                            </td>
                           </tr>
-                        )
+                        );
                       })}
                     </tbody>
                   </Table>

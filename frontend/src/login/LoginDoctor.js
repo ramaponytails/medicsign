@@ -45,12 +45,6 @@ const LoginDoctor = () => {
       <Formik
         validate={validate}
         onSubmit={async (values, { setSubmitting }) => {
-          if (isLoggedIn()) {
-            console.error(`Login but logged in`);
-            setSubmitting(false);
-            return;
-          }
-
           const payload = {
             credentials: {
               email: values.email,
@@ -64,11 +58,14 @@ const LoginDoctor = () => {
             const user = data.user;
             user.type = "Doctor";
 
+            console.log(user);
+
             if (token === "Not Found") {
               alert("User not found");
             } else {
-              saveUser(user);
-              saveRSA({
+              console.log("Logged In");
+              await saveUser(user);
+              await saveRSA({
                 publicKey: token.publicKey,
                 privateKey: token.privateKey,
               });

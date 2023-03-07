@@ -15,13 +15,6 @@
   },
   "plugins": ["react", "jsx-a11y", "import"],
   "rules": {
-    "object-shorthand": [
-      "error",
-      "properties",
-      {
-        "avoidQuotes": true
-      }
-    ],
     "func-names": ["off"],
     "no-use-before-define": ["error", "nofunc"],
     "no-return-assign": ["warn"],
