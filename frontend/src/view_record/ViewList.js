@@ -47,6 +47,48 @@ class RecordList extends Component {
   }
 
   render() {
-    return <div>Something</div>;
+    return (
+      <>
+        <Container fluid>
+          <Row>
+            <Col md="12">
+              <Card className="strpied-tabled-with-hover">
+                <Card.Header>
+                  <Card.Title as="h4">Striped Table with Hover</Card.Title>
+                  <p className="card-category">
+                    Here is a subtitle for this table
+                  </p>
+                </Card.Header>
+                <Card.Body className="table-full-width table-responsive px-0">
+                  <Table className="table-hover table-striped">
+                    <thead>
+                      <tr>
+                        <th className="border-0">ID</th>
+                        <th className="border-0">Patient Name</th>
+                        <th className="border-0">Disease</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.records.map((val, key) => {
+                        return (
+                          <tr key={key}>
+                            <td>{val.id}</td>
+                            <td>{val.patient_name}</td>
+                            <td>{val.disease}</td>
+                            <td><a href={'/record/' + val.id}>More Details</a></td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </Table>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </>
+    );
   }
 }
+
+export default RecordList;
