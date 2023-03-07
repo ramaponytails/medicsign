@@ -22,7 +22,7 @@ import ReactDOM from "react-dom/client";
 
 import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 
-import routes from "routes.js";
+import {SignedInRoutes, SignedOutRoutes} from "routes.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/animate.min.css";
@@ -30,34 +30,32 @@ import "./assets/scss/light-bootstrap-dashboard-react.scss?v=2.0.0";
 import "./assets/css/demo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-import AdminLayout from "layouts/Admin.js";
-import LoginPatient from "login/LoginPatient.js";
-import LoginDoctor from "login/LoginDoctor.js";
+import RecordView from "view_record/ViewSingle.js";
+import SignedInLayout from "layouts/SignedIn.js";
+import SignedOutLayout from "layouts/SignedOut.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const getRoutes = (routes) => {
   return routes.map((prop, key) => {
-    if (prop.layout === "/admin") {
-      return (
-        <Route
-          path={prop.layout + prop.path}
-          element={<prop.component />}
-          key={key}
-        />
-      );
-    } else {
-      return <Route />;
-    }
+    return (
+      <Route
+        path={prop.path}
+        element={<prop.component />}
+        key={key}
+      />
+    );
   });
 };
 
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path="/login/patient" element={<LoginPatient />} />
-      <Route path="/login/doctor" element={<LoginDoctor />} />
-      <Route element={<AdminLayout />}>{getRoutes(routes)}</Route>
+      <Route element = {<SignedInLayout />}>
+        <Route path="record/:id" element={<RecordView />} />
+      </Route>
+      <Route element={<SignedInLayout />}>{getRoutes(SignedInRoutes)}</Route>
+      <Route element={<SignedOutLayout />}>{getRoutes(SignedOutRoutes)}</Route>
     </Routes>
   </BrowserRouter>
 );
