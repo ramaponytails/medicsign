@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 
-import { isLoggedIn, createRSA, getPublic, getPrivate } from "app/App";
+import { createRSA, getPublic, getPrivate } from "app/App";
+import { isLoggedIn } from "login/Accounts";
 
 // name
 // email
