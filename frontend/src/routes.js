@@ -18,47 +18,65 @@
 */
 import RegisterPatient from "views/RegisterPatient.js";
 import RegisterDoctor from "views/RegisterDoctor.js";
-import Icons from "views/Icons.js";
 import Upgrade from "views/Upgrade.js";
 import CreateRecord from "views/CreateRecord.js";
+import RecordList from "view_record/ViewList.js";
+import LoginPatient from "login/LoginPatient.js";
+import LoginDoctor from "login/LoginDoctor.js";
 
-const dashboardRoutes = [
+const SignedInRoutes = [
   {
     upgrade: true,
     path: "/upgrade",
     name: "Upgrade to PRO",
     icon: "nc-icon nc-alien-33",
     component: Upgrade,
-    layout: "/admin",
-  },
-  {
-    path: "/register/patient",
-    name: "Register Patient",
-    icon: "nc-icon nc-chart-pie-35",
-    component: RegisterPatient,
-    layout: "/admin",
-  },
-  {
-    path: "/register/doctor",
-    name: "Register Doctor",
-    icon: "nc-icon nc-circle-09",
-    component: RegisterDoctor,
-    layout: "/admin",
-  },
-  {
-    path: "/icons",
-    name: "Icons",
-    icon: "nc-icon nc-atom",
-    component: Icons,
-    layout: "/admin",
   },
   {
     path: "/create/record",
     name: "Create Record",
     icon: "nc-icon",
     component: CreateRecord,
-    layout: "/admin",
+  },
+  {
+    path: "/record",
+    name: "Record List",
+    icon: "nc-icon",
+    component: RecordList,
   },
 ];
 
-export default dashboardRoutes;
+const SignedOutRoutes = [
+  {
+    upgrade: true,
+    path: "/upgrade",
+    name: "Upgrade to PRO",
+    icon: "nc-icon nc-alien-33",
+    component: Upgrade,
+  },
+  {
+    path: "/register/patient",
+    name: "Register Patient",
+    icon: "nc-icon nc-chart-pie-35",
+    component: RegisterPatient,
+  },
+  {
+    path: "/register/doctor",
+    name: "Register Doctor",
+    icon: "nc-icon nc-circle-09",
+    component: RegisterDoctor,
+  },
+  {
+    path: "/login/patient",
+    name: "Patient Login",
+    icon: "nc-icon",
+    component: LoginPatient,
+  },
+  {
+    path: "/login/doctor",
+    name: "Doctor Login",
+    icon: "nc-icon",
+    component: LoginDoctor,
+  },
+];
+export { SignedInRoutes, SignedOutRoutes };
