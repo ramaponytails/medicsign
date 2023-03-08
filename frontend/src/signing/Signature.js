@@ -1,4 +1,4 @@
-import React, { component } from "react";
+import React, { Component } from "react";
 import axios from "axios";
 import { signRSA } from "app/App.js";
 
