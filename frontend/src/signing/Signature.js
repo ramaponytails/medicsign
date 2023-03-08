@@ -1,6 +1,6 @@
 import React, { component } from "react";
 import axios from "axios";
-import { SignRSA } from "app/App.js";
+import { signRSA } from "app/App.js";
 
 class Signature extends Component {
   constructor(props) {
@@ -9,7 +9,7 @@ class Signature extends Component {
 
   signRecord() {
     data = JSON.stringify(this.props.data);
-    signature = SignRSA(data);
+    signature = signRSA(data);
     // update stuff
   }
 
