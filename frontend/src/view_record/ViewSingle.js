@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { isLoggedIn } from "login/Accounts";
+import Signature from "signing/Signature";
 
 import {
   Badge,
@@ -57,12 +58,7 @@ class RecordView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      doctor_name: "",
-      patient_name: "",
-      disease: "",
-      diagnosis: "",
-      created_at: "",
-      signature: "",
+      record: {},
     };
   }
 
@@ -72,13 +68,16 @@ class RecordView extends Component {
       const record = await queryRecord(record_id);
       const doctor = await queryDoctor(record.doctor_id);
       const patient = await queryPatient(record.patient_id);
-      this.setState({
+      const record_data = {
         doctor_name: doctor.name,
         patient_name: patient.name,
         disease: record.disease,
         diagnosis: record.diagnosis,
         created_at: record.created_at,
         signature: record.signature,
+      };
+      this.setState({
+        record: record_data,
       });
     } else {
       console.error(`Not logged in`);
@@ -101,29 +100,32 @@ class RecordView extends Component {
                   <tbody>
                     <tr>
                       <td width="15%">Doctor Name</td>
-                      <td>{this.state.doctor_name}</td>
+                      <td>{this.state.record.doctor_name}</td>
                     </tr>
                     <tr>
                       <td>Patient Name</td>
-                      <td>{this.state.patient_name}</td>
+                      <td>{this.state.record.patient_name}</td>
                     </tr>
                     <tr>
                       <td>Disease</td>
-                      <td>{this.state.disease}</td>
+                      <td>{this.state.record.disease}</td>
                     </tr>
                     <tr>
                       <td>Diagnosis</td>
-                      <td>{this.state.diagnosis}</td>
+                      <td>{this.state.record.diagnosis}</td>
                     </tr>
                     <tr>
                       <td>Signature</td>
-                      <td>{this.state.signature}</td>
+                      <td>{this.state.record.signature}</td>
                     </tr>
                   </tbody>
                 </Table>
               </Card.Body>
             </Card>
           </Col>
+        </Row>
+        <Row>
+          <Signature data={this.state.record} />
         </Row>
       </Container>
     );

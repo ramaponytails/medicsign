@@ -21,3 +21,5 @@ class Signature extends Component {
     );
   }
 }
+
+export default Signature;
