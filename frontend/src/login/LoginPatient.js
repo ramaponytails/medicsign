@@ -48,8 +48,8 @@ const LoginPatient = () => {
       <Formik
         validate={validate}
         onSubmit={async (values, { setSubmitting }) => {
-          if (isLoggedIn()) {
-            console.error(`Login but logged in`);
+          if (await isLoggedIn()) {
+            console.error("Error: Logged in but submit");
             setSubmitting(false);
             return;
           }

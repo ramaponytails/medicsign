@@ -77,7 +77,7 @@ function createPublicKey() {
 
 async function handleSubmit(values, { setSubmitting }) {
   if (await isLoggedIn()) {
-    console.error(`Error: Logged in but submit`);
+    console.error("Error: Logged in but submit");
     setSubmitting(false);
     return;
   }

@@ -45,6 +45,12 @@ const LoginDoctor = () => {
       <Formik
         validate={validate}
         onSubmit={async (values, { setSubmitting }) => {
+          if (await isLoggedIn()) {
+            console.error("Error: Logged in but submit");
+            setSubmitting(false);
+            return;
+          }
+
           const payload = {
             credentials: {
               email: values.email,
