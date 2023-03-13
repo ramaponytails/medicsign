@@ -76,8 +76,10 @@ async function create(req, res) {
     if (!dat || !keys) return await sendStatus(res, 400, `Incomplete data.`);
     if (!(await validate_keys(keys)))
       return await sendStatus(res, 400, `Invalid key format.`);
+    const { public_key, private_key } = keys;
 
     dat.password = await hash(dat.password);
+    dat.public_key = public_key;
 
     if (await Patient.countDocuments({ email: dat.email }))
       return await sendStatus(res, 409, `User exists.`);
@@ -85,7 +87,6 @@ async function create(req, res) {
     const newPatient = new Patient(dat);
     await newPatient.save();
 
-    const { public_key, private_key } = keys;
     const newKey = new Key({ userId: newPatient._id, public_key, private_key });
     await newKey.save();
 
@@ -140,11 +141,17 @@ async function view(req, res) {
     )
       return await sendStatus(res, 404, `Invalid userId.`);
 
-    if (req.user.userId !== userId) {
-      return await sendStatus(res, 403);
-    }
+    // if (req.user.userId !== userId) {
+    //   return await sendStatus(res, 403);
+    // }
 
-    const user = await Patient.findOne({ _id: userId }).exec();
+    const userPriv = await Patient.findOne({ _id: userId }).exec();
+    const user = {
+      name: userPriv.name,
+      gender: userPriv.gender,
+      public_key: userPriv.public_key,
+    };
+
     await success(res, { user });
   } catch (error) {
     logger.error(`Error viewing patient.`, { error });
