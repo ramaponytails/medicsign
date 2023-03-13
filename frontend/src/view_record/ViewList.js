@@ -26,19 +26,6 @@ async function queryRecordList() {
   }
 }
 
-async function queryDoctor(_id) {
-  try {
-    const res = await axios.get(
-      "http://localhost:3000/doctor/view/" + toString(_id)
-    );
-    console.log("success");
-    const { user } = res.data.data;
-    return user;
-  } catch (error) {
-    console.error(`Error: ${error}`);
-  }
-}
-
 async function queryPatient(_id) {
   try {
     console.log(_id.toString());
@@ -70,13 +57,13 @@ class RecordList extends Component {
         res.records[i].patient_name = patient_name;
       }
       console.log(res);
-      this.setState({
+      await this.setState({
         records: res.records,
       });
     } else {
       console.error("Not Logged In");
     }
-    console.log(this.state.records);
+    await console.log(this.state.records);
   }
 
   render() {
