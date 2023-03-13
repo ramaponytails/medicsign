@@ -7,4 +7,4 @@ services:
     restart: unless-stopped
     env_file: ./backend/express/.env
     ports:
-      - 1234:3000
+      - 3000:3000
