@@ -2,23 +2,26 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 
+import { createRSA, getPublic, getPrivate } from "app/App";
+import { isLoggedIn } from "login/Accounts";
+
 // name
 // email
 // password
-// gender
-// date_birth
+// hospital
 
 const validate = (values) => {
   const name_regex = /^\w+( \w+)*$/i;
   const email_regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
   const password_regex = /^[A-Za0-9._*%&$\\\/]/i;
+  const hospital_regex = /^[a-zA-Z0-9_-]+( [a-zA-Z0-9_-]+)*$/i;
 
   const errors = {};
 
   if (!values.name) {
     errors.name = "Name required";
   } else if (!name_regex.test(values.name)) {
-    errors.name = "Name must only contain alphanumeric characters and spaces";
+    errors.name = "Name must only contain alphabet characters and spaces";
   }
 
   if (!values.email) {
@@ -36,20 +39,11 @@ const validate = (values) => {
       "Password can only contain alphanumeric characters and symbols (. _ * % & $ \\ /)";
   }
 
-  if (!values.gender) {
-    errors.gender = "Gender required";
-  }
-
-  if (!values.date_birth) {
-    errors.date_birth = "Date birth is required";
-  } else {
-    var date_birth = new Date(values.date_birth);
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (date_birth > today) {
-      errors.date_birth = "Time Traveler spotted";
-    }
+  if (!values.hospital) {
+    errors.hospital = "Hospital required";
+  } else if (!hospital_regex.test(values.hospital)) {
+    errors.hospital =
+      "Hospital name can ony contain alphanumeric characters, spaces, and symbols (- _)";
   }
 
   return errors;
@@ -58,7 +52,7 @@ const validate = (values) => {
 async function create(payload) {
   try {
     const res = await axios.post(
-      `http://localhost:3000/patient/create`,
+      `http://localhost:3000/doctor/create`,
       payload
     );
     console.log(`Success!`);
@@ -68,29 +62,37 @@ async function create(payload) {
   }
 }
 
-function createPublicKey() {
-  return "aabbaabbaabbaa";
-}
-
 async function handleSubmit(values, { setSubmitting }) {
-  const date_birth = new Date(values.date_birth);
+  if (await isLoggedIn()) {
+    console.error("Error: Logged in but submit");
+    setSubmitting(false);
+    return;
+  }
+
+  console.log("creating RSA");
+
+  await createRSA();
 
   const payload = {
-    email: values.email,
-    gender: values.gender,
-    name: values.name,
-    date_birth: date_birth.getTime(),
-    password: values.password,
-    public_key: createPublicKey(),
+    user: {
+      email: values.email,
+      name: values.name,
+      password: values.password,
+      hospital: values.hospital,
+    },
+    keys: {
+      public_key: await getPublic(),
+      private_key: await getPrivate(),
+    },
   };
 
-  setTimeout(() => {
-    create(payload);
+  setTimeout(async () => {
+    await create(payload);
     setSubmitting(false);
   }, 400);
 }
 
-const PatientForm = () => {
+const DoctorForm = () => {
   return (
     <Formik
       validate={validate}
@@ -99,14 +101,13 @@ const PatientForm = () => {
         name: "",
         email: "",
         password: "",
-        gender: "",
-        date_birth: "",
+        hospital: "",
       }}
     >
       <Form>
         <div className="form-group row mb-2">
           <label htmlFor="name" className="col-sm-2">
-            Patient Name
+            Doctor Name
           </label>
           <div className="col-sm-10">
             <Field className="form-control" name="name" type="text" />
@@ -138,49 +139,12 @@ const PatientForm = () => {
           </div>
         </div>
         <div className="form-group row mb-2">
-          <div className="col-sm-2 pt-0">
-            <label htmlFor="gender"> Gender </label> <br />
-            <ErrorMessage name="gender">
-              {(msg) => <div style={{ color: "red" }}>{msg}</div>}
-            </ErrorMessage>
-          </div>
-          <div role="group" className="col-sm-10">
-            <div className="form-check">
-              <Field
-                className="form-check-input"
-                type="radio"
-                name="gender"
-                value="male"
-              />
-              <label>Male</label>
-            </div>
-            <div className="form-check">
-              <Field
-                className="form-check-input"
-                type="radio"
-                name="gender"
-                value="female"
-              />
-              <label>Female</label>
-            </div>
-            <div className="form-check">
-              <Field
-                className="form-check-input"
-                type="radio"
-                name="gender"
-                value="other"
-              />
-              <label>Other</label>
-            </div>
-          </div>
-        </div>
-        <div className="form-group row mb-2">
-          <label htmlFor="date_birth" className="col-sm-2">
-            Date of Birth
+          <label htmlFor="hospital" className="col-sm-2">
+            Hospital Name
           </label>
-          <div className="col-sm-10 pt-0">
-            <Field className="form-control" name="date_birth" type="date" />
-            <ErrorMessage name="date_birth">
+          <div className="col-sm-10">
+            <Field className="form-control" name="hospital" type="hospital" />
+            <ErrorMessage name="hospital">
               {(msg) => <div style={{ color: "red" }}>{msg}</div>}
             </ErrorMessage>
           </div>
@@ -193,4 +157,4 @@ const PatientForm = () => {
   );
 };
 
-export default PatientForm;
+export default DoctorForm;

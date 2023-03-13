@@ -1,4 +1,4 @@
-/* eslint-disable */ 
+/* eslint-disable */
 /*!
 
 =========================================================
@@ -16,65 +16,67 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import Dashboard from "views/Dashboard.js";
-import UserProfile from "views/UserProfile.js";
-import TableList from "views/TableList.js";
-import Typography from "views/Typography.js";
-import Icons from "views/Icons.js";
-import Maps from "views/Maps.js";
+import RegisterPatient from "views/RegisterPatient.js";
+import RegisterDoctor from "views/RegisterDoctor.js";
 import Upgrade from "views/Upgrade.js";
+import CreateRecord from "views/CreateRecord.js";
+import RecordList from "view_record/ViewList.js";
+import LoginPatient from "login/LoginPatient.js";
+import LoginDoctor from "login/LoginDoctor.js";
 
-const dashboardRoutes = [
+const SignedInRoutes = [
   {
     upgrade: true,
     path: "/upgrade",
     name: "Upgrade to PRO",
     icon: "nc-icon nc-alien-33",
     component: Upgrade,
-    layout: "/admin"
   },
   {
-    path: "/dashboard",
-    name: "Dashboard",
-    icon: "nc-icon nc-chart-pie-35",
-    component: Dashboard,
-    layout: "/admin"
+    path: "/create/record",
+    name: "Create Record",
+    icon: "nc-icon",
+    component: CreateRecord,
   },
   {
-    path: "/user",
-    name: "User Profile",
-    icon: "nc-icon nc-circle-09",
-    component: UserProfile,
-    layout: "/admin"
-  },
-  {
-    path: "/table",
-    name: "Table List",
-    icon: "nc-icon nc-notes",
-    component: TableList,
-    layout: "/admin"
-  },
-  {
-    path: "/typography",
-    name: "Typography",
-    icon: "nc-icon nc-paper-2",
-    component: Typography,
-    layout: "/admin"
-  },
-  {
-    path: "/icons",
-    name: "Icons",
-    icon: "nc-icon nc-atom",
-    component: Icons,
-    layout: "/admin"
-  },
-  {
-    path: "/maps",
-    name: "Maps",
-    icon: "nc-icon nc-pin-3",
-    component: Maps,
-    layout: "/admin"
+    path: "/record",
+    name: "Record List",
+    icon: "nc-icon",
+    component: RecordList,
   },
 ];
 
-export default dashboardRoutes;
+const SignedOutRoutes = [
+  {
+    upgrade: true,
+    path: "/upgrade",
+    name: "Upgrade to PRO",
+    icon: "nc-icon nc-alien-33",
+    component: Upgrade,
+  },
+  {
+    path: "/register/patient",
+    name: "Register Patient",
+    icon: "nc-icon nc-chart-pie-35",
+    component: RegisterPatient,
+  },
+  {
+    path: "/register/doctor",
+    name: "Register Doctor",
+    icon: "nc-icon nc-circle-09",
+    component: RegisterDoctor,
+  },
+  {
+    path: "/login/patient",
+    name: "Patient Login",
+    icon: "nc-icon",
+    component: LoginPatient,
+  },
+  {
+    path: "/login/doctor",
+    name: "Doctor Login",
+    icon: "nc-icon",
+    component: LoginDoctor,
+  },
+];
+export { SignedInRoutes, SignedOutRoutes };

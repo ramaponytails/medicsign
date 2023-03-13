@@ -17,9 +17,9 @@ import {
   Tooltip,
 } from "react-bootstrap";
 
-import PatientForm from "forms/CreatePatient";
+import PatientForm from "forms/RegisterPatient";
 
-function Dashboard() {
+function RegisterPatient() {
   return (
     <>
       <Container>
@@ -33,4 +33,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default RegisterPatient;

@@ -23,11 +23,11 @@ import Footer from "components/Footer/Footer";
 import Sidebar from "components/Sidebar/Sidebar";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
-import routes from "routes.js";
+import { SignedInRoutes } from "routes.js";
 
 import sidebarImage from "assets/img/sidebar-3.jpg";
 
-function AdminLayout({children}) {
+function SignedInLayout({children}) {
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
   const [hasImage, setHasImage] = React.useState(true);
@@ -49,7 +49,7 @@ function AdminLayout({children}) {
   return (
     <>
       <div className="wrapper">
-        <Sidebar color={color} image={hasImage ? image : ""} routes={routes} />
+        <Sidebar color={color} image={hasImage ? image : ""} routes={SignedInRoutes} />
         <div className="main-panel p-1" ref={mainPanel}>
           <AdminNavbar />
           <div className="m-3"><Outlet /></div>
@@ -68,4 +68,4 @@ function AdminLayout({children}) {
   );
 }
 
-export default AdminLayout;
+export default SignedInLayout;

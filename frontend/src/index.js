@@ -19,17 +19,11 @@ be included in all copies or substantial portions of the Software.
 /* eslint-disable */
 import React from "react";
 import ReactDOM from "react-dom/client";
+import axios from "axios";
 
-import { BrowserRouter, Routes, Route, Navigate, Link, } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 
-import routes from "routes.js";
-import Dashboard from "views/Dashboard.js";
-import UserProfile from "views/UserProfile.js";
-import TableList from "views/TableList.js";
-import Typography from "views/Typography.js";
-import Icons from "views/Icons.js";
-import Maps from "views/Maps.js";
-import Upgrade from "views/Upgrade.js";
+import { SignedInRoutes, SignedOutRoutes } from "routes.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/animate.min.css";
@@ -37,33 +31,28 @@ import "./assets/scss/light-bootstrap-dashboard-react.scss?v=2.0.0";
 import "./assets/css/demo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-import AdminLayout from "layouts/Admin.js";
+import RecordView from "view_record/ViewSingle.js";
+import SignedInLayout from "layouts/SignedIn.js";
+import SignedOutLayout from "layouts/SignedOut.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
+axios.defaults.withCredentials = true;
+
 const getRoutes = (routes) => {
   return routes.map((prop, key) => {
-    if (prop.layout === "/admin") {
-      return (
-        <Route
-          path={prop.layout + prop.path}
-          element={<prop.component />}
-          key={key}
-        />
-      );
-    } else {
-      return <Route />;
-    }
+    return <Route path={prop.path} element={<prop.component />} key={key} />;
   });
 };
 
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
-      <Route element={<AdminLayout />}>
-        {getRoutes(routes)}
+      <Route element={<SignedInLayout />}>
+        <Route path="record/:id" element={<RecordView />} />
       </Route>
+      <Route element={<SignedInLayout />}>{getRoutes(SignedInRoutes)}</Route>
+      <Route element={<SignedOutLayout />}>{getRoutes(SignedOutRoutes)}</Route>
     </Routes>
   </BrowserRouter>
 );
