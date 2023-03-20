@@ -27,6 +27,7 @@ async function queryRecordList() {
 }
 
 async function queryPatient(_id) {
+  console.log(_id.toString());
   try {
     console.log(_id.toString());
     const res = await axios.get(
@@ -65,7 +66,6 @@ class RecordList extends Component {
     }
     await console.log(this.state.records);
   }
-
   render() {
     return (
       <>
@@ -92,8 +92,8 @@ class RecordList extends Component {
                       {this.state.records.map((val, key) => {
                         return (
                           <tr key={key}>
-                            <td>{val.id}</td>
-                            <td>{val.patient_name}</td>
+                            <td>{val._id}</td>
+                            <td>{val.patient_name.name}</td>
                             <td>{val.disease}</td>
                             <td>
                               <a href={"/record/" + val._id}>More Details</a>
