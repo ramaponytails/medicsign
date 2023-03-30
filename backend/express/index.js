@@ -27,7 +27,7 @@ async function run() {
   await mongoose.connect(env.mongodb);
   logger.info(`Connected to Atlas.`);
 
-  app.listen(env.port, () =>
+  app.listen(env.BACKEND_PORT, () =>
     logger.info(`Server is listening to port ${env.BACKEND_PORT}.`)
   );
 }
