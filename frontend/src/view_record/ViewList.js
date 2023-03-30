@@ -26,6 +26,21 @@ async function queryRecordList() {
   }
 }
 
+async function queryPatient(_id) {
+  console.log(_id.toString());
+  try {
+    console.log(_id.toString());
+    const res = await axios.get(
+      "http://localhost:3000/patient/view/" + _id.toString()
+    );
+    console.log("success");
+    const { user } = res.data.data;
+    return user;
+  } catch (error) {
+    console.error(`Error: ${error}`);
+  }
+}
+
 class RecordList extends Component {
   constructor(props) {
     super(props);
@@ -36,16 +51,21 @@ class RecordList extends Component {
 
   async componentDidMount() {
     if (isLoggedIn()) {
-      const res = await queryRecordList();
+      let res = await queryRecordList();
+      for (let i = 0; i < res.records.length; i++) {
+        console.log(res.records[i].patient_id);
+        const patient_name = await queryPatient(res.records[i].patient_id);
+        res.records[i].patient_name = patient_name;
+      }
       console.log(res);
-      this.state({
+      await this.setState({
         records: res.records,
       });
     } else {
       console.error("Not Logged In");
     }
+    await console.log(this.state.records);
   }
-
   render() {
     return (
       <>
@@ -72,11 +92,11 @@ class RecordList extends Component {
                       {this.state.records.map((val, key) => {
                         return (
                           <tr key={key}>
-                            <td>{val.id}</td>
-                            <td>{val.patient_name}</td>
+                            <td>{val._id}</td>
+                            <td>{val.patient_name.name}</td>
                             <td>{val.disease}</td>
                             <td>
-                              <a href={"/record/" + val.id}>More Details</a>
+                              <a href={"/record/" + val._id}>More Details</a>
                             </td>
                           </tr>
                         );
