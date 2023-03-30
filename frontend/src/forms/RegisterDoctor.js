@@ -51,6 +51,7 @@ const validate = (values) => {
 
 async function create(payload) {
   try {
+    console.log(payload);
     const res = await axios.post(
       `http://localhost:3000/doctor/create`,
       payload

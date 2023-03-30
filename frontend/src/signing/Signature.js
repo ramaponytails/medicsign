@@ -5,18 +5,23 @@ import { signRSA } from "app/App.js";
 class Signature extends Component {
   constructor(props) {
     super(props);
+    this.signRecord = this.signRecord.bind(this);
   }
 
   signRecord() {
-    data = JSON.stringify(this.props.data);
-    signature = signRSA(data);
+    const data = JSON.stringify(this.props.data);
+
+    const signature = signRSA(data);
+    console.log(signature);
     // update stuff
   }
 
   render() {
     return (
       <div>
-        <button onClick={signRecord}>Sign Document</button>
+        <button className="btn btn-primary" onClick={this.signRecord}>
+          Sign Document
+        </button>
       </div>
     );
   }

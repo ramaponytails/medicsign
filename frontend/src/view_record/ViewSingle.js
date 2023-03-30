@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { isLoggedIn } from "login/Accounts";
 import Signature from "signing/Signature";
+import { useParams } from "react-router-dom";
 
 import {
   Badge,
@@ -18,7 +19,7 @@ import {
 async function queryRecord(_id) {
   try {
     const res = await axios.get(
-      "http://localhost:3000/record/view/" + toString(_id)
+      "http://localhost:3000/record/view/" + String(_id)
     );
     console.log("success");
     const { record } = res.data.data;
@@ -31,7 +32,7 @@ async function queryRecord(_id) {
 async function queryDoctor(_id) {
   try {
     const res = await axios.get(
-      "http://localhost:3000/doctor/view/" + toString(_id)
+      "http://localhost:3000/doctor/view/" + String(_id)
     );
     console.log("success");
     const { user } = res.data.data;
@@ -44,7 +45,7 @@ async function queryDoctor(_id) {
 async function queryPatient(_id) {
   try {
     const res = await axios.get(
-      "http://localhost:3000/patient/view/" + toString(_id)
+      "http://localhost:3000/patient/view/" + String(_id)
     );
     console.log("success");
     const { user } = res.data.data;
@@ -52,6 +53,10 @@ async function queryPatient(_id) {
   } catch (error) {
     console.error(`Error: ${error}`);
   }
+}
+
+function withParams(Component) {
+  return (props) => <Component {...props} params={useParams()} />;
 }
 
 class RecordView extends Component {
@@ -64,7 +69,8 @@ class RecordView extends Component {
 
   async componentDidMount() {
     if (isLoggedIn()) {
-      const { record_id } = useParams();
+      console.log("Is Logged In");
+      const record_id = this.props.params.id;
       const record = await queryRecord(record_id);
       const doctor = await queryDoctor(record.doctor_id);
       const patient = await queryPatient(record.patient_id);
@@ -76,6 +82,7 @@ class RecordView extends Component {
         created_at: record.created_at,
         signature: record.signature,
       };
+      console.log(record_data);
       this.setState({
         record: record_data,
       });
@@ -132,4 +139,4 @@ class RecordView extends Component {
   }
 }
 
-export default RecordView;
+export default withParams(RecordView);
