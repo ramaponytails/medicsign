@@ -87,6 +87,8 @@ async function handleSubmit(values, { setSubmitting }) {
     },
   };
 
+  console.log(payload);
+
   setTimeout(async () => {
     await create(payload);
     setSubmitting(false);

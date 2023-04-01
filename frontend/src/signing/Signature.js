@@ -8,10 +8,10 @@ class Signature extends Component {
     this.signRecord = this.signRecord.bind(this);
   }
 
-  signRecord() {
+  async signRecord() {
     const data = JSON.stringify(this.props.data);
 
-    const signature = signRSA(data);
+    const signature = await signRSA(data);
     console.log(signature);
     // update stuff
   }
