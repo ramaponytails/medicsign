@@ -125,11 +125,6 @@ function toUint8(str) {
   return uint8array;
 }
 
-function exportUint8(buf) {
-  var utf8string = new TextDecoder().decode(buf);
-  return utf8string;
-}
-
 async function signRSA(data) {
   const encoded = toUint8(data);
   const signature = await window.crypto.subtle.sign(
@@ -141,14 +136,19 @@ async function signRSA(data) {
     encoded
   );
   console.log(signature);
-  return exportUint8(signature);
+  console.log(ab2str(signature));
+  return ab2str(signature);
 }
 
 async function verifyRSA(signature, data) {
   const encoded = toUint8(data);
-  const signencoded = toUint8(signature);
+  const signencoded = str2ab(signature);
+  console.log(signencoded);
   return await window.crypto.subtle.verify(
-    "RSA-PSS",
+    {
+      name: "RSA-PSS",
+      saltLength: 32,
+    },
     await importPublic(await getPublic()),
     signencoded,
     encoded

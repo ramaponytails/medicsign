@@ -53,6 +53,8 @@ async function handleSubmit(values, { setSubmitting }) {
     signature: "",
   };
 
+  console.log(payload);
+
   setTimeout(async () => {
     await create(payload);
     setSubmitting(false);
@@ -74,23 +76,23 @@ const RecordForm = () => {
       >
         <Form>
           <div className="form-group row mb-2">
-            <label htmlFor="patient-id" className="col-sm-2">
+            <label htmlFor="patientid" className="col-sm-2">
               Patient ID
             </label>
             <div className="col-sm-10">
-              <Field className="form-control" name="patient-id" type="text" />
-              <ErrorMessage name="patient-id">
+              <Field className="form-control" name="patientid" type="text" />
+              <ErrorMessage name="patientid">
                 {(msg) => <div style={{ color: "red" }}>{msg}</div>}
               </ErrorMessage>
             </div>
           </div>
           <div className="form-group row mb-2">
-            <label htmlFor="doctor-id" className="col-sm-2">
+            <label htmlFor="doctorid" className="col-sm-2">
               Doctor ID
             </label>
             <div className="col-sm-10">
-              <Field className="form-control" name="doctor-id" type="text" />
-              <ErrorMessage name="doctor-id">
+              <Field className="form-control" name="doctorid" type="text" />
+              <ErrorMessage name="doctorid">
                 {(msg) => <div style={{ color: "red" }}>{msg}</div>}
               </ErrorMessage>
             </div>

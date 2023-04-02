@@ -12,9 +12,9 @@ class Verify extends Component {
   }
 
   async verifyRecord() {
-    const data = JSON.stringify(this.props.data);
+    const data = JSON.stringify(this.props.signed_data);
 
-    const signature = window.atob(this.props.data.signature);
+    const signature = this.props.data.signature;
     console.log(signature);
 
     const verified = await verifyRSA(signature, data);
@@ -36,3 +36,5 @@ class Verify extends Component {
     );
   }
 }
+
+export default Verify;

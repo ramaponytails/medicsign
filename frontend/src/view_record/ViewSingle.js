@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { isLoggedIn } from "login/Accounts";
 import Signature from "signing/Signature";
+import Verify from "signing/Verify";
 import { useParams } from "react-router-dom";
 
 import {
@@ -82,11 +83,18 @@ class RecordView extends Component {
         created_at: record.created_at,
         signature: record.signature,
       };
+      const signed_data = {
+        doctor_id: record.doctor_id,
+        patient_id: record.patient_id,
+        disease: record.disease,
+        diagnosis: record.diagnosis,
+      };
       const payload = record;
       console.log(record_data);
       this.setState({
         record: record_data,
         payload: payload,
+        signed_data,
       });
     } else {
       console.error(`Not logged in`);
@@ -95,10 +103,20 @@ class RecordView extends Component {
 
   render() {
     let signature_method = (
-      <Signature data={this.state.record} payload={payload} />
+      <Signature
+        data={this.state.record}
+        payload={this.state.payload}
+        sign_data={this.state.signed_data}
+      />
     );
     if (this.state.record.signature !== "") {
-      signature_method = <Verify data={this.state.record} payload={payload} />;
+      signature_method = (
+        <Verify
+          data={this.state.record}
+          payload={this.state.payload}
+          sign_data={this.state.signed_data}
+        />
+      );
     }
     return (
       <Container fluid>
