@@ -11,8 +11,22 @@ class Signature extends Component {
   async signRecord() {
     const data = JSON.stringify(this.props.data);
 
-    const signature = await signRSA(data);
+    const signature = window.btoa(await signRSA(data));
     console.log(signature);
+
+    let updated_record = this.props.data;
+    updated_record.signature = signature;
+
+    try {
+      const res = await axios.get(
+        "http://localhost:3000/record/update",
+        updated_record
+      );
+      console.log(`Success!`);
+      console.log(res.data);
+    } catch (error) {
+      console.error(`Error: ${error}`);
+    }
     // update stuff
   }
 
