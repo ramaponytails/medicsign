@@ -34,9 +34,6 @@ async function exportPublicKey(key) {
     true,
     ["verify"]
   );
-  console.log("COMPARE KEY AND IMPORTED");
-  console.log(key);
-  console.log(imported);
   return ab2str(exported);
 }
 
@@ -52,12 +49,8 @@ async function createRSA() {
     true,
     ["sign", "verify"]
   );
-  console.log("FINISH");
-  console.log(keyPair);
   const rawPrivate = await exportPrivateKey(keyPair.privateKey);
-  console.log("Raw Private " + rawPrivate);
   const rawPublic = await exportPublicKey(keyPair.publicKey);
-  console.log("Raw Public " + rawPublic);
   sessionStorage.setItem("privateKey", rawPrivate);
   sessionStorage.setItem("publicKey", rawPublic);
 }

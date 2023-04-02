@@ -82,9 +82,11 @@ class RecordView extends Component {
         created_at: record.created_at,
         signature: record.signature,
       };
+      const payload = record;
       console.log(record_data);
       this.setState({
         record: record_data,
+        payload: payload,
       });
     } else {
       console.error(`Not logged in`);
@@ -132,7 +134,7 @@ class RecordView extends Component {
           </Col>
         </Row>
         <Row>
-          <Signature data={this.state.record} />
+          <Signature data={this.state.record} payload={payload} />
         </Row>
       </Container>
     );
