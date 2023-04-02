@@ -94,6 +94,12 @@ class RecordView extends Component {
   }
 
   render() {
+    let signature_method = (
+      <Signature data={this.state.record} payload={payload} />
+    );
+    if (this.state.record.signature !== "") {
+      signature_method = <Verify data={this.state.record} payload={payload} />;
+    }
     return (
       <Container fluid>
         <Row>
@@ -133,9 +139,7 @@ class RecordView extends Component {
             </Card>
           </Col>
         </Row>
-        <Row>
-          <Signature data={this.state.record} payload={payload} />
-        </Row>
+        <Row>{signature_method}</Row>
       </Container>
     );
   }
