@@ -5,18 +5,50 @@ import { signRSA } from "app/App.js";
 class Signature extends Component {
   constructor(props) {
     super(props);
+    this.signRecord = this.signRecord.bind(this);
   }
 
-  signRecord() {
-    data = JSON.stringify(this.props.data);
-    signature = signRSA(data);
+  async signRecord() {
+    const data = JSON.stringify(this.props.signed_data);
+
+    const signature = await signRSA(data);
+    console.log(signature);
+
+    const timestamp = Date.parse(this.props.payload.created_at);
+
+    const payload = {
+      record: {
+        _id: this.props.payload._id,
+        doctor_id: this.props.payload.doctor_id,
+        patient_id: this.props.payload.patient_id,
+        disease: this.props.payload.disease,
+        diagnosis: this.props.payload.diagnosis,
+        created_at: timestamp,
+        signature: signature,
+      },
+    };
+
+    console.log(payload);
+
+    try {
+      const res = await axios.post(
+        `http://localhost:3000/record/update`,
+        payload
+      );
+      console.log(`Success!`);
+      console.log(res.data);
+    } catch (error) {
+      console.error(`Error: ${error}`);
+    }
     // update stuff
   }
 
   render() {
     return (
       <div>
-        <button onClick={signRecord}>Sign Document</button>
+        <button className="btn btn-primary" onClick={this.signRecord}>
+          Sign Document
+        </button>
       </div>
     );
   }

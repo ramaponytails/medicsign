@@ -1,32 +1,44 @@
 import React, { useState } from "react";
 
-// export string to Uint8 format
-const toUint8 = (data) => {
-  let encoder = new TextEncoder();
-  return encoder.encode(data);
-};
+function ab2str(buf) {
+  return window.btoa(String.fromCharCode.apply(null, new Uint8Array(buf)));
+}
 
-// export Uint8 or ArrayBuffer format to Base64 string
-const exportUint8 = (data) => {
-  const exportedAsString = String.fromCharCode.apply(
-    null,
-    new Uint8Array(data)
-  );
-  const exportedAsBase64 = window.btoa(exportedAsString);
-  return exportedAsBase64;
-};
+function str2ab(str) {
+  const binaryStr = window.atob(str);
+  const len = binaryStr.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryStr.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
 
 async function exportPrivateKey(key) {
   const exported = await window.crypto.subtle.exportKey("pkcs8", key);
-  return exportUint8(exported);
+  console.log("COMPARE FORMAT CHANGE");
+  console.log(exported);
+  console.log(str2ab(ab2str(exported)));
+  return ab2str(exported);
 }
 
 async function exportPublicKey(key) {
-  const exported = await window.crypto.subtle.exportKey("pkcs8", key);
-  return exportUint8(exported);
+  const exported = await window.crypto.subtle.exportKey("spki", key);
+  const imported = await window.crypto.subtle.importKey(
+    "spki",
+    exported,
+    {
+      name: "RSA-PSS",
+      hash: "SHA-256",
+    },
+    true,
+    ["verify"]
+  );
+  return ab2str(exported);
 }
 
 async function createRSA() {
+  console.log("GENERATE");
   const keyPair = await window.crypto.subtle.generateKey(
     {
       name: "RSA-PSS",
@@ -39,49 +51,105 @@ async function createRSA() {
   );
   const rawPrivate = await exportPrivateKey(keyPair.privateKey);
   const rawPublic = await exportPublicKey(keyPair.publicKey);
-  sessionStorage.setItem("privateKey", JSON.stringify(rawPrivate));
-  sessionStorage.setItem("publicKey", JSON.stringify(rawPublic));
+  sessionStorage.setItem("privateKey", rawPrivate);
+  sessionStorage.setItem("publicKey", rawPublic);
 }
 
 async function saveRSA(keys) {
+  console.log(keys);
   if (keys.publicKey && keys.privateKey) {
-    sessionStorage.setItem("privateKey", JSON.stringify(keys.publicKey));
-    sessionStorage.setItem("publicKey", JSON.stringify(keys.privateKey));
+    console.log("save");
+    sessionStorage.setItem("privateKey", keys.privateKey);
+    sessionStorage.setItem("publicKey", keys.publicKey);
   }
 }
 
-const getPublic = () => {
+async function getPublic() {
   const publicKeyString = sessionStorage.getItem("publicKey");
   if (publicKeyString !== "undefined") {
-    const userKey = JSON.parse(publicKeyString);
-    return userKey?.publicKey;
+    const userKey = publicKeyString;
+    return userKey;
   }
-};
+}
 
-const getPrivate = () => {
+async function getPrivate() {
   const privateKeyString = sessionStorage.getItem("privateKey");
   if (privateKeyString !== "undefined") {
-    const userKey = JSON.parse(privateKeyString);
-    return userKey?.privateKey;
+    const userKey = privateKeyString;
+    return userKey;
   }
-};
+}
+
+async function importPublic(key) {
+  const bufferKey = str2ab(key);
+  console.log(bufferKey);
+  try {
+    return await window.crypto.subtle.importKey(
+      "spki",
+      bufferKey,
+      {
+        name: "RSA-PSS",
+        hash: "SHA-256",
+      },
+      true,
+      ["verify"]
+    );
+  } catch (error) {
+    console.error(`Error: ${error}`);
+  }
+}
+
+async function importPrivate(key) {
+  const bufferKey = str2ab(key);
+  console.log(bufferKey);
+  try {
+    const cryptoKey = await window.crypto.subtle.importKey(
+      "pkcs8",
+      bufferKey,
+      {
+        name: "RSA-PSS",
+        hash: "SHA-256",
+      },
+      true,
+      ["sign"]
+    );
+    console.log(cryptoKey);
+    return cryptoKey;
+  } catch (error) {
+    console.error(`Error: ${error}`);
+  }
+}
+
+function toUint8(str) {
+  var uint8array = new TextEncoder("utf-8").encode(str);
+  return uint8array;
+}
 
 async function signRSA(data) {
   const encoded = toUint8(data);
   const signature = await window.crypto.subtle.sign(
-    "RSASSA-PKCS1-v1_5",
-    getPrivate(),
+    {
+      name: "RSA-PSS",
+      saltLength: 32,
+    },
+    await importPrivate(await getPrivate()),
     encoded
   );
-  return exportUint8(signature);
+  console.log(signature);
+  console.log(ab2str(signature));
+  return ab2str(signature);
 }
 
 async function verifyRSA(signature, data) {
   const encoded = toUint8(data);
-  const signencoded = toUint8(signature);
+  const signencoded = str2ab(signature);
+  console.log(signencoded);
   return await window.crypto.subtle.verify(
-    "RSASSA-PKCS1-v1_5",
-    getPrivate(),
+    {
+      name: "RSA-PSS",
+      saltLength: 32,
+    },
+    await importPublic(await getPublic()),
     signencoded,
     encoded
   );

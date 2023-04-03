@@ -64,6 +64,7 @@ const LoginDoctor = () => {
             const user = data.user;
             user.type = "Doctor";
 
+            console.log(token);
             console.log(user);
 
             if (token === "Not Found") {
@@ -72,8 +73,8 @@ const LoginDoctor = () => {
               console.log("Logged In");
               await saveUser(user);
               await saveRSA({
-                publicKey: token.publicKey,
-                privateKey: token.privateKey,
+                publicKey: token.public_key,
+                privateKey: token.private_key,
               });
             }
             setSubmitting(false);

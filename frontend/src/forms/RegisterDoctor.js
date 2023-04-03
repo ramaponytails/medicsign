@@ -51,6 +51,7 @@ const validate = (values) => {
 
 async function create(payload) {
   try {
+    console.log(payload);
     const res = await axios.post(
       `http://localhost:3000/doctor/create`,
       payload
@@ -85,6 +86,8 @@ async function handleSubmit(values, { setSubmitting }) {
       private_key: await getPrivate(),
     },
   };
+
+  console.log(payload);
 
   setTimeout(async () => {
     await create(payload);
