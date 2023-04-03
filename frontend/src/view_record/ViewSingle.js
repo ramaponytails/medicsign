@@ -83,18 +83,20 @@ class RecordView extends Component {
         created_at: record.created_at,
         signature: record.signature,
       };
+      const created_at = Date.parse(record.created_at);
       const signed_data = {
-        doctor_id: record.doctor_id,
         patient_id: record.patient_id,
+        doctor_id: record.doctor_id,
         disease: record.disease,
         diagnosis: record.diagnosis,
+        created_at: created_at,
       };
       const payload = record;
       console.log(record_data);
       this.setState({
         record: record_data,
         payload: payload,
-        signed_data,
+        signed_data: signed_data,
       });
     } else {
       console.error(`Not logged in`);
@@ -112,8 +114,7 @@ class RecordView extends Component {
     if (this.state.record.signature !== "") {
       signature_method = (
         <Verify
-          data={this.state.record}
-          payload={this.state.payload}
+          signature={this.state.record.signature}
           sign_data={this.state.signed_data}
         />
       );

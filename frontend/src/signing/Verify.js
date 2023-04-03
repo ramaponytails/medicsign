@@ -12,9 +12,10 @@ class Verify extends Component {
   }
 
   async verifyRecord() {
-    const data = JSON.stringify(this.props.signed_data);
+    const data = JSON.stringify(this.props.sign_data);
+    console.log(data);
 
-    const signature = this.props.data.signature;
+    const signature = this.props.signature;
     console.log(signature);
 
     const verified = await verifyRSA(signature, data);
