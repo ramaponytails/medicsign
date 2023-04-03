@@ -4,6 +4,7 @@ const { success, error, sendStatus } = require(`../middleware/req_handler`);
 const { Record } = require(`../models/record`);
 const { Patient } = require(`../models/patient`);
 const { Doctor } = require(`../models/doctor`);
+const signature = require(`../middleware/signature`);
 const ObjectId = mongoose.Types.ObjectId;
 
 function logAndThrow(jobs, message) {
@@ -38,7 +39,7 @@ function validate_id(userId) {
   return ObjectId.isValid(userId);
 }
 
-function validate(dat) {
+async function validate(dat) {
   var res = {};
   for (const key in recordSchema) {
     if (typeof dat[key] !== recordSchema[key]) return undefined;
@@ -46,13 +47,18 @@ function validate(dat) {
   }
   if (!validate_id(res.patient_id) || !validate_id(res.doctor_id))
     return undefined;
+
+  let { signature: _, ...sign } = dat;
+  if (!(await signature.verify(sign, dat.signature, dat.doctor_id)))
+    return undefined;
+
   return res;
 }
 
 async function create(req, res) {
   try {
     var dat = req.body.record;
-    dat = validate(dat);
+    dat = await validate(dat);
     if (!dat) return await sendStatus(res, 400, `Invalid record.`);
 
     const jobs = await Promise.allSettled([
@@ -110,7 +116,7 @@ async function update(req, res) {
   try {
     var dat = req.body.record;
     const recordId = dat._id;
-    dat = validate(dat);
+    dat = await validate(dat);
     if (
       !dat ||
       !recordId ||

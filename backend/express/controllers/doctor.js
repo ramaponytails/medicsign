@@ -11,6 +11,7 @@ const { Doctor } = require(`../models/doctor`);
 const { Record } = require(`../models/record`);
 const { Key } = require(`../models/key`);
 const { set_tokens } = require(`../middleware/auth`);
+const signature = require(`../middleware/signature`);
 const ObjectId = mongoose.Types.ObjectId;
 
 const cmdMap = {
@@ -45,35 +46,14 @@ async function hash(password) {
   return await bcrypt.hash(password, 10);
 }
 
-async function validate_keys(keys) {
-  try {
-    const { public_key, private_key } = keys;
-
-    const publicKey = crypto.createPublicKey({
-      key: Buffer.from(public_key, `base64`),
-      type: `spki`,
-      format: `der`,
-    });
-
-    const privateKey = crypto.createPrivateKey({
-      key: Buffer.from(private_key, `base64`),
-      type: `pkcs8`,
-      format: `der`,
-    });
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
-
 async function create(req, res) {
   try {
     var dat = req.body.user;
     dat = validate(dat);
     const { keys } = req.body;
     if (!dat || !keys) return await sendStatus(res, 400, `Incomplete data.`);
-    if (!(await validate_keys(keys)))
-      return await sendStatus(res, 400, `Invalid public key format.`);
+    if (!(await signature.validate_keys(keys)))
+      return await sendStatus(res, 400, `Invalid key pair.`);
     const { public_key, private_key } = keys;
 
     dat.password = await hash(dat.password);
