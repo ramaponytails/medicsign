@@ -60,6 +60,12 @@ async function validate_keys(keys) {
       type: `pkcs8`,
       format: `der`,
     });
+
+    const test_data = Buffer.from(`test_string`);
+    const signature = crypto.sign(`SHA256`, test_data, privateKey);
+    const verified = crypto.verify(`SHA256`, test_data, publicKey, signature);
+    if (!verified) return false;
+
     return true;
   } catch (error) {
     return false;
@@ -73,7 +79,7 @@ async function create(req, res) {
     const { keys } = req.body;
     if (!dat || !keys) return await sendStatus(res, 400, `Incomplete data.`);
     if (!(await validate_keys(keys)))
-      return await sendStatus(res, 400, `Invalid public key format.`);
+      return await sendStatus(res, 400, `Invalid key pair.`);
     const { public_key, private_key } = keys;
 
     dat.password = await hash(dat.password);
