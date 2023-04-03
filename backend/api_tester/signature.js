@@ -68,7 +68,29 @@ const data = {
   created_at: 22,
 };
 
-const signature = sign(data, private_key);
+// const signature = sign(data, private_key);
 
-console.log(signature);
-console.log(verify(data, signature, public_key));
+// console.log(signature);
+// console.log(verify(data, signature, public_key));
+
+function generate_pair() {
+  const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
+    modulusLength: 2048,
+    publicKeyEncoding: {
+      type: "spki",
+      format: "der",
+    },
+    privateKeyEncoding: {
+      type: "pkcs8",
+      format: "der",
+    },
+  });
+
+  console.log(
+    privateKey.toString(`base64`),
+    `\n`,
+    publicKey.toString(`base64`)
+  );
+}
+
+generate_pair();
