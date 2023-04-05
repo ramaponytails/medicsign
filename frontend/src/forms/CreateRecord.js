@@ -3,7 +3,7 @@ import axios from "axios";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 
 import { createRSA, getPublic, getPrivate, signRSA } from "app/App";
-import { isLoggedIn } from "login/Accounts";
+import { getUser, isLoggedIn } from "login/Accounts";
 
 // name
 // email
@@ -17,7 +17,6 @@ const validate = (values) => {
   const hospital_regex = /^[a-zA-Z0-9_-]+( [a-zA-Z0-9_-]+)*$/i;
 
   const errors = {};
-
   if (!values.patientid) {
     errors.patientid = "Patient ID required";
   }
@@ -45,6 +44,17 @@ async function create(payload) {
     console.log(`Success!`);
     console.log(res.data);
   } catch (error) {
+    console.error(`Error: ${error}`);
+  }
+}
+
+async function getDoctorID() {
+  try {
+    const user = await getUser();
+    const doctorID = await user.getDoctorID;
+    return doctorID;
+  }
+  catch(error) {
     console.error(`Error: ${error}`);
   }
 }
@@ -91,7 +101,7 @@ const RecordForm = () => {
       onSubmit={handleSubmit}
       initialValues={{
         patientid: "",
-        doctorid: "",
+        doctorid: getDoctorID(),
         disease: "",
         diagnosis: "",
       }}
@@ -104,17 +114,6 @@ const RecordForm = () => {
           <div className="col-sm-10">
             <Field className="form-control" name="patientid" type="text" />
             <ErrorMessage name="patientid">
-              {(msg) => <div style={{ color: "red" }}>{msg}</div>}
-            </ErrorMessage>
-          </div>
-        </div>
-        <div className="form-group row mb-2">
-          <label htmlFor="doctorid" className="col-sm-2">
-            Doctor ID
-          </label>
-          <div className="col-sm-10">
-            <Field className="form-control" name="doctorid" type="text" />
-            <ErrorMessage name="doctorid">
               {(msg) => <div style={{ color: "red" }}>{msg}</div>}
             </ErrorMessage>
           </div>
