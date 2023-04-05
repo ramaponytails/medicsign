@@ -8,6 +8,54 @@ const session = require(`./session`);
 
 const env = process.env;
 
+async function login(user, req, type) {
+  try {
+    await session.regenerate(req);
+
+    req.session.userId = user._id;
+    req.session.type = type;
+    await session.save(req);
+    return true;
+  } catch (error) {
+    logger.error(`Failed setting session cookies.`, { error });
+    return false;
+  }
+}
+
+async function logout(req, res) {
+  req.session.userId = null;
+  req.session.type = null;
+
+  try {
+    await session.save(req);
+    await session.regenerate(req);
+
+    return await success(res);
+  } catch (error) {
+    logger.error(`Failed logout.`, { error });
+    return await sendStatus(res, 500);
+  }
+}
+
+function auth(req, res, next) {
+  const { userId } = req.session;
+
+  if (!userId) {
+    return sendStatus(res, 403, `No credentials found.`);
+  }
+
+  req.user = { userId };
+  return next();
+}
+
+function validate(req, res) {
+  const { type } = req.session;
+
+  if (!type) return sendStatus(res, 403, `No credentials found.`);
+
+  return success(res, { token_type: type });
+}
+
 function set_refresh(user, res) {
   const refreshToken = jwt.sign(
     { userId: user._id, email: user.email },
@@ -58,35 +106,6 @@ function set_tokens(user, res, type) {
   };
 }
 
-async function login(user, req, type) {
-  try {
-    await session.regenerate(req);
-
-    req.session.userId = user._id;
-    req.session.type = type;
-    await session.save(req);
-    return true;
-  } catch (error) {
-    logger.error(`Failed setting session cookies.`, { error });
-    return false;
-  }
-}
-
-async function logout(req, res) {
-  req.session.userId = null;
-  req.session.type = null;
-
-  try {
-    await session.save(req);
-    await session.regenerate(req);
-
-    return await success(res);
-  } catch (error) {
-    logger.error(`Failed logout.`, { error });
-    return await sendStatus(res, 500);
-  }
-}
-
 function auth_token(req, res, next) {
   const { accessToken } = req.cookies;
 
@@ -101,17 +120,6 @@ function auth_token(req, res, next) {
     return sendStatus(res, 401, `Invalid token.`);
   }
 
-  return next();
-}
-
-function auth(req, res, next) {
-  const { userId } = req.session;
-
-  if (!userId) {
-    return sendStatus(res, 403, `No credentials found.`);
-  }
-
-  req.user = { userId };
   return next();
 }
 
@@ -154,12 +162,4 @@ function validate_token(req, res) {
   }
 }
 
-function validate(req, res) {
-  const { type } = req.session;
-
-  if (!type) return sendStatus(res, 403, `No credentials found.`);
-
-  return success(res, { token_type: type });
-}
-
-module.exports = { auth, validate, login, logout };
+module.exports = { login, logout, auth, validate };
