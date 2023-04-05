@@ -6,10 +6,23 @@ const { logger } = require(`./middleware/logger`);
 const { success, error } = require(`./middleware/req_handler`);
 const router = require(`./router`);
 const cookieParser = require(`cookie-parser`);
+const session = require(`express-session`);
+const crypto = require(`crypto`);
 
 const app = express();
 app.use(express.json());
-app.use(cookieParser());
+// app.use(cookieParser());
+
+const secret = crypto.randomBytes(128).toString(`base64`);
+app.use(
+  session({
+    secret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
+  })
+);
+
 app.use(
   cors({
     origin: `http://localhost:${env.FRONTEND_PORT}`,

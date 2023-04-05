@@ -3,6 +3,8 @@
 const jwt = require(`jsonwebtoken`);
 const { success, error, sendStatus } = require(`./req_handler`);
 const { logger } = require(`../middleware/logger`);
+const util = require(`util`);
+const session = require(`./session`);
 
 const env = process.env;
 
@@ -56,7 +58,21 @@ function set_tokens(user, res, type) {
   };
 }
 
-function auth(req, res, next) {
+async function login(user, req, type) {
+  try {
+    await session.regenerate(req);
+
+    req.session.userId = user._id;
+    req.session.type = type;
+    await session.save(req);
+    return true;
+  } catch (error) {
+    logger.error(`Failed setting session cookies.`, { error });
+    return false;
+  }
+}
+
+function auth_token(req, res, next) {
   const { accessToken } = req.cookies;
 
   if (!accessToken) {
@@ -70,6 +86,17 @@ function auth(req, res, next) {
     return sendStatus(res, 401, `Invalid token.`);
   }
 
+  return next();
+}
+
+function auth(req, res, next) {
+  const { userId } = req.session;
+
+  if (!userId) {
+    return sendStatus(res, 403, `No credentials found.`);
+  }
+
+  req.user = { userId };
   return next();
 }
 
@@ -96,7 +123,7 @@ function refresh(req, res) {
   }
 }
 
-function validate(req, res) {
+function validate_token(req, res) {
   const { accessToken } = req.cookies;
 
   if (!accessToken) {
@@ -112,4 +139,12 @@ function validate(req, res) {
   }
 }
 
-module.exports = { auth, set_tokens, refresh, validate };
+function validate(req, res) {
+  const { type } = req.session;
+
+  if (!type) return sendStatus(res, 403, `No credentials found.`);
+
+  return success(res, { token_type: type });
+}
+
+module.exports = { auth, validate, login };

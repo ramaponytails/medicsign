@@ -10,7 +10,7 @@ const { success, error, sendStatus } = require(`../middleware/req_handler`);
 const { Patient } = require(`../models/patient`);
 const { Record } = require(`../models/record`);
 const { Key } = require(`../models/key`);
-const { set_tokens } = require(`../middleware/auth`);
+const auth = require(`../middleware/auth`);
 const signature = require(`../middleware/signature`);
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -70,7 +70,9 @@ async function create(req, res) {
     const newKey = new Key({ userId: newPatient._id, public_key, private_key });
     await newKey.save();
 
-    const tokens = await set_tokens(newPatient, res, `Patient`);
+    // const tokens = await set_tokens(newPatient, res, `Patient`);
+    if (!(await auth.login(newPatient, req, `Patient`)))
+      return await sendStatus(res, 500);
 
     logger.info(`New Patient saved!`, { dat });
 
@@ -97,7 +99,9 @@ async function login(req, res) {
         public_key: userKey.public_key,
       };
 
-      const tokens = await set_tokens(user, res, `Patient`);
+      // const tokens = await set_tokens(user, res, `Patient`);
+      if (!(await auth.login(user, req, `Patient`)))
+        return await sendStatus(res, 500);
 
       logger.info(`Patient login success.`);
       return await success(res, { user, keys });
