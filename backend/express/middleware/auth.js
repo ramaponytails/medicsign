@@ -72,6 +72,21 @@ async function login(user, req, type) {
   }
 }
 
+async function logout(req, res) {
+  req.session.userId = null;
+  req.session.type = null;
+
+  try {
+    await session.save(req);
+    await session.regenerate(req);
+
+    return await success(res);
+  } catch (error) {
+    logger.error(`Failed logout.`, { error });
+    return await sendStatus(res, 500);
+  }
+}
+
 function auth_token(req, res, next) {
   const { accessToken } = req.cookies;
 
@@ -147,4 +162,4 @@ function validate(req, res) {
   return success(res, { token_type: type });
 }
 
-module.exports = { auth, validate, login };
+module.exports = { auth, validate, login, logout };
