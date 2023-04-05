@@ -18,20 +18,13 @@
 */
 import RegisterPatient from "views/RegisterPatient.js";
 import RegisterDoctor from "views/RegisterDoctor.js";
-import Upgrade from "views/Upgrade.js";
+import QRView from "views/ViewQR";
 import CreateRecord from "views/CreateRecord.js";
 import RecordList from "view_record/ViewList.js";
 import LoginPatient from "login/LoginPatient.js";
 import LoginDoctor from "login/LoginDoctor.js";
 
 const SignedInRoutes = [
-  {
-    upgrade: true,
-    path: "/upgrade",
-    name: "Upgrade to PRO",
-    icon: "nc-icon nc-alien-33",
-    component: Upgrade,
-  },
   {
     path: "/create/record",
     name: "Create Record",
@@ -44,16 +37,14 @@ const SignedInRoutes = [
     icon: "nc-icon",
     component: RecordList,
   },
+  {
+    path: "/view/qr",
+    name: "QR Code",
+    component: QRView,
+  }
 ];
 
 const SignedOutRoutes = [
-  {
-    upgrade: true,
-    path: "/upgrade",
-    name: "Upgrade to PRO",
-    icon: "nc-icon nc-alien-33",
-    component: Upgrade,
-  },
   {
     path: "/register/patient",
     name: "Register Patient",
