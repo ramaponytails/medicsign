@@ -47,7 +47,7 @@ function SignedOutLayout({children}) {
         var element = document.getElementById("bodyClick");
         element.parentNode.removeChild(element);
       }
-    }, [location]);
+    }, [location, data]);
     if(!data) {
       return (
         <h1>Loading</h1>
