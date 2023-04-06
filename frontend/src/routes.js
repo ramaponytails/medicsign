@@ -23,8 +23,15 @@ import CreateRecord from "views/CreateRecord.js";
 import RecordList from "view_record/ViewList.js";
 import LoginPatient from "login/LoginPatient.js";
 import LoginDoctor from "login/LoginDoctor.js";
+import Dashboard from "views/Dashboard";
+import About from "views/About";
 
 const SignedInRoutes = [
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
+  },
   {
     path: "/create/record",
     name: "Create Record",
@@ -41,10 +48,15 @@ const SignedInRoutes = [
     path: "/view/qr",
     name: "QR Code",
     component: QRView,
-  }
+  },
 ];
 
 const SignedOutRoutes = [
+  {
+    path: "/about",
+    name: "About Medicsign",
+    component: About,
+  },
   {
     path: "/register/patient",
     name: "Register Patient",
