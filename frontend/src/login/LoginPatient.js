@@ -87,7 +87,7 @@ function LoginPatient() {
                   privateKey: token.privateKey,
                 });
                 setSubmitting(false);
-                location.reload();
+                window.location.replace("../../record");
               }
               setSubmitting(false);
             }, 400);

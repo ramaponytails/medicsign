@@ -91,7 +91,7 @@ function LoginDoctor() {
                   privateKey: token.private_key,
                 });
                 setSubmitting(false);
-                location.reload();
+                window.location.replace("../../record");
               }
               setSubmitting(false);
             }, 400);
