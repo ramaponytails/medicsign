@@ -4,6 +4,8 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import { saveRSA } from "app/App";
 import { isLoggedIn, saveUser } from "./Accounts";
 
+import { Navigate } from "react-router";
+
 const validate = (values) => {
   const email_regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
   const password_regex = /^[A-Za0-9._*%&$\\\/]/i;
@@ -59,7 +61,7 @@ function LoginPatient() {
         <Formik
           validate={validate}
           onSubmit={async (values, { setSubmitting }) => {
-            if ((await isLoggedIn()) == "true") {
+            if ((await isLoggedIn()) === "true") {
               console.error("Error: Logged in but submit");
               setSubmitting(false);
               return;
@@ -74,7 +76,7 @@ function LoginPatient() {
 
             setTimeout(async () => {
               const data = await loginUser(payload);
-              const token = data.token;
+              const token = data.keys;
               const user = data.user;
               user.type = "Patient";
 
@@ -82,9 +84,9 @@ function LoginPatient() {
                 alert("User not found");
               } else {
                 saveUser(user);
-                saveRSA({
-                  publicKey: token.publicKey,
-                  privateKey: token.privateKey,
+                await saveRSA({
+                  publicKey: token.public_key,
+                  privateKey: token.private_key,
                 });
                 setSubmitting(false);
                 window.location.replace("../../record");

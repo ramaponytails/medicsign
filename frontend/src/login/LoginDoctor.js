@@ -4,7 +4,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import { saveRSA } from "app/App";
 import { isLoggedIn, saveUser } from "./Accounts.js";
 
-import { useNavigate } from "react-router";
+import { Navigate } from "react-router";
 
 const validate = (values) => {
   const email_regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
@@ -59,7 +59,7 @@ function LoginDoctor() {
         <Formik
           validate={validate}
           onSubmit={async (values, { setSubmitting }) => {
-            if ((await isLoggedIn()) == "true") {
+            if ((await isLoggedIn()) === "true") {
               console.error("Error: Logged in but submit");
               setSubmitting(false);
               return;
