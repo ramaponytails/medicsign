@@ -39,92 +39,111 @@ async function loginUser(payload) {
   }
 }
 
-const LoginDoctor = () => {
-  return (
-    <div className="container mt-5">
-      <Formik
-        validate={validate}
-        onSubmit={async (values, { setSubmitting }) => {
-          if (await isLoggedIn()) {
-            console.error("Error: Logged in but submit");
-            setSubmitting(false);
-            return;
-          }
-
-          const payload = {
-            credentials: {
-              email: values.email,
-              password: values.password,
-            },
-          };
-
-          setTimeout(async () => {
-            const data = await loginUser(payload);
-            const token = data.keys;
-            const user = data.user;
-            user.type = "Doctor";
-
-            console.log(token);
-            console.log(user);
-
-            if (token === "Not Found") {
-              alert("User not found");
-            } else {
-              console.log("Logged In");
-              await saveUser(user);
-              await saveRSA({
-                publicKey: token.public_key,
-                privateKey: token.private_key,
-              });
+function LoginDoctor() {
+  const [loginData, setloginData] = React.useState(null);
+  React.useEffect(() => {
+    isLoggedIn().then(loginData => { 
+      setloginData(loginData); 
+    });
+  }, [loginData]);  
+  console.log(loginData);
+  if(!loginData) {
+    return (
+      <h1>Loading</h1>
+    )
+  }
+  else if(loginData == "true") {
+    return (
+      <Navigate to="/dashboard"/>
+    );
+  }
+  else {
+    return (
+      <div className="container mt-5">
+        <Formik
+          validate={validate}
+          onSubmit={async (values, { setSubmitting }) => {
+            if (await isLoggedIn() == "true") {
+              console.error("Error: Logged in but submit");
+              setSubmitting(false);
+              return;
             }
-            setSubmitting(false);
-          }, 400);
-        }}
-        initialValues={{
-          email: "",
-          password: "",
-        }}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <div className="form-group row mb-2">
-              <label htmlFor="email" className="col-sm-2">
-                Email
-              </label>
-              <div className="col-sm-10">
-                <Field className="form-control" name="email" type="email" />
-                <ErrorMessage name="email">
-                  {(msg) => <div style={{ color: "red" }}>{msg}</div>}
-                </ErrorMessage>
+  
+            const payload = {
+              credentials: {
+                email: values.email,
+                password: values.password,
+              },
+            };
+  
+            setTimeout(async () => {
+              const data = await loginUser(payload);
+              const token = data.keys;
+              const user = data.user;
+              user.type = "Doctor";
+  
+              console.log(token);
+              console.log(user);
+  
+              if (token === "Not Found") {
+                alert("User not found");
+              } else {
+                console.log("Logged In");
+                await saveUser(user);
+                await saveRSA({
+                  publicKey: token.public_key,
+                  privateKey: token.private_key,
+                });
+              }
+              setSubmitting(false);
+            }, 400);
+          }}
+          initialValues={{
+            email: "",
+            password: "",
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <div className="form-group row mb-2">
+                <label htmlFor="email" className="col-sm-2">
+                  Email
+                </label>
+                <div className="col-sm-10">
+                  <Field className="form-control" name="email" type="email" />
+                  <ErrorMessage name="email">
+                    {(msg) => <div style={{ color: "red" }}>{msg}</div>}
+                  </ErrorMessage>
+                </div>
               </div>
-            </div>
-            <div className="form-group row mb-2">
-              <label htmlFor="password" className="col-sm-2">
-                Password
-              </label>
-              <div className="col-sm-10">
-                <Field
-                  className="form-control"
-                  name="password"
-                  type="password"
-                />
-                <ErrorMessage name="password">
-                  {(msg) => <div style={{ color: "red" }}>{msg}</div>}
-                </ErrorMessage>
+              <div className="form-group row mb-2">
+                <label htmlFor="password" className="col-sm-2">
+                  Password
+                </label>
+                <div className="col-sm-10">
+                  <Field
+                    className="form-control"
+                    name="password"
+                    type="password"
+                  />
+                  <ErrorMessage name="password">
+                    {(msg) => <div style={{ color: "red" }}>{msg}</div>}
+                  </ErrorMessage>
+                </div>
               </div>
-            </div>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="btn btn-primary"
-            >
-              Submit
-            </button>
-          </Form>
-        )}
-      </Formik>
-    </div>
-  );
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn btn-primary"
+              >
+                Submit
+              </button>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    );
+  }
 };
 
 export default LoginDoctor;

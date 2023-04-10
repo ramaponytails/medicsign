@@ -69,7 +69,7 @@ class RecordView extends Component {
   }
 
   async componentDidMount() {
-    if (isLoggedIn()) {
+    if (isLoggedIn() == "true") {
       console.log("Is Logged In");
       const record_id = this.props.params.id;
       const record = await queryRecord(record_id);
