@@ -101,8 +101,11 @@ async function handleSubmit(values, { setSubmitting }) {
   };
 
   setTimeout(async () => {
-    await create(payload);
+    const success = await create(payload);
     setSubmitting(false);
+    if (success) {
+      location.reload();
+    }
   }, 400);
 }
 

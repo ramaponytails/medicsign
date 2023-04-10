@@ -58,13 +58,15 @@ async function create(payload) {
     );
     console.log(`Success!`);
     console.log(res.data);
+    return true;
   } catch (error) {
     console.error(`Error: ${error}`);
+    return false;
   }
 }
 
 async function handleSubmit(values, { setSubmitting }) {
-  if (await isLoggedIn()) {
+  if ((await isLoggedIn()) === "true") {
     console.error("Error: Logged in but submit");
     setSubmitting(false);
     return;
@@ -90,8 +92,11 @@ async function handleSubmit(values, { setSubmitting }) {
   console.log(payload);
 
   setTimeout(async () => {
-    await create(payload);
+    const success = await create(payload);
     setSubmitting(false);
+    if (success) {
+      location.reload();
+    }
   }, 400);
 }
 

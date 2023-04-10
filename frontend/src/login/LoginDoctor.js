@@ -4,6 +4,8 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import { saveRSA } from "app/App";
 import { isLoggedIn, saveUser } from "./Accounts.js";
 
+import { useNavigate } from "react-router";
+
 const validate = (values) => {
   const email_regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
   const password_regex = /^[A-Za0-9._*%&$\\\/]/i;
@@ -42,49 +44,43 @@ async function loginUser(payload) {
 function LoginDoctor() {
   const [loginData, setloginData] = React.useState(null);
   React.useEffect(() => {
-    isLoggedIn().then(loginData => { 
-      setloginData(loginData); 
+    isLoggedIn().then((loginData) => {
+      setloginData(loginData);
     });
-  }, [loginData]);  
+  }, [loginData]);
   console.log(loginData);
-  if(!loginData) {
-    return (
-      <h1>Loading</h1>
-    )
-  }
-  else if(loginData == "true") {
-    return (
-      <Navigate to="/dashboard"/>
-    );
-  }
-  else {
+  if (!loginData) {
+    return <h1>Loading</h1>;
+  } else if (loginData == "true") {
+    return <Navigate to="/dashboard" />;
+  } else {
     return (
       <div className="container mt-5">
         <Formik
           validate={validate}
           onSubmit={async (values, { setSubmitting }) => {
-            if (await isLoggedIn() == "true") {
+            if ((await isLoggedIn()) == "true") {
               console.error("Error: Logged in but submit");
               setSubmitting(false);
               return;
             }
-  
+
             const payload = {
               credentials: {
                 email: values.email,
                 password: values.password,
               },
             };
-  
+
             setTimeout(async () => {
               const data = await loginUser(payload);
               const token = data.keys;
               const user = data.user;
               user.type = "Doctor";
-  
+
               console.log(token);
               console.log(user);
-  
+
               if (token === "Not Found") {
                 alert("User not found");
               } else {
@@ -94,6 +90,8 @@ function LoginDoctor() {
                   publicKey: token.public_key,
                   privateKey: token.private_key,
                 });
+                setSubmitting(false);
+                location.reload();
               }
               setSubmitting(false);
             }, 400);
@@ -144,6 +142,6 @@ function LoginDoctor() {
       </div>
     );
   }
-};
+}
 
 export default LoginDoctor;
