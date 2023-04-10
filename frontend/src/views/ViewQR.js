@@ -1,5 +1,5 @@
 import React from "react";
-import QRCode from 'qrcode.react';
+import QRCode from "qrcode.react";
 import { getUser, isLoggedIn } from "login/Accounts";
 
 /* eslint-disable */
@@ -19,24 +19,21 @@ import {
   Tooltip,
 } from "react-bootstrap";
 
-async function getPatientID() {
-  try {
-    const user = await getUser();
-    const patientID = user.getPatientID;
-    return patientID;
-  }
-  catch(error) {
-    console.error(`Error: ${error}`);
-  }
+function getPatientID() {
+  const user = getUser();
+  const patientID = user._id;
+  return patientID;
 }
 
 function QRView() {
+  const patient_id = getPatientID();
+  console.log(patient_id);
   return (
     <>
       <Container>
         <Row>
           <Col>
-            <QRCode value={getPatientID()} />
+            <QRCode value={patient_id} />
           </Col>
         </Row>
       </Container>
