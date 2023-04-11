@@ -61,19 +61,9 @@ function SignedInLayout({children}) {
           <div className="wrapper">
             <Sidebar color={color} image={hasImage ? image : ""} routes={SignedInRoutes} />
             <div className="main-panel p-1">
-              <AdminNavbar />
               <div className="m-3"><Outlet /></div>
-              <Footer />
             </div>
           </div>
-          <FixedPlugin
-            hasImage={hasImage}
-            setHasImage={() => setHasImage(!hasImage)}
-            color={color}
-            setColor={(color) => setColor(color)}
-            image={image}
-            setImage={(image) => setImage(image)}
-          />
         </>
     );
   }

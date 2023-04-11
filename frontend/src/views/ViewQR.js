@@ -31,12 +31,16 @@ async function getPatientID() {
 }
 
 function QRView() {
+  const QRSize = 2 / 3 * Math.min(window.screen.height, window.screen.width);
   return (
     <>
-      <Container>
+      <Container className="centered" fluid>
         <Row>
-          <Col>
-            <QRCode value={getPatientID()} />
+          <Col className="ml-auto mr-auto">
+            <QRCode className="centered" style={{
+              display: 'flex',
+              margin: 'auto',
+            }} size={QRSize} value={getPatientID()} />
           </Col>
         </Row>
       </Container>

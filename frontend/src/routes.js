@@ -60,13 +60,13 @@ const SignedOutRoutes = [
   {
     path: "/register/patient",
     name: "Register Patient",
-    icon: "nc-icon nc-chart-pie-35",
+    icon: "nc-icon",
     component: RegisterPatient,
   },
   {
     path: "/register/doctor",
     name: "Register Doctor",
-    icon: "nc-icon nc-circle-09",
+    icon: "nc-icon",
     component: RegisterDoctor,
   },
   {
