@@ -30,7 +30,6 @@ function getUser() {
     return "User not found";
   } else {
     const user = { type: type, _id: _id };
-    console.log(user);
     return user;
   }
 }

@@ -4,6 +4,8 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import { saveRSA } from "app/App";
 import { isLoggedIn, saveUser } from "./Accounts";
 
+import { Navigate } from "react-router";
+
 const validate = (values) => {
   const email_regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
   const password_regex = /^[A-Za0-9._*%&$\\\/]/i;
@@ -45,53 +47,49 @@ async function loginUser(payload) {
 function LoginPatient() {
   const [loginData, setloginData] = React.useState(null);
   React.useEffect(() => {
-    isLoggedIn().then(loginData => { 
-      setloginData(loginData); 
+    isLoggedIn().then((loginData) => {
+      setloginData(loginData);
     });
-  }, [loginData]);  
-  if(!loginData) {
-    return(
-      <h1>Loading</h1>
-    );
-  }
-  else if(loginData == "true") {
-    return(
-      <Navigate to="/dashboard"/> 
-    );
-  }
-  else {
+  }, [loginData]);
+  if (!loginData) {
+    return <h1>Loading</h1>;
+  } else if (loginData == "true") {
+    return <Navigate to="/dashboard" />;
+  } else {
     return (
       <div className="container mt-5">
         <Formik
           validate={validate}
           onSubmit={async (values, { setSubmitting }) => {
-            if (await isLoggedIn() == "true") {
+            if ((await isLoggedIn()) === "true") {
               console.error("Error: Logged in but submit");
               setSubmitting(false);
               return;
             }
-  
+
             const payload = {
               credentials: {
                 email: values.email,
                 password: values.password,
               },
             };
-  
+
             setTimeout(async () => {
               const data = await loginUser(payload);
-              const token = data.token;
+              const token = data.keys;
               const user = data.user;
               user.type = "Patient";
-  
+
               if (token === "Not Found") {
                 alert("User not found");
               } else {
                 saveUser(user);
-                saveRSA({
-                  publicKey: token.publicKey,
-                  privateKey: token.privateKey,
+                await saveRSA({
+                  publicKey: token.public_key,
+                  privateKey: token.private_key,
                 });
+                setSubmitting(false);
+                window.location.replace("../../record");
               }
               setSubmitting(false);
             }, 400);
@@ -142,6 +140,6 @@ function LoginPatient() {
       </div>
     );
   }
-};
+}
 
 export default LoginPatient;

@@ -57,7 +57,12 @@ async function verify(data, signature, userId) {
       format: `der`,
     });
 
-    const isVerified = crypto.verify(`SHA256`, data, public_key, signature);
+    const isVerified = crypto.verify(
+      `SHA256`,
+      data,
+      { key: public_key, padding: crypto.constants.RSA_PKCS1_PSS_PADDING },
+      signature
+    );
 
     return isVerified;
   } catch (error) {
