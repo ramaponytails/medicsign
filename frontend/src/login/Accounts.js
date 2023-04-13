@@ -5,9 +5,9 @@ async function isLoggedIn() {
   const type_empty = sessionStorage.getItem("type") === null;
   const _id_empty = sessionStorage.getItem("_id") === null;
   if (type_empty || _id_empty) {
-    return false;
+    return "false";
   } else {
-    return true;
+    return "true";
   }
 }
 
@@ -30,7 +30,6 @@ function getUser() {
     return "User not found";
   } else {
     const user = { type: type, _id: _id };
-    console.log(user);
     return user;
   }
 }

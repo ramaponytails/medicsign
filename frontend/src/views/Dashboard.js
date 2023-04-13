@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 /* eslint-disable */
 // react-bootstrap components
@@ -17,15 +17,13 @@ import {
   Tooltip,
 } from "react-bootstrap";
 
-import RecordForm from "forms/CreateRecord.js";
-
-function CreateRecord() {
+function Dashboard() {
   return (
     <>
       <Container>
         <Row>
           <Col>
-            <RecordForm />
+            <h1>Welcome to Medicsign</h1>
           </Col>
         </Row>
       </Container>
@@ -33,4 +31,4 @@ function CreateRecord() {
   );
 }
 
-export default CreateRecord;
+export default Dashboard;

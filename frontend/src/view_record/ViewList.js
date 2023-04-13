@@ -50,7 +50,7 @@ class RecordList extends Component {
   }
 
   async componentDidMount() {
-    if (isLoggedIn()) {
+    if (isLoggedIn() == "true") {
       let res = await queryRecordList();
       for (let i = 0; i < res.records.length; i++) {
         console.log(res.records[i].patient_id);

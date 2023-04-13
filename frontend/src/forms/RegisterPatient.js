@@ -76,7 +76,7 @@ function createPublicKey() {
 }
 
 async function handleSubmit(values, { setSubmitting }) {
-  if (await isLoggedIn()) {
+  if ((await isLoggedIn()) === "true") {
     console.error("Error: Logged in but submit");
     setSubmitting(false);
     return;
@@ -101,8 +101,11 @@ async function handleSubmit(values, { setSubmitting }) {
   };
 
   setTimeout(async () => {
-    await create(payload);
+    const success = await create(payload);
     setSubmitting(false);
+    if (success) {
+      location.reload();
+    }
   }, 400);
 }
 

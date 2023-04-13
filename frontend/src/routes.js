@@ -18,19 +18,19 @@
 */
 import RegisterPatient from "views/RegisterPatient.js";
 import RegisterDoctor from "views/RegisterDoctor.js";
-import Upgrade from "views/Upgrade.js";
+import QRView from "views/ViewQR";
 import CreateRecord from "views/CreateRecord.js";
 import RecordList from "view_record/ViewList.js";
 import LoginPatient from "login/LoginPatient.js";
 import LoginDoctor from "login/LoginDoctor.js";
+import Dashboard from "views/Dashboard";
+import About from "views/About";
 
 const SignedInRoutes = [
   {
-    upgrade: true,
-    path: "/upgrade",
-    name: "Upgrade to PRO",
-    icon: "nc-icon nc-alien-33",
-    component: Upgrade,
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
   },
   {
     path: "/create/record",
@@ -44,26 +44,29 @@ const SignedInRoutes = [
     icon: "nc-icon",
     component: RecordList,
   },
+  {
+    path: "/view/qr",
+    name: "QR Code",
+    component: QRView,
+  },
 ];
 
 const SignedOutRoutes = [
   {
-    upgrade: true,
-    path: "/upgrade",
-    name: "Upgrade to PRO",
-    icon: "nc-icon nc-alien-33",
-    component: Upgrade,
+    path: "/about",
+    name: "About Medicsign",
+    component: About,
   },
   {
     path: "/register/patient",
     name: "Register Patient",
-    icon: "nc-icon nc-chart-pie-35",
+    icon: "nc-icon",
     component: RegisterPatient,
   },
   {
     path: "/register/doctor",
     name: "Register Doctor",
-    icon: "nc-icon nc-circle-09",
+    icon: "nc-icon",
     component: RegisterDoctor,
   },
   {
