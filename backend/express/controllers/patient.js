@@ -190,7 +190,7 @@ async function list(req, res) {
     )
       return await sendStatus(res, 404, `Invalid userId.`);
 
-    if (req.user.userId !== userId) return await sendStatus(res, 403);
+    // if (req.user.userId !== userId) return await sendStatus(res, 403);
 
     const records = await Record.find({ patient_id: userId });
     return await success(res, { records });
