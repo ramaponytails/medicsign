@@ -23,7 +23,11 @@ import axios from "axios";
 
 import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 
-import { SignedInRoutes, SignedOutRoutes } from "routes.js";
+import {
+  SignedInDoctorRoutes,
+  SignedInPatientRoutes,
+  SignedOutRoutes,
+} from "routes.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/animate.min.css";
@@ -33,8 +37,6 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import RecordView from "view_record/ViewSingle.js";
 import PatientRecordView from "view_record/PatientViewSingle.js";
-import RecordList from "view_record/ViewList";
-import PatientRecordList from "view_record/PatientViewList.js";
 import SignedInLayout from "layouts/SignedIn.js";
 import SignedOutLayout from "layouts/SignedOut.js";
 import { getUser } from "login/Accounts";
@@ -60,14 +62,14 @@ const Single =
     </Route>
   );
 
-const List =
+const SignedInRouter =
   getUser().type === "Doctor" ? (
     <Route element={<SignedInLayout />}>
-      <Route path="record" name="Record List" element={<RecordList />} />
+      {getRoutes(SignedInDoctorRoutes)}
     </Route>
   ) : (
     <Route element={<SignedInLayout />}>
-      <Route path="record" name="Record List" element={<PatientRecordList />} />
+      {getRoutes(SignedInPatientRoutes)}
     </Route>
   );
 
@@ -75,8 +77,7 @@ root.render(
   <BrowserRouter>
     <Routes>
       {Single}
-      {List}
-      <Route element={<SignedInLayout />}>{getRoutes(SignedInRoutes)}</Route>
+      {SignedInRouter}
       <Route element={<SignedOutLayout />}>{getRoutes(SignedOutRoutes)}</Route>
     </Routes>
   </BrowserRouter>
