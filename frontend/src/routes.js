@@ -39,12 +39,6 @@ const SignedInRoutes = [
     component: CreateRecord,
   },
   {
-    path: "/record",
-    name: "Record List",
-    icon: "nc-icon",
-    component: RecordList,
-  },
-  {
     path: "/view/qr",
     name: "QR Code",
     component: QRView,
