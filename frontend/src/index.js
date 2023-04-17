@@ -32,8 +32,12 @@ import "./assets/css/demo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import RecordView from "view_record/ViewSingle.js";
+import PatientRecordView from "view_record/PatientViewSingle.js";
+import RecordList from "view_record/ViewList";
+import PatientRecordList from "view_record/PatientViewList.js";
 import SignedInLayout from "layouts/SignedIn.js";
 import SignedOutLayout from "layouts/SignedOut.js";
+import { getUser } from "login/Accounts";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -45,12 +49,33 @@ const getRoutes = (routes) => {
   });
 };
 
+const Single =
+  getUser().type === "Doctor" ? (
+    <Route element={<SignedInLayout />}>
+      <Route path="record/:id" element={<RecordView />} />
+    </Route>
+  ) : (
+    <Route element={<SignedInLayout />}>
+      <Route path="record/:id" element={<PatientRecordView />} />
+    </Route>
+  );
+
+const List =
+  getUser().type === "Doctor" ? (
+    <Route element={<SignedInLayout />}>
+      <Route path="record" name="Record List" element={<RecordList />} />
+    </Route>
+  ) : (
+    <Route element={<SignedInLayout />}>
+      <Route path="record" name="Record List" element={<PatientRecordList />} />
+    </Route>
+  );
+
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route element={<SignedInLayout />}>
-        <Route path="record/:id" element={<RecordView />} />
-      </Route>
+      {Single}
+      {List}
       <Route element={<SignedInLayout />}>{getRoutes(SignedInRoutes)}</Route>
       <Route element={<SignedOutLayout />}>{getRoutes(SignedOutRoutes)}</Route>
     </Routes>

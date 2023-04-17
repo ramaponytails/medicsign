@@ -60,7 +60,7 @@ function withParams(Component) {
   return (props) => <Component {...props} params={useParams()} />;
 }
 
-class RecordView extends Component {
+class PatientRecordView extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -164,4 +164,4 @@ class RecordView extends Component {
   }
 }
 
-export default withParams(RecordView);
+export default withParams(PatientRecordView);

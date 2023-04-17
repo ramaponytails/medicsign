@@ -17,7 +17,7 @@ import {
 async function queryRecordList() {
   try {
     const user = await getUser();
-    const query_path = "http://localhost:3000/doctor/list/" + user._id;
+    const query_path = "http://localhost:3000/patient/list/" + user._id;
     const res = await axios.get(query_path);
     const { data } = res.data;
     return data;
@@ -41,7 +41,7 @@ async function queryPatient(_id) {
   }
 }
 
-class RecordList extends Component {
+class PatientRecordList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -58,13 +58,13 @@ class RecordList extends Component {
         res.records[i].patient_name = patient_name;
       }
       console.log(res);
-      await this.setState({
+      this.setState({
         records: res.records,
       });
     } else {
       console.error("Not Logged In");
     }
-    await console.log(this.state.records);
+    console.log(this.state.records);
   }
   render() {
     return (
@@ -113,4 +113,4 @@ class RecordList extends Component {
   }
 }
 
-export default RecordList;
+export default PatientRecordList;
