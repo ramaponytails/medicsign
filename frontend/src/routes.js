@@ -21,12 +21,13 @@ import RegisterDoctor from "views/RegisterDoctor.js";
 import QRView from "views/ViewQR";
 import CreateRecord from "views/CreateRecord.js";
 import RecordList from "view_record/ViewList.js";
+import PatientRecordList from "view_record/PatientViewList";
 import LoginPatient from "login/LoginPatient.js";
 import LoginDoctor from "login/LoginDoctor.js";
 import Dashboard from "views/Dashboard";
 import About from "views/About";
 
-const SignedInRoutes = [
+const SignedInDoctorRoutes = [
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -37,6 +38,26 @@ const SignedInRoutes = [
     name: "Create Record",
     icon: "nc-icon",
     component: CreateRecord,
+  },
+  {
+    path: "/record",
+    name: "Record List",
+    icon: "nc-icon",
+    component: RecordList,
+  },
+];
+
+const SignedInPatientRoutes = [
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
+  },
+  {
+    path: "/record",
+    name: "Record List",
+    icon: "nc-icon",
+    component: PatientRecordList,
   },
   {
     path: "/view/qr",
@@ -76,4 +97,4 @@ const SignedOutRoutes = [
     component: LoginDoctor,
   },
 ];
-export { SignedInRoutes, SignedOutRoutes };
+export { SignedInDoctorRoutes, SignedInPatientRoutes, SignedOutRoutes };
