@@ -79,6 +79,7 @@ root.render(
       {Single}
       {SignedInRouter}
       <Route element={<SignedOutLayout />}>{getRoutes(SignedOutRoutes)}</Route>
+      <Route exact path="/" element={<Navigate to="/about" replace={true} />} />
     </Routes>
   </BrowserRouter>
 );
