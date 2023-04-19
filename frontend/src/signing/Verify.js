@@ -18,7 +18,9 @@ class Verify extends Component {
     const signature = this.props.signature;
     console.log(signature);
 
-    const verified = await verifyRSA(signature, data);
+    const doctor_id = this.props.doctor_id;
+
+    const verified = await verifyRSA(signature, data, doctor_id);
     this.setState({
       verification: verified
         ? "Signature verification successful"
