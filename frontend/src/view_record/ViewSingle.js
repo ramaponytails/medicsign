@@ -119,6 +119,10 @@ class RecordView extends Component {
         />
       );
     }
+    const current_signature = this.state.record.signature;
+    let truncated_signature =
+      current_signature.substring(0, Math.min(20, current_signature.length)) +
+      "...";
     return (
       <Container fluid>
         <Row>
@@ -150,7 +154,7 @@ class RecordView extends Component {
                     </tr>
                     <tr>
                       <td>Signature</td>
-                      <td>{this.state.record.signature}</td>
+                      <td>{truncated_signature}</td>
                     </tr>
                   </tbody>
                 </Table>
