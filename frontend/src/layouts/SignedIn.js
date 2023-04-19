@@ -59,9 +59,7 @@ function SignedInLayout({ children }) {
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-    isLoggedIn().then((data) => {
-      setData(data);
-    });
+    setData(isLoggedIn());
     if (
       window.innerWidth < 993 &&
       document.documentElement.className.indexOf("nav-open") !== -1

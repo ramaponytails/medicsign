@@ -69,7 +69,7 @@ class PatientRecordView extends Component {
   }
 
   async componentDidMount() {
-    if ((await isLoggedIn()) == "true") {
+    if (isLoggedIn() === "true") {
       console.log("Is Logged In");
       const record_id = this.props.params.id;
       const record = await queryRecord(record_id);
@@ -83,6 +83,9 @@ class PatientRecordView extends Component {
         created_at: record.created_at,
         signature: record.signature,
       };
+      const truncated_signature =
+        record.signature.substring(0, Math.min(40, record.signature.length)) +
+        "...";
       const created_at = Date.parse(record.created_at);
       const signed_data = {
         patient_id: record.patient_id,
@@ -97,6 +100,7 @@ class PatientRecordView extends Component {
         record: record_data,
         payload: payload,
         signed_data: signed_data,
+        trunc_signature: truncated_signature,
       });
     } else {
       console.error(`Not logged in`);
@@ -150,7 +154,7 @@ class PatientRecordView extends Component {
                     </tr>
                     <tr>
                       <td>Signature</td>
-                      <td>{this.state.record.signature}</td>
+                      <td>{this.state.trunc_signature}</td>
                     </tr>
                   </tbody>
                 </Table>

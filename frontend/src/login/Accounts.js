@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-async function isLoggedIn() {
+function isLoggedIn() {
   const type_empty = sessionStorage.getItem("type") === null;
   const _id_empty = sessionStorage.getItem("_id") === null;
   if (type_empty || _id_empty) {
@@ -24,8 +24,6 @@ function saveUser(user) {
 function getUser() {
   const type = JSON.parse(sessionStorage.getItem("type"));
   const _id = JSON.parse(sessionStorage.getItem("_id"));
-  console.log(type);
-  console.log(_id);
   if (type === "undefined" || _id === "undefined") {
     return "User not found";
   } else {
@@ -34,4 +32,10 @@ function getUser() {
   }
 }
 
-export { isLoggedIn, saveUser, getUser };
+function logout() {
+  sessionStorage.removeItem("type");
+  sessionStorage.removeItem("_id");
+  window.location.reload();
+}
+
+export { isLoggedIn, saveUser, getUser, logout };

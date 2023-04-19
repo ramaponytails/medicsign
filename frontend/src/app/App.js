@@ -16,9 +16,6 @@ function str2ab(str) {
 
 async function exportPrivateKey(key) {
   const exported = await window.crypto.subtle.exportKey("pkcs8", key);
-  console.log("COMPARE FORMAT CHANGE");
-  console.log(exported);
-  console.log(str2ab(ab2str(exported)));
   return ab2str(exported);
 }
 
@@ -55,7 +52,7 @@ async function createRSA() {
   sessionStorage.setItem("publicKey", rawPublic);
 }
 
-async function saveRSA(keys) {
+function saveRSA(keys) {
   console.log(keys);
   if (keys.publicKey && keys.privateKey) {
     console.log("save");
@@ -64,7 +61,7 @@ async function saveRSA(keys) {
   }
 }
 
-async function getPublic() {
+function getPublic() {
   const publicKeyString = sessionStorage.getItem("publicKey");
   if (publicKeyString !== "undefined") {
     const userKey = publicKeyString;
@@ -72,7 +69,7 @@ async function getPublic() {
   }
 }
 
-async function getPrivate() {
+function getPrivate() {
   const privateKeyString = sessionStorage.getItem("privateKey");
   if (privateKeyString !== "undefined") {
     const userKey = privateKeyString;

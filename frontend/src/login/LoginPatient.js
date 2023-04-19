@@ -47,9 +47,7 @@ async function loginUser(payload) {
 function LoginPatient() {
   const [loginData, setloginData] = React.useState(null);
   React.useEffect(() => {
-    isLoggedIn().then((loginData) => {
-      setloginData(loginData);
-    });
+    setloginData(isLoggedIn());
   }, [loginData]);
   if (!loginData) {
     return <h1>Loading</h1>;
@@ -61,7 +59,7 @@ function LoginPatient() {
         <Formik
           validate={validate}
           onSubmit={async (values, { setSubmitting }) => {
-            if ((await isLoggedIn()) === "true") {
+            if (isLoggedIn() === "true") {
               console.error("Error: Logged in but submit");
               setSubmitting(false);
               return;
