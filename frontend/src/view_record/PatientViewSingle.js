@@ -101,6 +101,7 @@ class PatientRecordView extends Component {
         payload: payload,
         signed_data: signed_data,
         trunc_signature: truncated_signature,
+        doctor_id: record.doctor_id,
       });
     } else {
       console.error(`Not logged in`);
@@ -120,6 +121,7 @@ class PatientRecordView extends Component {
         <Verify
           signature={this.state.record.signature}
           sign_data={this.state.signed_data}
+          doctor_id={this.state.doctor_id}
         />
       );
     }

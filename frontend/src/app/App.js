@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getUser } from "login/Accounts";
 
 function ab2str(buf) {
   return window.btoa(String.fromCharCode.apply(null, new Uint8Array(buf)));
@@ -137,19 +138,46 @@ async function signRSA(data) {
   return ab2str(signature);
 }
 
-async function verifyRSA(signature, data) {
-  const encoded = toUint8(data);
-  const signencoded = str2ab(signature);
-  console.log(signencoded);
-  return await window.crypto.subtle.verify(
-    {
-      name: "RSA-PSS",
-      saltLength: 32,
-    },
-    await importPublic(await getPublic()),
-    signencoded,
-    encoded
-  );
+async function getDoctorPublicKey(doctor_id) {
+  try {
+    const res = await axios.get(
+      `http://localhost:3000/doctor/view/${doctor_id}`
+    );
+    const { data } = res.data;
+    return data.user.public_key;
+  } catch (error) {
+    console.log(`Error: ${error}`);
+    return "Not Found";
+  }
+}
+
+async function verifyRSA(signature, data, doctor_id) {
+  if (getUser().type === "Doctor") {
+    const encoded = toUint8(data);
+    const signencoded = str2ab(signature);
+    return await window.crypto.subtle.verify(
+      {
+        name: "RSA-PSS",
+        saltLength: 32,
+      },
+      await importPublic(getPublic()),
+      signencoded,
+      encoded
+    );
+  } else {
+    const encoded = toUint8(data);
+    const signencoded = str2ab(signature);
+    console.log(signencoded);
+    return await window.crypto.subtle.verify(
+      {
+        name: "RSA-PSS",
+        saltLength: 32,
+      },
+      await importPublic(await getDoctorPublicKey(doctor_id)),
+      signencoded,
+      encoded
+    );
+  }
 }
 
 export { createRSA, saveRSA, getPublic, getPrivate, signRSA, verifyRSA };
