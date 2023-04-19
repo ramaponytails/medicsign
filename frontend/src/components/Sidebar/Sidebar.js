@@ -31,14 +31,6 @@ function Sidebar({ color, image, routes }) {
   const activeRoute = (routeName) => {
     return location.pathname.indexOf(routeName) > -1 ? "active" : "";
   };
-  const logout =
-    isLoggedIn() === "true" ? (
-      <Nav>
-        <button onClick={logout} />
-      </Nav>
-    ) : (
-      <></>
-    );
   return (
     <div className="sidebar" data-image={image} data-color={color}>
       <div
@@ -74,7 +66,6 @@ function Sidebar({ color, image, routes }) {
             return null;
           })}
         </Nav>
-        {logout}
       </div>
     </div>
   );

@@ -44,11 +44,8 @@ async function loginUser(payload) {
 function LoginDoctor() {
   const [loginData, setloginData] = React.useState(null);
   React.useEffect(() => {
-    isLoggedIn().then((loginData) => {
-      setloginData(loginData);
-    });
+    setloginData(isLoggedIn());
   }, [loginData]);
-  console.log(loginData);
   if (!loginData) {
     return <h1>Loading</h1>;
   } else if (loginData == "true") {
@@ -78,14 +75,10 @@ function LoginDoctor() {
               const user = data.user;
               user.type = "Doctor";
 
-              console.log(token);
-              console.log(user);
-
               if (token === "Not Found") {
                 alert("User not found");
               } else {
-                console.log("Logged In");
-                await saveUser(user);
+                saveUser(user);
                 await saveRSA({
                   publicKey: token.public_key,
                   privateKey: token.private_key,

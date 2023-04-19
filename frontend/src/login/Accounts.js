@@ -24,8 +24,6 @@ function saveUser(user) {
 function getUser() {
   const type = JSON.parse(sessionStorage.getItem("type"));
   const _id = JSON.parse(sessionStorage.getItem("_id"));
-  console.log(type);
-  console.log(_id);
   if (type === "undefined" || _id === "undefined") {
     return "User not found";
   } else {

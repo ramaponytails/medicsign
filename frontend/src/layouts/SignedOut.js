@@ -16,7 +16,14 @@
 
 */
 import React, { Component } from "react";
-import { useLocation, Outlet, Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
+import {
+  useLocation,
+  Outlet,
+  Route,
+  Routes,
+  BrowserRouter,
+  Navigate,
+} from "react-router-dom";
 
 import AdminNavbar from "components/Navbars/AdminNavbar";
 import Footer from "components/Footer/Footer";
@@ -27,7 +34,7 @@ import { SignedOutRoutes } from "routes.js";
 
 import sidebarImage from "assets/img/sidebar-3.jpg";
 
-function SignedOutLayout({children}) {
+function SignedOutLayout({ children }) {
   const [data, setData] = React.useState(null);
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
@@ -36,39 +43,37 @@ function SignedOutLayout({children}) {
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-    isLoggedIn().then(data => {
-      setData(data);
-    });
+    setData(isLoggedIn());
     if (
       window.innerWidth < 993 &&
       document.documentElement.className.indexOf("nav-open") !== -1
-      ) {
-        document.documentElement.classList.toggle("nav-open");
-        var element = document.getElementById("bodyClick");
-        element.parentNode.removeChild(element);
-      }
-    }, [location, data]);
-    if(!data) {
-      return (
-        <h1>Loading</h1>
-      );
+    ) {
+      document.documentElement.classList.toggle("nav-open");
+      var element = document.getElementById("bodyClick");
+      element.parentNode.removeChild(element);
     }
-    else if(data == "false") {
-      return (
-        <>
-          <div className="wrapper">
-            <Sidebar color={color} image={hasImage ? image : ""} routes={SignedOutRoutes} />
-            <div className="main-panel centered p-1">
-              <div className="m-3"><Outlet /></div>
+  }, [location, data]);
+  if (!data) {
+    return <h1>Loading</h1>;
+  } else if (data == "false") {
+    return (
+      <>
+        <div className="wrapper">
+          <Sidebar
+            color={color}
+            image={hasImage ? image : ""}
+            routes={SignedOutRoutes}
+          />
+          <div className="main-panel centered p-1">
+            <div className="m-3">
+              <Outlet />
             </div>
           </div>
-        </>
+        </div>
+      </>
     );
-  }
-  else {
-    return (
-      <Navigate to="/dashboard" replace={true}/>
-    );
+  } else {
+    return <Navigate to="/dashboard" replace={true} />;
   }
 }
 
