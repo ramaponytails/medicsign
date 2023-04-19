@@ -20,7 +20,9 @@ class Verify extends Component {
 
     const verified = await verifyRSA(signature, data);
     this.setState({
-      verification: verified ? "Verified" : "Not Verified",
+      verification: verified
+        ? "Signature verification successful"
+        : "Signature verification fail",
     });
   }
 
