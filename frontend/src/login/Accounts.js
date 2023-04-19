@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-async function isLoggedIn() {
+function isLoggedIn() {
   const type_empty = sessionStorage.getItem("type") === null;
   const _id_empty = sessionStorage.getItem("_id") === null;
   if (type_empty || _id_empty) {
