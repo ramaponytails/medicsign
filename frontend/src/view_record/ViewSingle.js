@@ -83,6 +83,9 @@ class RecordView extends Component {
         created_at: record.created_at,
         signature: record.signature,
       };
+      const truncated_signature =
+        record.signature.substring(0, Math.min(40, record.signature.length)) +
+        "...";
       const created_at = Date.parse(record.created_at);
       const signed_data = {
         patient_id: record.patient_id,
@@ -97,6 +100,7 @@ class RecordView extends Component {
         record: record_data,
         payload: payload,
         signed_data: signed_data,
+        trunc_sign: truncated_signature,
       });
     } else {
       console.error(`Not logged in`);
@@ -119,10 +123,6 @@ class RecordView extends Component {
         />
       );
     }
-    const current_signature = this.state.record.signature;
-    let truncated_signature =
-      current_signature.substring(0, Math.min(20, current_signature.length)) +
-      "...";
     return (
       <Container fluid>
         <Row>
@@ -154,7 +154,7 @@ class RecordView extends Component {
                     </tr>
                     <tr>
                       <td>Signature</td>
-                      <td>{truncated_signature}</td>
+                      <td>{this.state.trunc_sign}</td>
                     </tr>
                   </tbody>
                 </Table>
