@@ -34,4 +34,10 @@ function getUser() {
   }
 }
 
-export { isLoggedIn, saveUser, getUser };
+function logout() {
+  sessionStorage.removeItem("type");
+  sessionStorage.removeItem("_id");
+  window.location.reload();
+}
+
+export { isLoggedIn, saveUser, getUser, logout };
