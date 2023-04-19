@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { getUser } from "login/Accounts";
+import axios from "axios";
 
 function ab2str(buf) {
   return window.btoa(String.fromCharCode.apply(null, new Uint8Array(buf)));
@@ -144,6 +145,7 @@ async function getDoctorPublicKey(doctor_id) {
       `http://localhost:3000/doctor/view/${doctor_id}`
     );
     const { data } = res.data;
+    console.log(data.user.public_key);
     return data.user.public_key;
   } catch (error) {
     console.log(`Error: ${error}`);

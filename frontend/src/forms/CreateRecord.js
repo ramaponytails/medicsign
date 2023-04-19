@@ -161,9 +161,8 @@ const RecordForm = () => {
           setTimeout(async () => {
             await create(payload);
             setSubmitting(false);
+            window.location.replace("../../record");
           }, 400);
-
-          window.location.replace("../../record");
         }}
         initialValues={{
           patientid: currentPatientId,
