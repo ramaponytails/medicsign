@@ -8,6 +8,7 @@ const router = require(`./router`);
 const cookieParser = require(`cookie-parser`);
 const session = require(`express-session`);
 const crypto = require(`crypto`);
+const websocket = require(`./middleware/websocket`);
 
 const app = express();
 app.use(express.json());
@@ -40,9 +41,10 @@ async function run() {
   await mongoose.connect(env.mongodb);
   logger.info(`Connected to Atlas.`);
 
-  app.listen(env.BACKEND_PORT, () =>
+  const server = app.listen(env.BACKEND_PORT, () =>
     logger.info(`Server is listening to port ${env.BACKEND_PORT}.`)
   );
+  websocket(server);
 }
 
 run();
