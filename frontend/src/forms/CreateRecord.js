@@ -87,13 +87,12 @@ function getDoctorID() {
 const RecordForm = () => {
   const [patientId, setPatientId] = useState("");
 
-  const handleScan = (data) => {
+  const scanQRCode = (data) => {
     if (!data) return;
     if (!data.text) return;
     var ObjectId = require("mongoose").Types.ObjectId;
     if (ObjectId.isValid(data.text)) {
       setPatientId(data.text);
-      console.log(data.text);
     }
   };
 
@@ -228,7 +227,7 @@ const RecordForm = () => {
           );
         }}
       </Formik>
-      <Scan handleScan={handleScan} />
+      <Scan handleScan={scanQRCode} />
     </>
   );
 };
