@@ -22,6 +22,7 @@ services:
       - 3001:3000
   mongodb:
     image: "mongodb/mongodb-community-server:6.0-ubi8"
+    restart: unless-stopped
     environment:
       - MONGODB_INITDB_ROOT_USERNAME=ramaponytails
       - MONGODB_INITDB_ROOT_PASSWORD=ahlibesar
