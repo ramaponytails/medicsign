@@ -40,6 +40,7 @@ Used to login to an existing doctor account.
     - **name** `(string)` &mdash; The doctor's name.
     - **hospital** `(string)` &mdash; Hospital name where doctor is working.
     - **password** `(string)` &mdash; The doctor's password (hashed).
+    - **\_id** `(string)` &mdash; The doctor's user id.
   - **keys** `(object)` &mdash; The doctor's keys:
     - **public_key** `(string)` &mdash; The doctor's public key in `base64`. (`spki` `der` format)
     - **private_key** `(string)` &mdash; The doctor's private key in `base64`. (`pkcs8` `der` format)
@@ -67,7 +68,8 @@ Used to login to an existing doctor account.
 
 # Error Response
 
-| **Condition**                | **Code**          | **Message**                    |
-| ---------------------------- | ----------------- | ------------------------------ |
-| Incomplete data sent         | `400 BAD REQUEST` | `Insufficient data to log in.` |
-| Invalid credentials provided | `400 BAD REQUEST` | `Invalid credentials.`         |
+| **Condition**                  | **Code**                    | **Message**                    |
+| ------------------------------ | --------------------------- | ------------------------------ |
+| Incomplete/incorrect data sent | `400 BAD REQUEST`           | `Insufficient data to log in.` |
+| Invalid credentials provided   | `400 BAD REQUEST`           | `Invalid credentials.`         |
+| Internal error                 | `500 INTERNAL SERVER ERROR` |
