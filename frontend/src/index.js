@@ -85,13 +85,15 @@ const SignedOutRouter =
     <></>
   );
 
+const base_path = isLoggedIn() === "true" ? "/dashboard" : "/about";
+
 root.render(
   <BrowserRouter>
     <Routes>
       {Single}
       {SignedInRouter}
       {SignedOutRouter}
-      <Route path="*" element={<Navigate to="/about" replace={true} />} />
+      <Route path="*" element={<Navigate to={base_path} replace={true} />} />
     </Routes>
   </BrowserRouter>
 );
