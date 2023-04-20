@@ -8,9 +8,36 @@ services:
     env_file: ./backend/express/.env
     ports:
       - 3000:3000
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+    networks:
+      - mongodb_network
   frontend:
     image: "medicsign/frontend:latest"
     build: ./frontend/
     restart: unless-stopped
     ports:
       - 3001:3000
+  mongodb:
+    image: "mongodb/mongodb-community-server:6.0-ubi8"
+    restart: unless-stopped
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=ramaponytails
+      - MONGODB_INITDB_ROOT_PASSWORD=ahlibesar
+      - MONGODB_INITDB_DATABASE=db
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - mongodb_network
+
+volumes:
+  mongodb:
+
+networks:
+  mongodb_network:
+    driver: bridge
