@@ -66,7 +66,7 @@ const validate = (values) => {
   return errors;
 };
 
-async function create(payload) {
+async function sendRecord(payload) {
   try {
     const res = await axios.post(`http://localhost:3000/record/create`, {
       record: payload,
@@ -142,8 +142,6 @@ const RecordForm = () => {
           };
 
           const JSON_signed = JSON.stringify(signed_data);
-          console.log(JSON_signed);
-
           const signature = await signRSA(JSON_signed);
 
           const payload = {
@@ -155,10 +153,8 @@ const RecordForm = () => {
             signature: signature,
           };
 
-          console.log(payload);
-
           setTimeout(async () => {
-            await create(payload);
+            await sendRecord(payload);
             setSubmitting(false);
             window.location.replace("../../record");
           }, 400);
