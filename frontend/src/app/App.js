@@ -23,16 +23,6 @@ async function exportPrivateKey(key) {
 
 async function exportPublicKey(key) {
   const exported = await window.crypto.subtle.exportKey("spki", key);
-  const imported = await window.crypto.subtle.importKey(
-    "spki",
-    exported,
-    {
-      name: "RSA-PSS",
-      hash: "SHA-256",
-    },
-    true,
-    ["verify"]
-  );
   return ab2str(exported);
 }
 
