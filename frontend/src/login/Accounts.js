@@ -35,7 +35,7 @@ function getUser() {
 function logout() {
   sessionStorage.removeItem("type");
   sessionStorage.removeItem("_id");
-  window.location.reload();
+  window.location.replace("/about");
 }
 
 export { isLoggedIn, saveUser, getUser, logout };

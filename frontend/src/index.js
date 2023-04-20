@@ -40,6 +40,7 @@ import PatientRecordView from "view_record/PatientViewSingle.js";
 import SignedInLayout from "layouts/SignedIn.js";
 import SignedOutLayout from "layouts/SignedOut.js";
 import { getUser } from "login/Accounts";
+import { isLoggedIn } from "login/Accounts";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -56,10 +57,12 @@ const Single =
     <Route element={<SignedInLayout />}>
       <Route path="record/:id" element={<RecordView />} />
     </Route>
-  ) : (
+  ) : getUser().type === "Patient" ? (
     <Route element={<SignedInLayout />}>
       <Route path="record/:id" element={<PatientRecordView />} />
     </Route>
+  ) : (
+    <></>
   );
 
 const SignedInRouter =
@@ -67,19 +70,30 @@ const SignedInRouter =
     <Route element={<SignedInLayout />}>
       {getRoutes(SignedInDoctorRoutes)}
     </Route>
-  ) : (
+  ) : getUser().type === "Patient" ? (
     <Route element={<SignedInLayout />}>
       {getRoutes(SignedInPatientRoutes)}
     </Route>
+  ) : (
+    <></>
   );
+
+const SignedOutRouter =
+  isLoggedIn() === "false" ? (
+    <Route element={<SignedOutLayout />}>{getRoutes(SignedOutRoutes)}</Route>
+  ) : (
+    <></>
+  );
+
+const base_path = isLoggedIn() === "true" ? "/dashboard" : "/about";
 
 root.render(
   <BrowserRouter>
     <Routes>
       {Single}
       {SignedInRouter}
-      <Route element={<SignedOutLayout />}>{getRoutes(SignedOutRoutes)}</Route>
-      <Route exact path="/" element={<Navigate to="/about" replace={true} />} />
+      {SignedOutRouter}
+      <Route path="*" element={<Navigate to={base_path} replace={true} />} />
     </Routes>
   </BrowserRouter>
 );

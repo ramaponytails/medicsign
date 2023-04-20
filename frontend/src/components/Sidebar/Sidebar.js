@@ -34,7 +34,7 @@ function Sidebar({ color, image, routes }) {
   const LogoutButton =
     isLoggedIn() === "true" ? (
       <li>
-        <a href="#" className={"nav-link"} onClick={logout}>
+        <a href="/about" className={"nav-link"} onClick={logout}>
           <p>Logout</p>
         </a>
       </li>
