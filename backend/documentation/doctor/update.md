@@ -1,4 +1,4 @@
-# Register
+# Update
 
 Used to update an existing doctor account.
 
