@@ -23,4 +23,4 @@ Further Details about the features can be seen on the folder of each feature
 ### Credits
 Made by Team Rama Ponytails (Joel Gunawan, Joel Carlo Vieri, Matthew Allan) for the Young Turing Program Competition.
 
-![Image](https://i.imgur.com/JORnn3y.png =150x)@NTUST, Taiwan
+<img src="https://i.imgur.com/JORnn3y.png" width=15% height=15%>@NTUST, Taiwan
