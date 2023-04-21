@@ -70,5 +70,6 @@ Used to update an existing doctor account.
 | **Condition**                        | **Code**                    | **Message**        |
 | ------------------------------------ | --------------------------- | ------------------ |
 | Incomplete/incorrect data sent       | `400 BAD REQUEST`           | `Incomplete data.` |
+| Invalid Auth                         | `401 UNAUTHORIZED`          |                    |
 | Email provided is already registered | `409 CONFLICT`              | `User exists.`     |
 | Internal error                       | `500 INTERNAL SERVER ERROR` |

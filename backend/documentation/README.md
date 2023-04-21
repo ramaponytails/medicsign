@@ -8,7 +8,7 @@ The backend API is divided into four categories: `/doctor/`, `/patient/`, `/reco
 - [Login](doctor/login.md): `POST /doctor/create`
 - [Update](doctor/update.md): `POST /doctor/update`
 - [View](doctor/view.md): `GET /doctor/view/:_id`
-- Record list: `GET /doctor/list/:_id`
+- [View Record list](doctor/list.md): `GET /doctor/list/:_id`
 
 ## Libraries Used
 
