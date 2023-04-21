@@ -34,7 +34,7 @@ Used to login to an existing doctor account.
 ### Body
 
 - **success** `(bool)` &mdash; Whether the request was successful.
-- **data**? `(object)` &mdash; If successful, the saved data:
+- **data**? `(object)` &mdash; If successful, the requested data:
   - **user** `(object)` &mdash; The account details:
     - **email** `(string)` &mdash; The doctor's email.
     - **name** `(string)` &mdash; The doctor's name.
