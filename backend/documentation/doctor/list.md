@@ -66,9 +66,8 @@ Used to view the record list of an existing doctor account.
 
 # Error Response
 
-| **Condition**                        | **Code**                    | **Message**        |
-| ------------------------------------ | --------------------------- | ------------------ |
-| Incomplete/incorrect data sent       | `400 BAD REQUEST`           | `Incomplete data.` |
-| Invalid auth                         | `401 UNAUTHORIZED`          |                    |
-| Email provided is already registered | `409 CONFLICT`              | `User exists.`     |
-| Internal error                       | `500 INTERNAL SERVER ERROR` |
+| **Condition**       | **Code**                    | **Message**       |
+| ------------------- | --------------------------- | ----------------- |
+| Invalid `_id` given | `404 NOT FOUND`             | `Invalid userId.` |
+| Invalid Auth        | `401 UNAUTHORIZED`          |                   |
+| Internal error      | `500 INTERNAL SERVER ERROR` |
