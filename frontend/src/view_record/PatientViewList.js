@@ -74,10 +74,8 @@ class PatientRecordList extends Component {
             <Col md="12">
               <Card className="strpied-tabled-with-hover">
                 <Card.Header>
-                  <Card.Title as="h4">Striped Table with Hover</Card.Title>
-                  <p className="card-category">
-                    Here is a subtitle for this table
-                  </p>
+                  <Card.Title as="h4">Patient Record List</Card.Title>
+                  <p className="card-category">List of Patient's Records</p>
                 </Card.Header>
                 <Card.Body className="table-full-width table-responsive px-0">
                   <Table className="table-hover table-striped">
