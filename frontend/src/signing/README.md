@@ -1,0 +1,5 @@
+## [Verify](https://github.com/ramaponytails/medicsign/blob/frontend_documentation/frontend/src/signing/Verify.js#L5)
+<img src="https://i.imgur.com/mxxEaCp.png" height=50% width=50%> <br>
+The verify component receives JSON data (aka the data that was signed) and signature from the [RecordView](https://github.com/ramaponytails/medicsign/blob/frontend_documentation/frontend/src/view_record/ViewSingle.js#L63) component for the doctor side or [PatientRecordView](https://github.com/ramaponytails/medicsign/blob/frontend_documentation/frontend/src/view_record/PatientViewSingle.js#L63) component for the patient side. The JSON data and the signature is paseed through the [props](https://react.dev/learn/passing-props-to-a-component) parameter. 
+
+To verify the signature, when we click the button, the [verifyRSA](https://github.com/ramaponytails/medicsign/blob/frontend_documentation/frontend/src/app/App.js#L146) function will run to verify the signature and can be used by both patient and doctor. If the function returns true, it will return "Signature verification successful" and "Signature verification fail" otherwise.
