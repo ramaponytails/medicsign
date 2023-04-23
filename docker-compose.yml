@@ -5,15 +5,23 @@ services:
     image: "medicsign/backend:latest"
     build: ./backend/express/
     restart: unless-stopped
+    environment:
+      - WAIT_HOSTS=mongodb:27017
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=10
+      - WAIT_HOST_CONNECT_TIMEOUT=30
     env_file: ./backend/express/.env
-    ports:
-      - 3000:3000
+    # ports:
+    #   - 3000:3000
+    expose:
+      - 3000
     depends_on:
       - mongodb
     links:
       - mongodb
     networks:
       - mongodb_network
+      - backend
   frontend:
     image: "medicsign/frontend:latest"
     build: ./frontend/
@@ -34,6 +42,16 @@ services:
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
       - mongodb_network
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+    ports:
+      - 3000:3000
+    networks:
+      - backend
 
 volumes:
   mongodb:
@@ -41,3 +59,6 @@ volumes:
 networks:
   mongodb_network:
     driver: bridge
+  backend:
+    driver: bridge
+    name: backend

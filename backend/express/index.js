@@ -9,18 +9,26 @@ const cookieParser = require(`cookie-parser`);
 const session = require(`express-session`);
 const crypto = require(`crypto`);
 const websocket = require(`./middleware/websocket`);
+const MongoStore = require('connect-mongo');
 
 const app = express();
 app.use(express.json());
 // app.use(cookieParser());
 
-const secret = crypto.randomBytes(128).toString(`base64`);
+const secret =
+  env.ACCESS_TOKEN_SECRET || crypto.randomBytes(128).toString(`base64`);
+
 app.use(
   session({
     secret,
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
+    store: MongoStore.create({
+      mongoUrl: env.mongodb,
+      ttl: 7 * 24 * 60 * 60,
+      autoRemove: `native`,
+    }),
   })
 );
 
